@@ -1,0 +1,7 @@
+name = "hkd-food-delivery"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+[env.production]
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]

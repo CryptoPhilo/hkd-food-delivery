@@ -1,3 +1,18 @@
 {
-  "/api/v1/restaurants/route": "app/api/v1/restaurants/route.js"
+  "/_not-found/page": "app/_not-found/page.js",
+  "/cancel/[token]/page": "app/cancel/[token]/page.js",
+  "/checkout/page": "app/checkout/page.js",
+  "/confirm/[token]/page": "app/confirm/[token]/page.js",
+  "/page": "app/page.js",
+  "/order/[id]/page": "app/order/[id]/page.js",
+  "/restaurant/[id]/page": "app/restaurant/[id]/page.js",
+  "/api/v1/restaurants/route": "app/api/v1/restaurants/route.js",
+  "/api/v1/orders/[id]/route": "app/api/v1/orders/[id]/route.js",
+  "/api/v1/orders/route": "app/api/v1/orders/route.js",
+  "/api/v1/restaurants/[id]/route": "app/api/v1/restaurants/[id]/route.js",
+  "/api/v1/settings/delivery-fee/route": "app/api/v1/settings/delivery-fee/route.js",
+  "/admin/orders/page": "app/admin/orders/page.js",
+  "/admin/restaurants/page": "app/admin/restaurants/page.js",
+  "/admin/page": "app/admin/page.js",
+  "/admin/settings/page": "app/admin/settings/page.js"
 }

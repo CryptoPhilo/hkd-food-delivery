@@ -1,0 +1,220 @@
+// ============================================
+// 한경 음식배달 서비스 - Prisma Schema
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+// ============================================
+// Users Table - 고객 정보
+// ============================================
+model User {
+  id        String   @id @default(uuid())
+  phone     String   @unique
+  name      String?
+  email     String?  @unique
+  password  String?
+  fcmToken  String?  @map("fcm_token")
+  isActive  Boolean  @default(true) @map("is_active")
+  
+  orders    Order[]
+  
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@index([phone])
+  @@map("users")
+}
+
+// ============================================
+// Restaurants Table - 식당 정보
+// ============================================
+model Restaurant {
+  id              String   @id @default(uuid())
+  naverPlaceId    String?  @unique @map("naver_place_id")
+  kakaoPlaceId    String?  @map("kakao_place_id")
+  
+  name            String
+  address         String
+  roadAddress     String?  @map("road_address")
+  latitude        Float
+  longitude       Float
+  
+  phone           String?
+  category        String?
+  businessStatus  String?  @map("business_status")
+  businessHours   String?  @map("business_hours")
+  
+  description     String?
+  imageUrl        String?  @map("image_url")
+  rating          Float?
+  
+  isActive        Boolean  @default(true) @map("is_active")
+  isDeliverable   Boolean  @default(true) @map("is_deliverable")
+  
+  deliveryRadius  Float?   @default(3.0) @map("delivery_radius")
+  
+  menus           Menu[]
+  orders          Order[]
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([naverPlaceId])
+  @@index([isActive, isDeliverable])
+  @@index([latitude, longitude])
+  @@map("restaurants")
+}
+
+// ============================================
+// Menus Table - 메뉴 정보
+// ============================================
+model Menu {
+  id            String   @id @default(uuid())
+  restaurantId  String   @map("restaurant_id")
+  
+  naverMenuId   String?  @map("naver_menu_id")
+  name          String
+  description   String?
+  price         Int
+  imageUrl      String?  @map("image_url")
+  
+  isAvailable   Boolean  @default(true) @map("is_available")
+  isActive      Boolean  @default(true) @map("is_active")
+  
+  orderItems    OrderItem[]
+  
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([restaurantId, isAvailable])
+  @@map("menus")
+}
+
+// ============================================
+// Orders Table - 주문 정보
+// ============================================
+model Order {
+  id              String   @id @default(uuid())
+  orderNumber     String   @unique @map("order_number")
+  
+  userId          String   @map("user_id")
+  restaurantId    String   @map("restaurant_id")
+  
+  status          String   @default("pending")
+  
+  subtotal        Int
+  deliveryFee     Int      @map("delivery_fee")
+  totalAmount     Int      @map("total_amount")
+  
+  deliveryAddress String   @map("delivery_address")
+  deliveryLatitude Float   @map("delivery_latitude")
+  deliveryLongitude Float  @map("delivery_longitude")
+  
+  estimatedPickupTime   DateTime? @map("estimated_pickup_time")
+  estimatedDeliveryTime Int?      @map("estimated_delivery_time")
+  
+  paymentMethod      String?   @map("payment_method")
+  customerPaymentId  String?   @map("customer_payment_id")
+  customerPaidAt     DateTime? @map("customer_paid_at")
+  paymentStatus     String   @default("pending") @map("payment_status")
+  
+  restaurantPaidAmount Int?    @map("restaurant_paid_amount")
+  restaurantPaidAt    DateTime? @map("restaurant_paid_at")
+  
+  pickupTime       DateTime? @map("pickup_time")
+  
+  confirmToken     String?   @unique @map("confirm_token")
+  confirmTokenExpiry DateTime? @map("confirm_token_expiry")
+  confirmedAt      DateTime? @map("confirmed_at")
+  
+  pickedUpAt       DateTime? @map("picked_up_at")
+  deliveredAt      DateTime? @map("delivered_at")
+  cancelledAt      DateTime? @map("cancelled_at")
+  cancelReason     String?   @map("cancel_reason")
+  
+  customerMemo     String?   @map("customer_memo")
+  restaurantMemo   String?   @map("restaurant_memo")
+  
+  user            User       @relation(fields: [userId], references: [id])
+  restaurant      Restaurant @relation(fields: [restaurantId], references: [id])
+  items           OrderItem[]
+  
+  createdAt       DateTime @default(now()) @map("created_at")
+  updatedAt       DateTime @updatedAt @map("updated_at")
+
+  @@index([userId])
+  @@index([restaurantId])
+  @@index([status])
+  @@index([orderNumber])
+  @@index([confirmToken])
+  @@map("orders")
+}
+
+// ============================================
+// OrderItems Table - 주문 메뉴 상세
+// ============================================
+model OrderItem {
+  id          String  @id @default(uuid())
+  orderId     String  @map("order_id")
+  menuId      String? @map("menu_id")
+  
+  menuName    String  @map("menu_name")
+  quantity    Int
+  unitPrice   Int     @map("unit_price")
+  subtotal    Int
+  
+  order       Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menu        Menu?   @relation(fields: [menuId], references: [id])
+  
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// ============================================
+// Settings Table - 시스템 설정
+// ============================================
+model Setting {
+  id          String   @id @default(uuid())
+  key         String   @unique
+  value       String
+  type        String
+  description String?
+   
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([key, type])
+  @@map("settings")
+}
+
+// ============================================
+// DeliveryZone Table - 식당별 배달 가능 지역
+// ============================================
+model DeliveryZone {
+  id            String   @id @default(uuid())
+  restaurantId  String   @map("restaurant_id")
+  zoneName      String   @map("zone_name")
+  latitude      Float
+  longitude     Float
+  radiusKm      Float    @map("radius_km")
+  
+  isActive      Boolean  @default(true) @map("is_active")
+  
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([restaurantId, zoneName])
+  @@index([restaurantId])
+  @@map("delivery_zones")
+}

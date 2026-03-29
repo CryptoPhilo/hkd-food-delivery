@@ -33,6 +33,11 @@ interface Order {
     name: string;
     phone: string | null;
   };
+  driver?: {
+    id: string;
+    phone: string;
+    name: string | null;
+  } | null;
   items: OrderItem[];
 }
 
@@ -154,6 +159,24 @@ export default function OrderStatusPage() {
             <div className="border-t pt-4">
               <p className="text-sm text-gray-500 mb-1">예상 배달 시간</p>
               <p className="font-medium text-blue-600">약 {order.estimatedDeliveryTime}분</p>
+            </div>
+          )}
+
+          {order.driver && (
+            <div className="border-t pt-4">
+              <p className="text-sm text-gray-500 mb-1">배달원</p>
+              <div className="flex items-center justify-between">
+                <p className="font-medium">{order.driver.name || '배달원'}</p>
+                <a
+                  href={`tel:${order.driver.phone}`}
+                  className="flex items-center text-blue-600 text-sm"
+                >
+                  <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                  </svg>
+                  {order.driver.phone}
+                </a>
+              </div>
             </div>
           )}
         </div>

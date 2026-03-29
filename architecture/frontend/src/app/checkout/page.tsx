@@ -322,7 +322,8 @@ function CheckoutContent() {
             restaurantName: cartData[restaurantId].restaurantName,
           });
         } else {
-          alert(`오류 (${cartData[restaurantId].restaurantName}): ${data.error || '주문 실패'}`);
+          const errorMsg = typeof data.error === 'string' ? data.error : (data.error?.message || JSON.stringify(data.error) || '주문 실패');
+          alert(`오류 (${cartData[restaurantId].restaurantName}): ${errorMsg}`);
           return;
         }
       }

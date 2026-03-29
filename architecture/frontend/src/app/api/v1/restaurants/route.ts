@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
+
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 function calculateDistance(lat1: number, lng1: number, lat2: number, lng2: number): number {
   const R = 6371;
@@ -25,41 +26,36 @@ function calculateDeliveryFee(distance: number): { fee: number; isDeliverable: b
 
 export async function GET(request: Request) {
   try {
-    const supabase = await createClient();
     const { searchParams } = new URL(request.url);
     const lat = searchParams.get('lat');
     const lng = searchParams.get('lng');
     const page = parseInt(searchParams.get('page') || '1');
     const limit = parseInt(searchParams.get('limit') || '20');
 
-    const { data: restaurants, error } = await supabase
-      .from('restaurants')
-      .select('*, menus(*)')
-      .eq('is_active', true);
+    const response = await fetch(`${BACKEND_URL}/api/v1/restaurants`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    if (error) throw error;
+    const data = await response.json();
 
-    let result = (restaurants || []).map((r: any) => ({
-      ...r,
-      isActive: r.is_active,
-      isDeliverable: r.is_deliverable,
-      businessHours: r.business_hours,
-      businessStatus: r.business_status,
-      roadAddress: r.road_address,
-      latitude: r.latitude,
-      longitude: r.longitude,
-    }));
+    if (!response.ok) {
+      throw new Error(data.error || '식당 목록 조회 실패');
+    }
+
+    let result = data.data || [];
     
     if (lat && lng) {
       const userLat = parseFloat(lat);
       const userLng = parseFloat(lng);
       
-      result = (restaurants || []).map((r: any) => {
+      result = result.map((r: any) => {
         const distance = calculateDistance(userLat, userLng, r.latitude, r.longitude);
         const { fee, isDeliverable } = calculateDeliveryFee(distance);
         return {
           ...r,
-          isActive: r.is_active,
           distance,
           deliveryFee: fee,
           isDeliverable,

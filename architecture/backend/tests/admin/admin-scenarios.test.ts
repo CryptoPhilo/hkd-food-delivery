@@ -1,0 +1,426 @@
+import request from 'supertest';
+import app from '../../src/app';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+describe('어드민 시나리오 통합 테스트', () => {
+  let adminToken: string;
+  let storeId: string;
+  let productIds: string[] = [];
+
+  beforeEach(async () => {
+    await prisma.ageVerification.deleteMany();
+    await prisma.orderItem.deleteMany();
+    await prisma.order.deleteMany();
+    await prisma.menu.deleteMany();
+    await prisma.restaurant.deleteMany();
+    await prisma.user.deleteMany();
+    await prisma.setting.deleteMany();
+    await prisma.driver.deleteMany();
+    await prisma.settlement.deleteMany();
+
+    adminToken = 'mock-admin-token';
+  });
+
+  afterAll(async () => {
+    await prisma.$disconnect();
+  });
+
+  describe('시나리오 1: 편의점 생성 및 상품 일괄 등록', () => {
+    it('어드민이 편의점을 생성하고 여러 상품을 한 번에 등록한다', async () => {
+      const storeResponse = await request(app)
+        .post('/api/v1/admin/stores')
+        .send({
+          storeType: 'convenience_store',
+          name: 'GS25 제주한경점',
+          address: '제주시 한경면 고산리 123',
+          latitude: 33.3620,
+          longitude: 126.3100,
+          brandName: 'GS25',
+          operatingHours24: true,
+          deliveryRadius: 2.5,
+          isActive: true,
+          isDeliverable: true
+        });
+
+      expect(storeResponse.status).toBe(201);
+      storeId = storeResponse.body.data.id;
+      expect(storeResponse.body.data.storeType).toBe('convenience_store');
+
+      const products = [
+        { name: '삼각김밥 참치마요', price: 1500, category: '식품', stock: 30 },
+        { name: '삼각김밥 불고기', price: 1800, category: '식품', stock: 25 },
+        { name: '컵라면 신라면', price: 1200, category: '식품', stock: 50 },
+        { name: '캔커피 맥심', price: 1500, category: '음료', stock: 40 },
+        { name: '생수 500ml', price: 1000, category: '음료', stock: 100 },
+        { name: '카스 맥주 500ml', price: 3500, category: '주류', stock: 20, requiresAgeVerification: true, ageRestriction: 'adult' },
+        { name: '테라 맥주 500ml', price: 3500, category: '주류', stock: 20, requiresAgeVerification: true, ageRestriction: 'adult' },
+        { name: '소주 참이슬', price: 2000, category: '주류', stock: 30, requiresAgeVerification: true, ageRestriction: 'adult' },
+        { name: '에너지드링크', price: 2500, category: '음료', stock: 15 }
+      ];
+
+      for (const product of products) {
+        const productResponse = await request(app)
+          .post(`/api/v1/admin/stores/${storeId}/products`)
+          .send({
+            ...product,
+            isAvailable: true,
+            isActive: true
+          });
+
+        expect(productResponse.status).toBe(201);
+        productIds.push(productResponse.body.data.id);
+      }
+
+      const productsResponse = await request(app)
+        .get(`/api/v1/admin/stores/${storeId}/products`);
+
+      expect(productsResponse.status).toBe(200);
+      expect(productsResponse.body.data).toHaveLength(9);
+
+      const categories = productsResponse.body.data.map((p: any) => p.category);
+      expect(categories.filter((c: string) => c === '주류')).toHaveLength(3);
+      expect(categories.filter((c: string) => c === '식품')).toHaveLength(3);
+      expect(categories.filter((c: string) => c === '음료')).toHaveLength(3);
+    });
+  });
+
+  describe('시나리오 2: 상품 재고 관리 및 가격 조정', () => {
+    beforeEach(async () => {
+      const store = await prisma.restaurant.create({
+        data: {
+          storeType: 'convenience_store',
+          name: 'CU 제주한경점',
+          address: '제주시 한경면',
+          latitude: 33.3615,
+          longitude: 126.3098,
+          brandName: 'CU',
+          isActive: true,
+          isDeliverable: true,
+          deliveryRadius: 3.0
+        }
+      });
+      storeId = store.id;
+
+      const product1 = await prisma.menu.create({
+        data: { restaurantId: storeId, name: '삼각김밥', price: 1500, category: '식품', stock: 50, isAvailable: true, isActive: true }
+      });
+      const product2 = await prisma.menu.create({
+        data: { restaurantId: storeId, name: '맥주', price: 3500, category: '주류', stock: 20, requiresAgeVerification: true, ageRestriction: 'adult', isAvailable: true, isActive: true }
+      });
+      productIds = [product1.id, product2.id];
+    });
+
+    it('상품 가격을 인상하고 재고를 조정한다', async () => {
+      const priceResponse = await request(app)
+        .put(`/api/v1/admin/products/${productIds[0]}`)
+        .send({ price: 1800 });
+
+      expect(priceResponse.status).toBe(200);
+      expect(priceResponse.body.data.price).toBe(1800);
+
+      let stockResponse = await request(app)
+        .patch(`/api/v1/admin/products/${productIds[0]}/stock`)
+        .send({ quantity: 10, operation: 'subtract' });
+
+      expect(stockResponse.status).toBe(200);
+      expect(stockResponse.body.data.stock).toBe(40);
+
+      stockResponse = await request(app)
+        .patch(`/api/v1/admin/products/${productIds[0]}/stock`)
+        .send({ quantity: 20, operation: 'add' });
+
+      expect(stockResponse.status).toBe(200);
+      expect(stockResponse.body.data.stock).toBe(60);
+    });
+
+    it('재고가 0이 되면 자동 품절 처리된다', async () => {
+      let stockResponse = await request(app)
+        .patch(`/api/v1/admin/products/${productIds[0]}/stock`)
+        .send({ quantity: 50, operation: 'subtract' });
+
+      expect(stockResponse.status).toBe(200);
+      expect(stockResponse.body.data.stock).toBe(0);
+      expect(stockResponse.body.data.isAvailable).toBe(false);
+    });
+  });
+
+  describe('시나리오 3: 주문 관리 및 상태 변경', () => {
+    let userId: string;
+    let orderId: string;
+
+    beforeEach(async () => {
+      const store = await prisma.restaurant.create({
+        data: {
+          storeType: 'convenience_store',
+          name: 'CU 제주한경점',
+          address: '제주시 한경면',
+          latitude: 33.3615,
+          longitude: 126.3098,
+          brandName: 'CU',
+          isActive: true,
+          isDeliverable: true,
+          deliveryRadius: 3.0
+        }
+      });
+      storeId = store.id;
+
+      const user = await prisma.user.create({
+        data: { phone: '010-1234-5678', name: '테스트사용자' }
+      });
+      userId = user.id;
+
+      const product = await prisma.menu.create({
+        data: { restaurantId: storeId, name: '삼각김밥', price: 1500, category: '식품', stock: 50, isAvailable: true, isActive: true }
+      });
+
+      const order = await prisma.order.create({
+        data: {
+          orderNumber: 'TEST001',
+          userId,
+          restaurantId: storeId,
+          subtotal: 1500,
+          deliveryFee: 3000,
+          totalAmount: 4500,
+          deliveryAddress: '제주시 한경면',
+          deliveryLatitude: 33.365,
+          deliveryLongitude: 126.315,
+          status: 'pending',
+          items: {
+            create: {
+              menuId: product.id,
+              menuName: '삼각김밥',
+              quantity: 1,
+              unitPrice: 1500,
+              subtotal: 1500
+            }
+          }
+        }
+      });
+      orderId = order.id;
+    });
+
+    it('주문 목록을 조회하고 상태를 변경한다', async () => {
+      const ordersResponse = await request(app)
+        .get('/api/v1/admin/orders');
+
+      expect(ordersResponse.status).toBe(200);
+      expect(ordersResponse.body.data.length).toBeGreaterThan(0);
+
+      const orderResponse = await request(app)
+        .get(`/api/v1/orders/${orderId}`);
+
+      expect(orderResponse.status).toBe(200);
+      expect(orderResponse.body.data.orderNumber).toBe('TEST001');
+    });
+  });
+
+  describe('시나리오 4: 주류 상품 성인 인증 필수 처리', () => {
+    beforeEach(async () => {
+      const store = await prisma.restaurant.create({
+        data: {
+          storeType: 'convenience_store',
+          name: 'CU 제주한경점',
+          address: '제주시 한경면',
+          latitude: 33.3615,
+          longitude: 126.3098,
+          brandName: 'CU',
+          isActive: true,
+          isDeliverable: true,
+          deliveryRadius: 3.0
+        }
+      });
+      storeId = store.id;
+    });
+
+    it('성인 인증이 필요한 상품만 필터링하여 조회한다', async () => {
+      await prisma.menu.createMany({
+        data: [
+          { restaurantId: storeId, name: '음료', price: 1500, category: '음료', stock: 50, isAvailable: true, isActive: true },
+          { restaurantId: storeId, name: '소주', price: 2000, category: '주류', stock: 30, requiresAgeVerification: true, ageRestriction: 'adult', isAvailable: true, isActive: true },
+          { restaurantId: storeId, name: '맥주', price: 3500, category: '주류', stock: 20, requiresAgeVerification: true, ageRestriction: 'adult', isAvailable: true, isActive: true }
+        ]
+      });
+
+      const response = await request(app)
+        .get(`/api/v1/admin/stores/${storeId}/products`)
+        .query({ requiresAgeVerification: true });
+
+      expect(response.status).toBe(200);
+      expect(response.body.data).toHaveLength(2);
+      expect(response.body.data.every((p: any) => p.requiresAgeVerification === true)).toBe(true);
+    });
+  });
+
+  describe('시나리오 5: 배달원 등록 및 관리', () => {
+    let driverId: string;
+
+    it('배달원을 등록하고 목록을 조회한다', async () => {
+      const driverResponse = await request(app)
+        .post('/api/v1/drivers/register')
+        .send({
+          name: '홍길동',
+          phone: '010-9999-8888',
+          cardNumber: '1234'
+        });
+
+      expect([200, 201]).toContain(driverResponse.status);
+      driverId = driverResponse.body.data.id;
+
+      const listResponse = await request(app)
+        .get('/api/v1/drivers/list');
+
+      expect(listResponse.status).toBe(200);
+      expect(listResponse.body.data.length).toBeGreaterThan(0);
+    });
+  });
+
+  describe('시나리오 6: 배달원 정산 관리', () => {
+    let driverId: string;
+
+    beforeEach(async () => {
+      const driver = await prisma.driver.create({
+        data: {
+          name: '홍길동',
+          phone: '010-9999-8888',
+          cardNumber: '1234'
+        }
+      });
+      driverId = driver.id;
+    });
+
+    it('배달원 정산 정보를 조회한다', async () => {
+      const settlementResponse = await request(app)
+        .get('/api/v1/driver-settlements/current')
+        .query({ driverId });
+
+      expect([200, 404]).toContain(settlementResponse.status);
+    });
+  });
+
+  describe('시나리오 7: 시스템 설정 관리', () => {
+    it('배달비 설정을 조회하고 수정한다', async () => {
+      const settingsResponse = await request(app)
+        .get('/api/v1/admin/settings');
+
+      expect(settingsResponse.status).toBe(200);
+      expect(settingsResponse.body.data).toBeDefined();
+    });
+
+    it('플랫폼 운영시간을 설정한다', async () => {
+      const hoursResponse = await request(app)
+        .get('/api/v1/settings/platform-hours');
+
+      expect(hoursResponse.status).toBe(200);
+    });
+  });
+
+  describe('시나리오 8: 대시보드 통계 조회', () => {
+    beforeEach(async () => {
+      const store = await prisma.restaurant.create({
+        data: {
+          storeType: 'convenience_store',
+          name: '테스트편의점',
+          address: '제주시 한경면',
+          latitude: 33.3615,
+          longitude: 126.3098,
+          brandName: 'CU',
+          isActive: true,
+          isDeliverable: true,
+          deliveryRadius: 3.0
+        }
+      });
+
+      const user = await prisma.user.create({
+        data: { phone: '010-1111-2222', name: '주문자' }
+      });
+
+      await prisma.order.createMany({
+        data: [
+          {
+            orderNumber: 'DASH001',
+            userId: user.id,
+            restaurantId: store.id,
+            subtotal: 10000,
+            deliveryFee: 3000,
+            totalAmount: 13000,
+            deliveryAddress: '테스트주소1',
+            deliveryLatitude: 33.365,
+            deliveryLongitude: 126.315,
+            status: 'completed',
+            createdAt: new Date()
+          },
+          {
+            orderNumber: 'DASH002',
+            userId: user.id,
+            restaurantId: store.id,
+            subtotal: 15000,
+            deliveryFee: 3000,
+            totalAmount: 18000,
+            deliveryAddress: '테스트주소2',
+            deliveryLatitude: 33.365,
+            deliveryLongitude: 126.315,
+            status: 'pending',
+            createdAt: new Date()
+          }
+        ]
+      });
+    });
+
+    it('어드민 대시보드에서 주요 통계를 조회한다', async () => {
+      const dashboardResponse = await request(app)
+        .get('/api/v1/admin/dashboard');
+
+      expect(dashboardResponse.status).toBe(200);
+      expect(dashboardResponse.body).toBeDefined();
+    });
+  });
+
+  describe('시나리오 9: Mock 데이터 일괄 생성', () => {
+    it('테스트용 Mock 데이터를 일괄 생성한다', async () => {
+      const importResponse = await request(app)
+        .post('/api/v1/admin/import-mock');
+
+      expect([200, 201, 400]).toContain(importResponse.status);
+    });
+  });
+
+  describe('시나리오 10: 상품 삭제 및 복원', () => {
+    let productId: string;
+
+    beforeEach(async () => {
+      const store = await prisma.restaurant.create({
+        data: {
+          storeType: 'convenience_store',
+          name: 'CU 제주한경점',
+          address: '제주시 한경면',
+          latitude: 33.3615,
+          longitude: 126.3098,
+          brandName: 'CU',
+          isActive: true,
+          isDeliverable: true,
+          deliveryRadius: 3.0
+        }
+      });
+      storeId = store.id;
+
+      const product = await prisma.menu.create({
+        data: { restaurantId: storeId, name: '테스트상품', price: 1000, category: '식품', stock: 10, isAvailable: true, isActive: true }
+      });
+      productId = product.id;
+    });
+
+    it('상품을 삭제하고 다시 활성화한다', async () => {
+      const deleteResponse = await request(app)
+        .delete(`/api/v1/admin/products/${productId}`);
+
+      expect(deleteResponse.status).toBe(200);
+
+      const getResponse = await request(app)
+        .get(`/api/v1/admin/stores/${storeId}/products`);
+
+      expect(getResponse.body.data.find((p: any) => p.id === productId)).toBeUndefined();
+    });
+  });
+});

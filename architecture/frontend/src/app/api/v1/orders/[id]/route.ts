@@ -1,27 +1,32 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
+
+const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET(
   request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient();
     const { id } = params;
 
-    const { data: order, error } = await supabase
-      .from('orders')
-      .select('*, restaurant(*), items(*, menu(*)), user(*)')
-      .eq('id', id)
-      .single();
+    const response = await fetch(`${BACKEND_URL}/api/v1/orders/${id}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
 
-    if (error) throw error;
+    const data = await response.json();
 
-    return NextResponse.json({ success: true, data: order });
-  } catch (error) {
+    if (!response.ok) {
+      throw new Error(data.error || '주문 조회 실패');
+    }
+
+    return NextResponse.json(data);
+  } catch (error: any) {
     console.error('Error:', error);
-    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
   }
 }

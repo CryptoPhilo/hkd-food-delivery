@@ -39,6 +39,17 @@ interface Order {
   items: OrderItem[];
 }
 
+interface DeliveryGroup {
+  id: string;
+  phone: string;
+  name: string | null;
+  deliveryAddress: string;
+  customerMemo: string | null;
+  createdAt: string;
+  orders: Order[];
+  totalAmount: number;
+}
+
 const STATUS_TABS = [
   { key: 'pending', label: '신규 주문', color: 'yellow' },
   { key: 'pending_confirmation', label: '확인 대기', color: 'blue' },
@@ -63,13 +74,46 @@ function OrdersContent() {
   
   const [activeTab, setActiveTab] = useState(initialStatus);
   const [orders, setOrders] = useState<Order[]>([]);
+  const [deliveryGroups, setDeliveryGroups] = useState<DeliveryGroup[]>([]);
   const [loading, setLoading] = useState(true);
+  const [selectedGroup, setSelectedGroup] = useState<DeliveryGroup | null>(null);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [showPickupModal, setShowPickupModal] = useState(false);
   const [pickupAmount, setPickupAmount] = useState('');
   const [showPickupTimeModal, setShowPickupTimeModal] = useState(false);
   const [pickupTime, setPickupTime] = useState('');
   const [restaurantMemo, setRestaurantMemo] = useState('');
+
+  const groupOrdersByDelivery = (orders: Order[]): DeliveryGroup[] => {
+    const groups: Map<string, DeliveryGroup> = new Map();
+    
+    for (const order of orders) {
+      const timeKey = new Date(order.createdAt).getTime();
+      const timeBucket = Math.floor(timeKey / 60000);
+      const groupKey = `${order.user.phone}_${order.deliveryAddress}_${timeBucket}`;
+      
+      if (!groups.has(groupKey)) {
+        groups.set(groupKey, {
+          id: groupKey,
+          phone: order.user.phone,
+          name: order.user.name,
+          deliveryAddress: order.deliveryAddress,
+          customerMemo: order.customerMemo,
+          createdAt: order.createdAt,
+          orders: [],
+          totalAmount: 0,
+        });
+      }
+      
+      const group = groups.get(groupKey)!;
+      group.orders.push(order);
+      group.totalAmount += order.totalAmount;
+    }
+    
+    return Array.from(groups.values()).sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+  };
 
   const fetchOrders = useCallback(async () => {
     setLoading(true);
@@ -78,6 +122,7 @@ function OrdersContent() {
       const data = await response.json();
       if (data.success) {
         setOrders(data.data);
+        setDeliveryGroups(groupOrdersByDelivery(data.data));
       }
     } catch (error) {
       console.error('Failed to fetch orders:', error);
@@ -230,38 +275,72 @@ function OrdersContent() {
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
             </div>
-          ) : orders.length === 0 ? (
+          ) : deliveryGroups.length === 0 ? (
             <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
               해당 상태의 주문이 없습니다
             </div>
           ) : (
-            orders.map((order) => (
-              <OrderCard
-                key={order.id}
-                order={order}
-                onSelect={() => setSelectedOrder(order)}
-                isSelected={selectedOrder?.id === order.id}
+            deliveryGroups.map((group) => (
+              <DeliveryGroupCard
+                key={group.id}
+                group={group}
+                onSelect={() => {
+                  setSelectedGroup(group);
+                  setSelectedOrder(group.orders[0]);
+                }}
+                isSelected={selectedGroup?.id === group.id}
               />
             ))
           )}
         </div>
 
         <div className="lg:col-span-1">
-          {selectedOrder ? (
-            <OrderDetail
-              order={selectedOrder}
-              onSetPickupTime={() => {
-                setPickupTime('');
-                setRestaurantMemo('');
-                setShowPickupTimeModal(true);
-              }}
-              onPickupComplete={() => {
-                setPickupAmount(String(selectedOrder.subtotal));
-                setShowPickupModal(true);
-              }}
-              onStartDelivery={() => handleStartDelivery(selectedOrder.id)}
-              onCompleteDelivery={() => handleCompleteDelivery(selectedOrder.id)}
-            />
+          {selectedGroup ? (
+            <div className="space-y-4">
+              <div className="bg-white rounded-lg shadow p-4">
+                <h3 className="font-medium text-lg mb-4">배달 정보</h3>
+                <div className="space-y-2 text-sm">
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">고객</span>
+                    <span>{selectedGroup.name || selectedGroup.phone}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">전화번호</span>
+                    <span>{selectedGroup.phone}</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">배달 주소</span>
+                    <span className="text-right">{selectedGroup.deliveryAddress}</span>
+                  </div>
+                  {selectedGroup.customerMemo && (
+                    <div className="border-t pt-2 mt-2">
+                      <p className="text-gray-500 text-xs">고객 메모</p>
+                      <p>{selectedGroup.customerMemo}</p>
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              {selectedGroup.orders.map((order) => (
+                <OrderDetail
+                  key={order.id}
+                  order={order}
+                  onSetPickupTime={() => {
+                    setSelectedOrder(order);
+                    setPickupTime('');
+                    setRestaurantMemo('');
+                    setShowPickupTimeModal(true);
+                  }}
+                  onPickupComplete={() => {
+                    setSelectedOrder(order);
+                    setPickupAmount(String(order.subtotal));
+                    setShowPickupModal(true);
+                  }}
+                  onStartDelivery={() => handleStartDelivery(order.id)}
+                  onCompleteDelivery={() => handleCompleteDelivery(order.id)}
+                />
+              ))}
+            </div>
           ) : (
             <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
               주문을 선택하세요
@@ -354,6 +433,60 @@ function OrdersContent() {
             </div>
           </div>
         </Modal>
+      )}
+    </div>
+  );
+}
+
+function DeliveryGroupCard({ 
+  group, 
+  onSelect, 
+  isSelected 
+}: { 
+  group: DeliveryGroup; 
+  onSelect: () => void;
+  isSelected: boolean;
+}) {
+  const formatTime = (dateString: string) => {
+    return new Date(dateString).toLocaleTimeString('ko-KR', { 
+      hour: '2-digit', 
+      minute: '2-digit' 
+    });
+  };
+
+  const restaurantNames = group.orders.map(o => o.restaurant.name).join(', ');
+
+  return (
+    <div
+      onClick={onSelect}
+      className={`bg-white rounded-lg shadow p-4 cursor-pointer transition-all ${
+        isSelected ? 'ring-2 ring-blue-500' : 'hover:shadow-md'
+      }`}
+    >
+      <div className="flex justify-between items-start">
+        <div>
+          <p className="font-medium text-gray-900">
+            {group.name || group.phone}
+          </p>
+          <p className="text-sm text-gray-500">{group.deliveryAddress}</p>
+        </div>
+        <div className="text-right">
+          <p className="font-medium text-gray-900">{group.totalAmount.toLocaleString()}원</p>
+          <p className="text-sm text-gray-500">{formatTime(group.createdAt)}</p>
+        </div>
+      </div>
+      <div className="mt-2 flex items-center justify-between">
+        <span className="text-sm text-gray-600">
+          {restaurantNames}
+        </span>
+        <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">
+          {group.orders.length}개 식당
+        </span>
+      </div>
+      {group.customerMemo && (
+        <div className="mt-2 text-sm text-orange-600">
+          메모: {group.customerMemo}
+        </div>
       )}
     </div>
   );

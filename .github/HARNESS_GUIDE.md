@@ -5,6 +5,7 @@
 이 프로젝트는 GitHub Actions 기반의 자동화된 CI/CD 파이프라인을 갖추고 있습니다.
 
 ```
+[수동 개발]
 개발자 → PR 생성 → CI 자동 실행 → 리뷰/머지
                                       ↓
          staging 브랜치 ← ─── staging 배포 (자동)
@@ -12,6 +13,15 @@
          main 브랜치 ← ──── production 배포 (자동)
                                       ↓
                               헬스체크 → 실패 시 자동 롤백
+
+[에이전트 자동화]
+에이전트 세션 → agent/* 브랜치에 auto-commit
+                  ↓
+      자동 PR 생성 (→ staging) + CI 검증
+                  ↓
+      CI 통과 → staging 머지 → staging 배포
+                  ↓
+      검증 완료 → Promote to Production → main 머지 → production 배포
 ```
 
 ---
@@ -135,6 +145,8 @@ GitHub → Settings → Branches에서 다음을 설정하세요:
 
 ## 6. 개발 워크플로우
 
+### 수동 개발
+
 ```bash
 # 1. 기능 브랜치 생성
 git checkout -b feature/my-feature
@@ -152,6 +164,47 @@ gh pr create --base staging
 # 5. staging → main PR 생성 및 머지
 # → production 자동 배포 → 헬스체크 → 완료
 ```
+
+### 에이전트 자동화 워크플로우
+
+에이전트 세션에서 코드를 변경하면 `agent-commit.sh` 스크립트를 통해 자동으로 안전하게 커밋됩니다.
+
+```bash
+# 1. 에이전트가 코드 변경 후 자동 커밋
+./scripts/agent-commit.sh "주문 API 에러 핸들링 개선"
+
+# 스크립트가 자동으로:
+# - main/staging에 있으면 agent/* 브랜치 생성
+# - .env, credentials 등 위험 파일 자동 제외
+# - Conventional Commits 형식 메시지 생성
+# - 원격에 push
+
+# 2. 자동 PR 생성 (agent-pr-staging.yml)
+# agent/* 브랜치에 push → staging 대상 PR 자동 생성
+# 같은 브랜치에 추가 커밋 → 기존 PR에 코멘트 추가
+
+# 3. CI 자동 검증
+# PR에 대해 ci.yml이 자동 실행
+# 린트, 타입체크, 빌드, Docker 검증
+
+# 4. staging 머지 후 검증
+# staging 환경에서 실제 동작 확인
+
+# 5. Production 승격
+# Actions → "Promote to Production" → 배포 설명 입력 → 실행
+# staging → main PR 자동 생성
+```
+
+### 안전장치
+
+| 계층 | 보호 내용 |
+|------|-----------|
+| `agent-commit.sh` | main/staging 직접 커밋 차단, 위험 파일(.env 등) 자동 제외 |
+| `agent-pr-staging.yml` | feature→staging PR 자동 생성, CI 검증 강제 |
+| `ci.yml` | 린트/타입체크/빌드/Docker 검증 |
+| `deploy-staging.yml` | staging 배포 + 헬스체크 |
+| `promote-production.yml` | 수동 승격만 허용, 변경 내역 자동 문서화 |
+| `deploy-production.yml` | 순차 배포 + 헬스체크 + 자동 롤백 |
 
 ---
 

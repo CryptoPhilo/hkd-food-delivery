@@ -1,0 +1,138 @@
+# ============================================
+# HKD Agent 워크플로우 - Feature → Staging 자동 PR
+# agent/* 브랜치에 push 시 staging으로 PR 자동 생성
+# ============================================
+
+name: Agent → Staging PR
+
+on:
+  push:
+    branches: ['agent/**']
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  create-pr:
+    name: 📋 Staging PR 생성
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: staging 브랜치 존재 확인
+        run: |
+          if ! git ls-remote --heads origin staging | grep -q staging; then
+            echo "⚠️ staging 브랜치가 없습니다. main에서 생성합니다."
+            git checkout -b staging origin/main
+            git push origin staging
+          fi
+
+      - name: 기존 PR 확인
+        id: check-pr
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ github.ref_name }}"
+          EXISTING_PR=$(gh pr list --head "$BRANCH" --base staging --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING_PR" ]; then
+            echo "existing_pr=$EXISTING_PR" >> "$GITHUB_OUTPUT"
+            echo "✅ 기존 PR #$EXISTING_PR 발견 - 새 PR 생성 불필요"
+          else
+            echo "existing_pr=" >> "$GITHUB_OUTPUT"
+            echo "📋 새 PR을 생성합니다"
+          fi
+
+      - name: 변경 분석
+        if: steps.check-pr.outputs.existing_pr == ''
+        id: analyze
+        run: |
+          BRANCH="${{ github.ref_name }}"
+
+          # 커밋 요약
+          COMMITS=$(git log origin/staging..HEAD --oneline 2>/dev/null || git log origin/main..HEAD --oneline)
+          COMMIT_COUNT=$(echo "$COMMITS" | wc -l | tr -d ' ')
+
+          # 변경 파일 통계
+          STATS=$(git diff --stat origin/staging..HEAD 2>/dev/null || git diff --stat origin/main..HEAD)
+          FILES_CHANGED=$(git diff --name-only origin/staging..HEAD 2>/dev/null | wc -l | tr -d ' ' || echo "0")
+
+          # scope 감지
+          HAS_BACKEND=$(git diff --name-only origin/staging..HEAD 2>/dev/null | grep -c '^architecture/backend/' || echo "0")
+          HAS_FRONTEND=$(git diff --name-only origin/staging..HEAD 2>/dev/null | grep -c '^architecture/frontend/' || echo "0")
+          HAS_SCRAPERS=$(git diff --name-only origin/staging..HEAD 2>/dev/null | grep -c '^scrapers/' || echo "0")
+
+          SCOPES=""
+          [ "$HAS_BACKEND" -gt 0 ] && SCOPES="backend"
+          [ "$HAS_FRONTEND" -gt 0 ] && SCOPES="${SCOPES:+$SCOPES, }frontend"
+          [ "$HAS_SCRAPERS" -gt 0 ] && SCOPES="${SCOPES:+$SCOPES, }scrapers"
+          [ -z "$SCOPES" ] && SCOPES="general"
+
+          # PR 제목 생성
+          TITLE="[Agent] ${BRANCH##agent/}: ${SCOPES} (${FILES_CHANGED} files)"
+          TITLE=$(echo "$TITLE" | cut -c1-70)
+
+          echo "title=$TITLE" >> "$GITHUB_OUTPUT"
+
+          # PR body를 파일에 저장 (멀티라인)
+          cat > /tmp/pr-body.md << 'BODYEOF'
+          ## 🤖 Agent 자동 PR
+
+          **브랜치:** `${{ github.ref_name }}`
+          **영향 범위:** SCOPES_PLACEHOLDER
+          **변경 파일:** FILES_PLACEHOLDER개
+          **커밋 수:** COMMITS_PLACEHOLDER개
+
+          ### 커밋 내역
+          ```
+          COMMITS_LIST_PLACEHOLDER
+          ```
+
+          ### 변경 통계
+          ```
+          STATS_PLACEHOLDER
+          ```
+
+          ---
+          > ⚠️ **이 PR은 에이전트가 자동 생성했습니다.**
+          > CI 검증 통과 후 staging 머지를 진행하세요.
+          > staging에서 검증 후 `Promote to Production` 워크플로우로 main에 반영하세요.
+          BODYEOF
+
+          # 플레이스홀더 치환
+          sed -i "s|SCOPES_PLACEHOLDER|$SCOPES|g" /tmp/pr-body.md
+          sed -i "s|FILES_PLACEHOLDER|$FILES_CHANGED|g" /tmp/pr-body.md
+          sed -i "s|COMMITS_PLACEHOLDER|$COMMIT_COUNT|g" /tmp/pr-body.md
+          sed -i "s|COMMITS_LIST_PLACEHOLDER|$COMMITS|g" /tmp/pr-body.md
+          sed -i "s|STATS_PLACEHOLDER|$STATS|g" /tmp/pr-body.md
+
+      - name: PR 생성
+        if: steps.check-pr.outputs.existing_pr == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH="${{ github.ref_name }}"
+
+          gh pr create \
+            --head "$BRANCH" \
+            --base staging \
+            --title "${{ steps.analyze.outputs.title }}" \
+            --body-file /tmp/pr-body.md \
+            --label "agent-auto"
+
+          echo "✅ PR 생성 완료"
+
+      - name: 기존 PR 코멘트 추가
+        if: steps.check-pr.outputs.existing_pr != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM="${{ steps.check-pr.outputs.existing_pr }}"
+          COMMIT_SHA="${{ github.sha }}"
+          COMMIT_MSG=$(git log -1 --format="%s")
+
+          gh pr comment "$PR_NUM" --body "🔄 새 커밋 추가: \`${COMMIT_SHA:0:7}\` - ${COMMIT_MSG}"
+          echo "✅ PR #$PR_NUM 에 코멘트 추가"

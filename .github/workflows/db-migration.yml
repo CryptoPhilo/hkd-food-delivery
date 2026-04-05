@@ -26,6 +26,8 @@ jobs:
 
       - name: 백엔드 Prisma 검증
         working-directory: architecture/backend
+        env:
+          DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci_dummy"
         run: |
           npm install
           npx prisma validate
@@ -35,6 +37,8 @@ jobs:
       - name: 마이그레이션 드리프트 체크
         continue-on-error: true
         working-directory: architecture/backend
+        env:
+          DATABASE_URL: "postgresql://ci:ci@localhost:5432/ci_dummy"
         run: |
           # 마이그레이션 파일과 스키마 일치 여부 확인
           if [ -d "prisma/migrations" ]; then

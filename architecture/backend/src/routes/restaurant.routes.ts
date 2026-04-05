@@ -25,7 +25,7 @@ function validatePagination(maxLimit: number) {
 router.get('/regions', async (req: Request, res: Response, next: NextFunction) => {
   try {
     const regions = await (prisma.$queryRawUnsafe as any)(
-      `SELECT id, name, name_en as "nameEn", latitude, longitude, radius_km as "radiusKm" FROM regions WHERE is_active = true ORDER BY name ASC`
+      `SELECT id, code, name, name_en as "nameEn", center_latitude as "centerLatitude", center_longitude as "centerLongitude", address_keyword as "addressKeyword", is_active as "isActive" FROM regions WHERE is_active = true ORDER BY name ASC`
     );
 
     res.json({ success: true, data: regions });

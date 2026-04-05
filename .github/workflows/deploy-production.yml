@@ -1,0 +1,193 @@
+# ============================================
+# HKD 배포 하네스 - Production 환경
+# main 브랜치 push 시 자동 배포 (CI 통과 후)
+# ============================================
+
+name: Deploy Production
+
+on:
+  push:
+    branches: [main]
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  # ──────────────────────────────────────
+  # 변경 감지
+  # ──────────────────────────────────────
+  changes:
+    name: 🔍 변경 감지
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'architecture/backend/**'
+            frontend:
+              - 'architecture/frontend/**'
+
+  # ──────────────────────────────────────
+  # 백엔드 Production 배포
+  # ──────────────────────────────────────
+  deploy-backend:
+    name: 🔧 백엔드 → Production
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: architecture/backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fly.io CLI 설치
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: 현재 배포 버전 기록 (롤백용)
+        id: pre-deploy
+        run: |
+          CURRENT=$(flyctl releases --app hkd-backend --json 2>/dev/null | \
+            jq -r '.[0].ImageRef // "none"') || CURRENT="none"
+          echo "previous_image=$CURRENT" >> $GITHUB_OUTPUT
+          echo "📌 현재 버전: $CURRENT"
+
+      - name: Production 배포
+        id: deploy
+        run: flyctl deploy --app hkd-backend --remote-only
+
+      - name: 헬스체크
+        id: healthcheck
+        run: |
+          echo "⏳ 서비스 안정화 대기 (30초)..."
+          sleep 30
+
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://hkd-backend.fly.dev/health || true)
+            if [ "$status" = "200" ]; then
+              echo "✅ 백엔드 Production 헬스체크 통과"
+              exit 0
+            fi
+            echo "⏳ 헬스체크 대기 중... (시도 $i, 상태: $status)"
+            sleep 10
+          done
+          echo "❌ 헬스체크 실패"
+          exit 1
+
+      - name: 자동 롤백 (헬스체크 실패 시)
+        if: failure() && steps.healthcheck.outcome == 'failure' && steps.pre-deploy.outputs.previous_image != 'none'
+        run: |
+          echo "⚠️ 헬스체크 실패 - 이전 버전으로 롤백 중..."
+          flyctl deploy --app hkd-backend \
+            --image "${{ steps.pre-deploy.outputs.previous_image }}"
+          echo "🔄 롤백 완료: ${{ steps.pre-deploy.outputs.previous_image }}"
+
+  # ──────────────────────────────────────
+  # 프론트엔드 Production 배포
+  # ──────────────────────────────────────
+  deploy-frontend:
+    name: 🎨 프론트엔드 → Production
+    needs: [changes, deploy-backend]
+    if: |
+      always() &&
+      needs.changes.outputs.frontend == 'true' &&
+      (needs.deploy-backend.result == 'success' || needs.deploy-backend.result == 'skipped')
+    runs-on: ubuntu-latest
+    environment: production
+    defaults:
+      run:
+        working-directory: architecture/frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fly.io CLI 설치
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: 현재 배포 버전 기록 (롤백용)
+        id: pre-deploy
+        run: |
+          CURRENT=$(flyctl releases --app hkd-frontend --json 2>/dev/null | \
+            jq -r '.[0].ImageRef // "none"') || CURRENT="none"
+          echo "previous_image=$CURRENT" >> $GITHUB_OUTPUT
+
+      - name: Production 배포
+        run: flyctl deploy --app hkd-frontend --remote-only
+
+      - name: 헬스체크
+        id: healthcheck
+        run: |
+          echo "⏳ 서비스 안정화 대기 (30초)..."
+          sleep 30
+
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://hankyeong.xyz/ || true)
+            if [ "$status" = "200" ]; then
+              echo "✅ 프론트엔드 Production 헬스체크 통과"
+              exit 0
+            fi
+            echo "⏳ 헬스체크 대기 중... (시도 $i, 상태: $status)"
+            sleep 10
+          done
+          echo "❌ 헬스체크 실패"
+          exit 1
+
+      - name: 자동 롤백 (헬스체크 실패 시)
+        if: failure() && steps.healthcheck.outcome == 'failure' && steps.pre-deploy.outputs.previous_image != 'none'
+        run: |
+          echo "⚠️ 헬스체크 실패 - 이전 버전으로 롤백 중..."
+          flyctl deploy --app hkd-frontend \
+            --image "${{ steps.pre-deploy.outputs.previous_image }}"
+          echo "🔄 롤백 완료"
+
+  # ──────────────────────────────────────
+  # 배포 알림 (선택: Slack/Discord 등 연동 가능)
+  # ──────────────────────────────────────
+  notify:
+    name: 📢 배포 알림
+    if: always()
+    needs: [deploy-backend, deploy-frontend]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 배포 결과 요약
+        run: |
+          echo "## 🚀 Production 배포 결과"
+          echo "- Backend:  ${{ needs.deploy-backend.result }}"
+          echo "- Frontend: ${{ needs.deploy-frontend.result }}"
+          echo "- 커밋: ${{ github.sha }}"
+          echo "- 시각: $(date -u '+%Y-%m-%d %H:%M UTC')"
+
+      # 선택: Slack 알림 연동
+      # - name: Slack 알림
+      #   if: always()
+      #   uses: 8398a7/action-slack@v3
+      #   with:
+      #     status: custom
+      #     fields: repo,commit,author
+      #     custom_payload: |
+      #       {
+      #         text: `HKD 배포 ${process.env.STATUS}`,
+      #         attachments: [{
+      #           color: '${{ job.status }}' === 'success' ? '#36a64f' : '#ff0000',
+      #           fields: [
+      #             { title: 'Backend', value: '${{ needs.deploy-backend.result }}' },
+      #             { title: 'Frontend', value: '${{ needs.deploy-frontend.result }}' }
+      #           ]
+      #         }]
+      #       }
+      #   env:
+      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}

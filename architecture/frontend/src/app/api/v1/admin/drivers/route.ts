@@ -14,6 +14,21 @@ export async function GET(request: Request) {
       params.append('isOnDuty', isOnDuty);
     }
 
+    // [SECURITY] 어드민 사용자의 regionId를 배달원 목록 필터에 추가
+    const adminUserHeader = request.headers.get('x-admin-user');
+    if (adminUserHeader) {
+      try {
+        // X-Admin-User 헤더는 Base64 인코딩되어 전송됨
+        const decoded = decodeURIComponent(escape(atob(adminUserHeader)));
+        const admin = JSON.parse(decoded);
+        if (admin.role === 'region_admin' && admin.regionId) {
+          params.append('regionId', admin.regionId);
+        }
+      } catch (e) {
+        console.error('Admin user header decode error:', e);
+      }
+    }
+
     const response = await fetch(`${BACKEND_URL}/api/v1/drivers/list?${params.toString()}`, {
       method: 'GET',
       headers: {

@@ -1,0 +1,144 @@
+# ============================================
+# HKD 배포 하네스 - Staging 환경
+# staging 브랜치 push 시 자동 배포
+# ============================================
+
+name: Deploy Staging
+
+on:
+  push:
+    branches: [staging]
+
+concurrency:
+  group: deploy-staging
+  cancel-in-progress: false  # 배포 중 취소 방지
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  # ──────────────────────────────────────
+  # 변경 감지
+  # ──────────────────────────────────────
+  changes:
+    name: 🔍 변경 감지
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'architecture/backend/**'
+            frontend:
+              - 'architecture/frontend/**'
+
+  # ──────────────────────────────────────
+  # 백엔드 Staging 배포
+  # ──────────────────────────────────────
+  deploy-backend-staging:
+    name: 🔧 백엔드 → Staging
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    environment: staging
+    defaults:
+      run:
+        working-directory: architecture/backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fly.io CLI 설치
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Staging 배포
+        run: flyctl deploy --app hkd-backend-staging --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: 헬스체크
+        run: |
+          echo "⏳ 서비스 안정화 대기 (30초)..."
+          sleep 30
+
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://hkd-backend-staging.fly.dev/health || true)
+            if [ "$status" = "200" ]; then
+              echo "✅ 백엔드 Staging 헬스체크 통과 (시도 $i)"
+              exit 0
+            fi
+            echo "⏳ 헬스체크 대기 중... (시도 $i, 상태: $status)"
+            sleep 10
+          done
+          echo "❌ 헬스체크 실패"
+          exit 1
+
+  # ──────────────────────────────────────
+  # 프론트엔드 Staging 배포
+  # ──────────────────────────────────────
+  deploy-frontend-staging:
+    name: 🎨 프론트엔드 → Staging
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    environment: staging
+    defaults:
+      run:
+        working-directory: architecture/frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Fly.io CLI 설치
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: Staging 배포
+        run: flyctl deploy --app hkd-frontend-staging --remote-only
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+      - name: 헬스체크
+        run: |
+          echo "⏳ 서비스 안정화 대기 (30초)..."
+          sleep 30
+
+          for i in 1 2 3 4 5; do
+            status=$(curl -s -o /dev/null -w "%{http_code}" \
+              https://hkd-frontend-staging.fly.dev/ || true)
+            if [ "$status" = "200" ]; then
+              echo "✅ 프론트엔드 Staging 헬스체크 통과 (시도 $i)"
+              exit 0
+            fi
+            echo "⏳ 헬스체크 대기 중... (시도 $i, 상태: $status)"
+            sleep 10
+          done
+          echo "❌ 헬스체크 실패"
+          exit 1
+
+  # ──────────────────────────────────────
+  # Staging 배포 요약
+  # ──────────────────────────────────────
+  staging-summary:
+    name: 📋 Staging 배포 요약
+    if: always()
+    needs: [deploy-backend-staging, deploy-frontend-staging]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 배포 결과
+        run: |
+          echo "## Staging 배포 결과"
+          echo "Backend:  ${{ needs.deploy-backend-staging.result }}"
+          echo "Frontend: ${{ needs.deploy-frontend-staging.result }}"
+
+          if [[ "${{ needs.deploy-backend-staging.result }}" == "failure" ]] || \
+             [[ "${{ needs.deploy-frontend-staging.result }}" == "failure" ]]; then
+            echo "❌ Staging 배포 실패 - Production 배포를 진행하지 마세요"
+            exit 1
+          fi
+          echo "✅ Staging 배포 완료"

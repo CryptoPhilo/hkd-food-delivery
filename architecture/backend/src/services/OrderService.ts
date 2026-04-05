@@ -1,11 +1,27 @@
 import { PrismaClient } from '@prisma/client';
 import { v4 as uuidv4 } from 'uuid';
 import { paymentService } from './PaymentService';
-import { smsService } from './SMSService';
+// SMS 제거 — 고객 알림은 웹 주문조회(polling)로 대체
 import { ageVerificationService } from './AgeVerificationService';
 import { OrderStatus, PaymentStatus, User, Restaurant, Order, OrderItem } from '../types/prisma';
+import logger from '../utils/logger';
 
 const prisma = new PrismaClient();
+
+/**
+ * [SECURITY] User 객체에서 민감 필드를 제외한 안전한 select 정의
+ * password, fcmToken 등 민감 정보가 API 응답에 포함되지 않도록 함
+ * (CRITICAL-03 보안 취약점 수정)
+ */
+const safeUserSelect = {
+  id: true,
+  phone: true,
+  name: true,
+  isActive: true,
+  createdAt: true,
+  updatedAt: true,
+  // password, fcmToken, email 등은 의도적으로 제외
+};
 
 export { OrderStatus, PaymentStatus };
 
@@ -31,6 +47,9 @@ interface CreateOrderInput {
   deliveryLng: number;
   customerMemo?: string;
   ageVerificationId?: string;
+  clientDeliveryFee?: number;
+  locale?: string;
+  deliveryGroupId?: string;
 }
 
 interface SetPickupTimeInput {
@@ -54,7 +73,7 @@ export class OrderService {
   }
 
   async createOrderWithPayment(input: CreateOrderInput & { impUid?: string }): Promise<Order> {
-    const { userId, restaurantId, items, deliveryAddress, deliveryLat, deliveryLng, customerMemo, ageVerificationId } = input;
+    const { userId, restaurantId, items, deliveryAddress, deliveryLat, deliveryLng, customerMemo, ageVerificationId, clientDeliveryFee, locale = 'ko', deliveryGroupId } = input;
 
     const restaurant = await prisma.restaurant.findUnique({
       where: { id: restaurantId },
@@ -151,7 +170,7 @@ export class OrderService {
       };
     });
 
-    const { deliveryFee, distance } = await this.calculateDeliveryFee(
+    const { deliveryFee: calculatedFee, distance } = await this.calculateDeliveryFee(
       restaurant.latitude,
       restaurant.longitude,
       deliveryLat,
@@ -162,11 +181,13 @@ export class OrderService {
       throw new Error(`배달 가능 지역을 초과했습니다. (최대 ${restaurant.deliveryRadius}km)`);
     }
 
+    // 프론트엔드에서 전달된 배달비가 있으면 그 값을 사용 (결제 금액과 일치시키기 위해)
+    const deliveryFee = (clientDeliveryFee !== undefined && clientDeliveryFee >= 0) ? clientDeliveryFee : calculatedFee;
     const totalAmount = subtotal + deliveryFee;
     const estimatedDeliveryTime = Math.ceil(20 + (distance / 30) * 60);
     const orderNumber = `HK${Date.now().toString(36).toUpperCase()}`;
 
-    const order = await prisma.order.create({
+    const order = await (prisma.order as any).create({
       data: {
         orderNumber,
         userId,
@@ -180,6 +201,8 @@ export class OrderService {
         deliveryLatitude: deliveryLat,
         deliveryLongitude: deliveryLng,
         customerMemo,
+        locale,
+        deliveryGroupId: deliveryGroupId || null,
         items: {
           create: orderItemData,
         },
@@ -187,15 +210,12 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    const message = this.buildOrderReceivedSMS(order, distance, estimatedDeliveryTime);
-    await smsService.sendSMS({
-      to: order.user.phone,
-      message,
-    });
+    // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+    logger.info('[Order] 주문 접수 완료 (웹 조회로 대체)', { orderId: order.id });
 
     return order as any;
   }
@@ -205,7 +225,7 @@ export class OrderService {
 
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { user: true, restaurant: true, items: true },
+      include: { user: { select: safeUserSelect }, restaurant: true, items: true },
     });
 
     if (!order) {
@@ -231,18 +251,15 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
     const confirmUrl = `${process.env.FRONTEND_URL}/confirm/${confirmToken}`;
     const cancelUrl = `${process.env.FRONTEND_URL}/cancel/${confirmToken}`;
 
-    const smsMessage = this.buildConfirmationSMS(updatedOrder, pickupTime, confirmUrl, cancelUrl);
-    await smsService.sendSMS({
-      to: updatedOrder.user.phone,
-      message: smsMessage,
-    });
+    // SMS 제거 — 고객은 웹 주문조회에서 확인/취소 링크 접근
+    logger.info('[Order] 픽업 확인 요청 (웹 조회로 대체)', { orderId: updatedOrder.id, confirmUrl, cancelUrl });
 
     return updatedOrder as any;
   }
@@ -253,7 +270,7 @@ export class OrderService {
         confirmToken: token,
         status: OrderStatusEnum.PENDING_CONFIRMATION,
       },
-      include: { user: true, restaurant: true, items: true },
+      include: { user: { select: safeUserSelect }, restaurant: true, items: true },
     });
 
     if (!order) {
@@ -275,15 +292,12 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    const message = this.buildConfirmedSMS(updatedOrder);
-    await smsService.sendSMS({
-      to: updatedOrder.user.phone,
-      message,
-    });
+    // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+    logger.info('[Order] 주문 확인 완료 (웹 조회로 대체)', { orderId: updatedOrder.id });
 
     return updatedOrder as any;
   }
@@ -332,15 +346,12 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    const message = this.buildCancellationSMS(updatedOrder);
-    await smsService.sendSMS({
-      to: updatedOrder.user.phone,
-      message,
-    });
+    // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+    logger.info('[Order] 주문 취소 완료 (웹 조회로 대체)', { orderId: updatedOrder.id });
 
     return updatedOrder as any;
   }
@@ -348,7 +359,7 @@ export class OrderService {
   async markAsPickedUp(orderId: string, restaurantPaidAmount?: number): Promise<Order> {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { user: true, restaurant: true, items: true },
+      include: { user: { select: safeUserSelect }, restaurant: true, items: true },
     });
 
     if (!order) {
@@ -371,23 +382,90 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    const message = this.buildPickedUpSMS(updatedOrder);
-    await smsService.sendSMS({
-      to: updatedOrder.user.phone,
-      message: message,
-    });
+    const locale = (order as any).locale || 'ko';
+
+    // 복수 식당 주문 그룹 여부 확인
+    if ((order as any).deliveryGroupId) {
+      // 같은 배달 그룹의 전체 주문 조회
+      const groupOrders = await (prisma.order as any).findMany({
+        where: { deliveryGroupId: (order as any).deliveryGroupId },
+        include: { restaurant: true },
+      });
+
+      const totalCount = groupOrders.length;
+      const pickedUpCount = groupOrders.filter((o: any) =>
+        ['picked_up', 'delivering', 'completed'].includes(o.status)
+      ).length;
+      const remaining = totalCount - pickedUpCount;
+
+      // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+      logger.info('[Order] 픽업 상태 변경 (웹 조회로 대체)', {
+        orderId: updatedOrder.id,
+        pickedUpCount,
+        totalCount,
+        remaining,
+      });
+    } else {
+      logger.info('[Order] 픽업 완료 (웹 조회로 대체)', { orderId: updatedOrder.id });
+    }
 
     return updatedOrder as any;
+  }
+
+  /**
+   * 배달 그룹 정보를 조회 (주문 상세 API에서 사용)
+   */
+  async getDeliveryGroupInfo(deliveryGroupId: string) {
+    const groupOrders = await (prisma.order as any).findMany({
+      where: { deliveryGroupId },
+      include: { restaurant: true, items: true },
+      orderBy: { createdAt: 'asc' },
+    });
+
+    const totalOrders = groupOrders.length;
+    const pickedUpOrders = groupOrders.filter((o: any) =>
+      ['picked_up', 'delivering', 'completed'].includes(o.status)
+    ).length;
+
+    // 그룹 전체 금액 합산
+    const groupSubtotal = groupOrders.reduce((sum: number, o: any) => sum + Number(o.subtotal || 0), 0);
+    const groupDeliveryFee = groupOrders.reduce((sum: number, o: any) => sum + Number(o.deliveryFee || 0), 0);
+    const groupTotalAmount = groupOrders.reduce((sum: number, o: any) => sum + Number(o.totalAmount || 0), 0);
+
+    return {
+      totalOrders,
+      pickedUpOrders,
+      groupSubtotal,
+      groupDeliveryFee,
+      groupTotalAmount,
+      orders: groupOrders.map((o: any) => ({
+        id: o.id,
+        orderNumber: o.orderNumber,
+        restaurantName: o.restaurant.name,
+        status: o.status,
+        pickedUpAt: o.pickedUpAt,
+        subtotal: Number(o.subtotal || 0),
+        deliveryFee: Number(o.deliveryFee || 0),
+        totalAmount: Number(o.totalAmount || 0),
+        items: o.items.map((item: any) => ({
+          id: item.id,
+          menuName: item.menuName,
+          quantity: item.quantity,
+          unitPrice: Number(item.unitPrice || 0),
+          subtotal: Number(item.subtotal || 0),
+        })),
+      })),
+    };
   }
 
   async markAsDelivering(orderId: string): Promise<Order> {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { user: true },
+      include: { user: { select: safeUserSelect } },
     });
 
     if (!order) {
@@ -402,14 +480,12 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    await smsService.sendSMS({
-      to: updatedOrder.user.phone,
-      message: `[한경배달] 주문번호 ${order.orderNumber}이(가) 배달 중입니다.`,
-    });
+    // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+    logger.info('[Order] 배달 중 상태 변경 (웹 조회로 대체)', { orderId: updatedOrder.id });
 
     return updatedOrder as any;
   }
@@ -417,7 +493,7 @@ export class OrderService {
   async markAsCompleted(orderId: string): Promise<Order> {
     const order = await prisma.order.findUnique({
       where: { id: orderId },
-      include: { user: true },
+      include: { user: { select: safeUserSelect } },
     });
 
     if (!order) {
@@ -433,11 +509,12 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
 
-    await smsService.sendDeliveryComplete(order.user.phone, order.orderNumber);
+    // SMS 제거 — 고객은 웹 주문조회에서 실시간 상태 확인
+    logger.info('[Order] 배달 완료 (웹 조회로 대체)', { orderId: order.id });
 
     return updatedOrder as any;
   }
@@ -448,8 +525,15 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
-        driver: true,
+        user: { select: safeUserSelect },
+        driver: {
+          select: {
+            id: true,
+            name: true,
+            phone: true,
+            isActive: true,
+          } as any,
+        },
       },
     });
   }
@@ -472,7 +556,7 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
   }
@@ -484,7 +568,7 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
   }
@@ -496,7 +580,7 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
   }
@@ -508,7 +592,7 @@ export class OrderService {
       include: {
         items: true,
         restaurant: true,
-        user: true,
+        user: { select: safeUserSelect },
       },
     });
   }
@@ -533,66 +617,7 @@ export class OrderService {
     };
   }
 
-  private buildOrderReceivedSMS(order: any, distance: number, estimatedTime: number): string {
-    const items = (order.items || []).map((i: any) => `${i.menuName} x${i.quantity}`).join(', ');
-
-    return `[한경배달]
-주문이 요청되었습니다.
-주문번호: ${order.orderNumber}
-식당: ${order.restaurant.name}
-메뉴: ${items}
-배달비: ${order.deliveryFee.toLocaleString()}원
-총액: ${order.totalAmount.toLocaleString()}원
-예상 배달 시간: 약 ${estimatedTime}분
-
-업체에서 픽업 가능 시간을 확인중입니다.`;
-  }
-
-  private buildConfirmationSMS(
-    order: any,
-    pickupTime: Date,
-    confirmUrl: string,
-    cancelUrl: string
-  ): string {
-    const pickupTimeStr = pickupTime.toLocaleTimeString('ko-KR', {
-      hour: '2-digit',
-      minute: '2-digit',
-    });
-
-    const items = (order.items || []).map((i: any) => `${i.menuName} x${i.quantity}`).join(', ');
-
-    return `[한경배달]
-주문번호: ${order.orderNumber}
-식당: ${order.restaurant.name}
-메뉴: ${items}
-배달비: ${order.deliveryFee.toLocaleString()}원
-총액: ${order.totalAmount.toLocaleString()}원
-예상 픽업 시간: ${pickupTimeStr}
-예상 배달 시간: 약 ${order.estimatedDeliveryTime}분
-
-주문을 확정하시겠습니까?
-확정: ${confirmUrl}
-취소: ${cancelUrl}
-
-10분 이내 미확정 시 자동 취소됩니다.`;
-  }
-
-  private buildConfirmedSMS(order: any): string {
-    return `[한경배달]
-주문번호: ${order.orderNumber}이(가) 확정되었습니다.
-업체에서 식당에 주문을 넣고 픽업 후 배달을 시작합니다.`;
-  }
-
-  private buildCancellationSMS(order: any): string {
-    return `[한경배달]
-주문번호: ${order.orderNumber}이(가) 취소되었습니다.`;
-  }
-
-  private buildPickedUpSMS(order: any): string {
-    return `[한경배달]
-주문번호: ${order.orderNumber}의 결제가 완료되고 픽업되었습니다.
-배달을 시작합니다.`;
-  }
+  // SMS 빌드 메서드 제거 — 고객 알림은 웹 주문조회(polling)로 대체
 
   async validateOrderItems(items: { menuId: string; quantity: number }[]) {
     const menuItems = await prisma.menu.findMany({

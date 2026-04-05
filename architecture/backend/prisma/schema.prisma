@@ -7,8 +7,8 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
-  url      = "file:./dev.db"
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 // ============================================
@@ -50,29 +50,37 @@ model Restaurant {
   storeType       String   @default("restaurant") @map("store_type") // "restaurant" | "convenience_store"
   
   name            String
+  nameEn          String?  @map("name_en")
   address         String
   roadAddress     String?  @map("road_address")
   latitude        Float
   longitude       Float
-  
+
   phone           String?
   category        String?
+  categoryEn      String?  @map("category_en")
+  descriptionEn   String?  @map("description_en")
   businessStatus  String?  @map("business_status")
   businessHours   String?  @map("business_hours")
   
   description     String?
   imageUrl        String?  @map("image_url")
+  thumbnailUrl    String?  @map("thumbnail_url")
   rating          Float?
-  
+
   isActive        Boolean  @default(true) @map("is_active")
   isDeliverable   Boolean  @default(true) @map("is_deliverable")
-  
+  isRecommended   Boolean  @default(false) @map("is_recommended")
+
   deliveryRadius  Float?   @default(3.0) @map("delivery_radius")
-  
+
   // 편의점 전용 필드
   brandName        String?   @map("brand_name")        // 브랜드명 (CU, GS25 등)
   operatingHours24 Boolean?  @default(false) @map("operating_hours_24") // 24시간 영업
-  
+
+  regionId        String?  @map("region_id")
+  region          Region?  @relation(fields: [regionId], references: [id])
+
   menus           Menu[]
   orders          Order[]
   
@@ -83,6 +91,7 @@ model Restaurant {
   @@index([storeType])
   @@index([isActive, isDeliverable])
   @@index([latitude, longitude])
+  @@index([regionId])
   @@map("restaurants")
 }
 
@@ -95,9 +104,12 @@ model Menu {
   
   naverMenuId   String?  @map("naver_menu_id")
   name          String
+  nameEn        String?  @map("name_en")
   description   String?
+  descriptionEn String?  @map("description_en")
   price         Int
   imageUrl      String?  @map("image_url")
+  thumbnailUrl  String?  @map("thumbnail_url")
   
   isAvailable   Boolean  @default(true) @map("is_available")
   isActive      Boolean  @default(true) @map("is_active")
@@ -162,13 +174,15 @@ model Order {
   
   customerMemo          String?   @map("customer_memo")
   restaurantMemo        String?   @map("restaurant_memo")
-  
+  locale                String    @default("ko")
+  deliveryGroupId       String?   @map("delivery_group_id")  // 복수 식당 주문 그룹 ID
+
   user                  User           @relation(fields: [userId], references: [id])
   restaurant            Restaurant     @relation(fields: [restaurantId], references: [id])
   driver                Driver?        @relation(fields: [driverId], references: [id])
   items                 OrderItem[]
   settlementItems       SettlementItem[]
-  
+
   createdAt       DateTime @default(now()) @map("created_at")
   updatedAt       DateTime @updatedAt @map("updated_at")
 
@@ -178,6 +192,7 @@ model Order {
   @@index([status])
   @@index([orderNumber])
   @@index([confirmToken])
+  @@index([deliveryGroupId])
   @@map("orders")
 }
 
@@ -351,17 +366,82 @@ model AgeVerification {
   id          String   @id @default(uuid())
   userId      String   @map("user_id")
   user        User     @relation(fields: [userId], references: [id])
-  
+
   verifiedAt  DateTime @default(now()) @map("verified_at")
   expiresAt   DateTime @map("expires_at")
-  
+
   method      String   @default("phone") @map("method") // 인증 방식 (phone, ipin 등)
   phoneNumber String   @map("phone_number")
   isVerified  Boolean  @default(true) @map("is_verified")
-  
+
   createdAt   DateTime @default(now()) @map("created_at")
-  
+
   @@index([userId])
   @@index([expiresAt])
   @@map("age_verifications")
+}
+
+// ============================================
+// RefreshToken Table - JWT Refresh Token 관리
+// (Token Rotation & Revocation 지원)
+// ============================================
+model RefreshToken {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  userId    String    @map("user_id")
+  userType  String    @map("user_type") // "user" | "driver" | "admin"
+  expiresAt DateTime  @map("expires_at")
+  revokedAt DateTime? @map("revoked_at")
+  createdAt DateTime  @default(now()) @map("created_at")
+
+  @@index([userId])
+  @@index([token])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// ============================================
+// AdminUser Table - 관리자
+// ============================================
+model AdminUser {
+  id          String   @id @default(uuid())
+  username    String   @unique
+  password    String
+  name        String?
+  role        String   @default("admin") // "super_admin" | "admin" | "regional_admin"
+  regionId    String?  @map("region_id")
+  region      Region?  @relation(fields: [regionId], references: [id])
+
+  isActive    Boolean  @default(true) @map("is_active")
+  lastLoginAt DateTime? @map("last_login_at")
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@index([username])
+  @@map("admin_users")
+}
+
+// ============================================
+// Region Table - 지역
+// ============================================
+model Region {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  nameEn      String?  @map("name_en")
+  description String?
+
+  latitude    Float?
+  longitude   Float?
+  radiusKm    Float?   @map("radius_km")
+
+  isActive    Boolean  @default(true) @map("is_active")
+
+  adminUsers  AdminUser[]
+  restaurants Restaurant[]
+
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  @@map("regions")
 }

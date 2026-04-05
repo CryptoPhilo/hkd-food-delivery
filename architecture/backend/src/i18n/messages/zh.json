@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "您的订单已提交。",
+      "orderNumber": "订单号: {orderNumber}",
+      "restaurant": "餐厅: {restaurantName}",
+      "menu": "菜品: {items}",
+      "deliveryFee": "配送费: ₩{deliveryFee}",
+      "totalAmount": "总计: ₩{totalAmount}",
+      "estimatedTime": "预计配送时间: 约{estimatedTime}分钟",
+      "waitingPickupTime": "正在确认取餐时间。"
+    },
+    "confirmation": {
+      "estimatedPickup": "预计取餐时间: {pickupTimeStr}",
+      "estimatedDelivery": "预计配送时间: 约{estimatedDeliveryTime}分钟",
+      "confirmQuestion": "是否确认订单？",
+      "confirmLink": "确认: {confirmUrl}",
+      "cancelLink": "取消: {cancelUrl}",
+      "autoCancel": "10分钟内未确认将自动取消。"
+    },
+    "confirmed": "订单号: {orderNumber}已确认。\n将从餐厅取餐后开始配送。",
+    "cancelled": "订单号: {orderNumber}已取消。",
+    "pickedUp": "订单号: {orderNumber}已付款并取餐。\n开始配送。",
+    "deliveryComplete": "订单号: {orderNumber}已配送完成。\n\n感谢您！",
+    "pickupNotification": "订单号: {orderNumber}\n取餐时间: {pickupTimeStr}\n\n将按时取餐。",
+    "driverAssigned": "订单{orderNumber}已分配配送员。",
+    "driverDeparted": "配送员正前往取订单{orderNumber}。",
+    "delivering": "订单{orderNumber}正在配送中。",
+    "verificationCode": "年龄验证码: {code}\n\n请在3分钟内输入。",
+    "authCode": "验证码: {verificationCode}\n请在3分钟内输入。",
+    "orderLink": "点击下方链接开始下单。\n{targetUrl}",
+    "partialPickup": "{restaurantName} 已取餐 ({pickedUp}/{total}家餐厅)",
+    "partialPickupRemaining": "剩余{remaining}家取餐后开始配送。",
+    "allPickedUp": "所有餐厅已取餐 ({total}/{total})",
+    "allPickedUpDelivery": "即将开始配送！"
+  }
+}

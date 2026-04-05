@@ -1,57 +1,69 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
+const BACKEND_URL = process.env.BACKEND_URL || 'https://api.hankyeong.xyz';
+
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const { data: setting } = await supabase
-      .from('settings')
-      .select('*')
-      .eq('key', 'platform_hours')
-      .single();
+    const response = await fetch(`${BACKEND_URL}/api/v1/settings/platform-hours`, {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    });
 
-    const defaultSettings = {
-      openTime: '09:00',
-      closeTime: '22:00',
-      isActive: true,
-    };
+    const text = await response.text();
+    console.log('[platform-hours GET] backend response:', response.status, text.slice(0, 300));
 
-    if (setting) {
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      // 백엔드 응답 파싱 실패 시 기본값 반환
+      console.error('[platform-hours GET] JSON parse failed, using defaults');
       return NextResponse.json({
         success: true,
-        data: JSON.parse(setting.value),
+        data: { openTime: '09:00', closeTime: '22:00', isActive: true, closedDays: [] },
       });
     }
 
-    return NextResponse.json({ success: true, data: defaultSettings });
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    console.error('[platform-hours GET] Error:', error);
+    // 백엔드 연결 실패 시에도 기본값 반환 (운영 중)
+    return NextResponse.json({
+      success: true,
+      data: { openTime: '09:00', closeTime: '22:00', isActive: true, closedDays: [] },
+    });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
     const body = await request.json();
-    
-    const { data: setting, error } = await supabase
-      .from('settings')
-      .upsert({
-        key: 'platform_hours',
-        value: JSON.stringify(body),
-        type: 'platform_hours',
-      }, { onConflict: 'key' })
-      .select()
-      .single();
+    console.log('[platform-hours POST] body:', JSON.stringify(body));
 
-    if (error) throw error;
+    const response = await fetch(`${BACKEND_URL}/api/v1/settings/platform-hours`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
 
-    return NextResponse.json({ success: true, data: setting });
+    const text = await response.text();
+    console.log('[platform-hours POST] backend response:', response.status, text.slice(0, 300));
+
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return NextResponse.json(
+        { success: false, error: `백엔드 응답 파싱 실패 (${response.status}): ${text.slice(0, 200)}` },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[platform-hours POST] Error:', error);
     return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }

@@ -61,9 +61,10 @@ router.get('/platform-hours', async (req: Request, res: Response, next: NextFunc
 
 router.post('/platform-hours', async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const { openTime, closeTime, isActive } = req.body;
+    const { openTime, closeTime, isActive, closedDays } = req.body;
 
-    const value = JSON.stringify({ openTime, closeTime, isActive });
+    const data = { openTime, closeTime, isActive, closedDays: closedDays || [] };
+    const value = JSON.stringify(data);
 
     const setting = await prisma.setting.upsert({
       where: { key: 'platform_hours' },
@@ -73,7 +74,7 @@ router.post('/platform-hours', async (req: Request, res: Response, next: NextFun
 
     res.json({
       success: true,
-      data: { openTime, closeTime, isActive },
+      data,
     });
   } catch (error) {
     next(error);

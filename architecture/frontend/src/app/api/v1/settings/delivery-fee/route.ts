@@ -1,56 +1,61 @@
 import { NextResponse } from 'next/server';
-import { createClient } from '@/utils/supabase/server';
 
 export const dynamic = 'force-dynamic';
 
+const BACKEND_URL = process.env.BACKEND_URL || 'https://api.hankyeong.xyz';
+
 export async function GET() {
   try {
-    const supabase = await createClient();
-    const { data: setting } = await supabase
-      .from('settings')
-      .select('*')
-      .eq('key', 'delivery_fee')
-      .single();
+    const response = await fetch(`${BACKEND_URL}/api/v1/settings/delivery-fee`, {
+      headers: { 'Content-Type': 'application/json' },
+      cache: 'no-store',
+    });
 
-    const defaultFee = {
-      baseFee: 5000,
-      extraPerRestaurant: 3000,
-    };
-
-    if (setting) {
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
       return NextResponse.json({
         success: true,
-        data: JSON.parse(setting.value),
+        data: { baseFee: 3000, perKmFee: 500, maxDistance: 5.0, freeDeliveryThreshold: 30000 },
       });
     }
 
-    return NextResponse.json({ success: true, data: defaultFee });
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
+    console.error('[delivery-fee GET] Error:', error);
+    return NextResponse.json({
+      success: true,
+      data: { baseFee: 3000, perKmFee: 500, maxDistance: 5.0, freeDeliveryThreshold: 30000 },
+    });
   }
 }
 
 export async function POST(request: Request) {
   try {
-    const supabase = await createClient();
     const body = await request.json();
-    
-    const { data: setting, error } = await supabase
-      .from('settings')
-      .upsert({
-        key: 'delivery_fee',
-        value: JSON.stringify(body),
-        type: 'delivery_fee',
-      }, { onConflict: 'key' })
-      .select()
-      .single();
 
-    if (error) throw error;
+    const response = await fetch(`${BACKEND_URL}/api/v1/settings/delivery-fee`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body),
+    });
 
-    return NextResponse.json({ success: true, data: setting });
+    const text = await response.text();
+    let data;
+    try {
+      data = JSON.parse(text);
+    } catch {
+      return NextResponse.json(
+        { success: false, error: `백엔드 응답 파싱 실패 (${response.status})` },
+        { status: 500 }
+      );
+    }
+
+    return NextResponse.json(data);
   } catch (error) {
-    console.error('Error:', error);
+    console.error('[delivery-fee POST] Error:', error);
     return NextResponse.json({ success: false, error: String(error) }, { status: 500 });
   }
 }

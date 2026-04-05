@@ -1,0 +1,71 @@
+# ============================================
+# HKD 배포 하네스 - Supabase Edge Functions
+# supabase/functions 디렉토리 변경 시 자동 배포
+# ============================================
+
+name: Deploy Edge Functions
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'supabase/functions/**'
+  workflow_dispatch:
+    inputs:
+      function_name:
+        description: '특정 함수만 배포 (비워두면 전체 배포)'
+        required: false
+        type: string
+
+env:
+  SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+  SUPABASE_PROJECT_REF: ${{ secrets.SUPABASE_PROJECT_REF }}
+
+jobs:
+  deploy-edge-functions:
+    name: ⚡ Edge Functions 배포
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Supabase CLI 설치
+        uses: supabase/setup-cli@v1
+        with:
+          version: latest
+
+      - name: 변경된 함수 감지
+        id: detect
+        run: |
+          if [ -n "${{ inputs.function_name }}" ]; then
+            echo "functions=${{ inputs.function_name }}" >> $GITHUB_OUTPUT
+            echo "📌 수동 지정: ${{ inputs.function_name }}"
+          else
+            # 최근 커밋에서 변경된 Edge Functions 감지
+            CHANGED=$(git diff --name-only HEAD~1 HEAD -- supabase/functions/ | \
+              grep -oP 'supabase/functions/\K[^/]+' | sort -u | tr '\n' ' ')
+            if [ -z "$CHANGED" ]; then
+              echo "변경된 함수 없음"
+              echo "functions=" >> $GITHUB_OUTPUT
+            else
+              echo "functions=$CHANGED" >> $GITHUB_OUTPUT
+              echo "📦 변경 감지: $CHANGED"
+            fi
+          fi
+
+      - name: Edge Functions 배포
+        if: steps.detect.outputs.functions != ''
+        run: |
+          for func in ${{ steps.detect.outputs.functions }}; do
+            echo "🚀 배포 중: $func"
+            supabase functions deploy "$func" \
+              --project-ref "$SUPABASE_PROJECT_REF" \
+              --no-verify-jwt
+            echo "✅ 배포 완료: $func"
+          done
+
+      - name: 전체 배포 (함수 목록 없을 시 스킵)
+        if: steps.detect.outputs.functions == '' && inputs.function_name == ''
+        run: |
+          echo "ℹ️ 변경된 Edge Function이 없습니다. 스킵합니다."

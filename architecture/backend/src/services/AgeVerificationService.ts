@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { SMSService } from './SMSService';
+import { smsService } from './SMSService';
 
 const prisma = new PrismaClient();
 
@@ -15,11 +15,8 @@ interface AgeVerificationVerify {
 
 export class AgeVerificationService {
   private static instance: AgeVerificationService;
-  private smsService: SMSService;
 
-  constructor() {
-    this.smsService = new SMSService();
-  }
+  constructor() {}
 
   static getInstance(): AgeVerificationService {
     if (!AgeVerificationService.instance) {
@@ -59,7 +56,7 @@ export class AgeVerificationService {
     });
 
     try {
-      await this.smsService.sendVerificationCode(phoneNumber, code);
+      await smsService.sendVerificationCode(phoneNumber, code);
     } catch (error) {
     }
 

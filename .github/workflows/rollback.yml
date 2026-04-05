@@ -1,0 +1,105 @@
+# ============================================
+# HKD 배포 하네스 - 수동 롤백
+# Actions UI에서 수동으로 실행하여 이전 버전으로 롤백
+# ============================================
+
+name: Manual Rollback
+
+on:
+  workflow_dispatch:
+    inputs:
+      service:
+        description: '롤백 대상 서비스'
+        required: true
+        type: choice
+        options:
+          - backend
+          - frontend
+          - both
+      release_number:
+        description: '롤백할 릴리즈 번호 (비워두면 직전 버전)'
+        required: false
+        type: string
+      reason:
+        description: '롤백 사유'
+        required: true
+        type: string
+
+env:
+  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+
+jobs:
+  rollback:
+    name: 🔄 롤백 - ${{ inputs.service }}
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+      - name: Fly.io CLI 설치
+        uses: superfly/flyctl-actions/setup-flyctl@master
+
+      - name: 롤백 정보 확인
+        run: |
+          echo "## 롤백 정보"
+          echo "- 대상: ${{ inputs.service }}"
+          echo "- 릴리즈: ${{ inputs.release_number || '직전 버전' }}"
+          echo "- 사유: ${{ inputs.reason }}"
+          echo "- 실행자: ${{ github.actor }}"
+
+      - name: 백엔드 롤백
+        if: inputs.service == 'backend' || inputs.service == 'both'
+        run: |
+          echo "🔄 백엔드 롤백 시작..."
+
+          if [ -n "${{ inputs.release_number }}" ]; then
+            IMAGE=$(flyctl releases --app hkd-backend --json | \
+              jq -r '.[] | select(.Version == ${{ inputs.release_number }}) | .ImageRef')
+          else
+            IMAGE=$(flyctl releases --app hkd-backend --json | \
+              jq -r '.[1].ImageRef')
+          fi
+
+          if [ -z "$IMAGE" ] || [ "$IMAGE" = "null" ]; then
+            echo "❌ 롤백 대상 이미지를 찾을 수 없습니다"
+            exit 1
+          fi
+
+          echo "📌 롤백 이미지: $IMAGE"
+          flyctl deploy --app hkd-backend --image "$IMAGE"
+          echo "✅ 백엔드 롤백 완료"
+
+      - name: 프론트엔드 롤백
+        if: inputs.service == 'frontend' || inputs.service == 'both'
+        run: |
+          echo "🔄 프론트엔드 롤백 시작..."
+
+          if [ -n "${{ inputs.release_number }}" ]; then
+            IMAGE=$(flyctl releases --app hkd-frontend --json | \
+              jq -r '.[] | select(.Version == ${{ inputs.release_number }}) | .ImageRef')
+          else
+            IMAGE=$(flyctl releases --app hkd-frontend --json | \
+              jq -r '.[1].ImageRef')
+          fi
+
+          if [ -z "$IMAGE" ] || [ "$IMAGE" = "null" ]; then
+            echo "❌ 롤백 대상 이미지를 찾을 수 없습니다"
+            exit 1
+          fi
+
+          echo "📌 롤백 이미지: $IMAGE"
+          flyctl deploy --app hkd-frontend --image "$IMAGE"
+          echo "✅ 프론트엔드 롤백 완료"
+
+      - name: 롤백 후 헬스체크
+        run: |
+          sleep 30
+
+          if [[ "${{ inputs.service }}" == "backend" || "${{ inputs.service }}" == "both" ]]; then
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://hkd-backend.fly.dev/health || true)
+            echo "백엔드 헬스체크: $status"
+          fi
+
+          if [[ "${{ inputs.service }}" == "frontend" || "${{ inputs.service }}" == "both" ]]; then
+            status=$(curl -s -o /dev/null -w "%{http_code}" https://hankyeong.xyz/ || true)
+            echo "프론트엔드 헬스체크: $status"
+          fi

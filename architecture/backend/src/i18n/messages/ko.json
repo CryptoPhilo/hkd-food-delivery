@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[한경배달]",
+    "orderReceived": {
+      "title": "주문이 요청되었습니다.",
+      "orderNumber": "주문번호: {orderNumber}",
+      "restaurant": "식당: {restaurantName}",
+      "menu": "메뉴: {items}",
+      "deliveryFee": "배달비: ₩{deliveryFee}",
+      "totalAmount": "총액: ₩{totalAmount}",
+      "estimatedTime": "예상 배달 시간: 약 {estimatedTime}분",
+      "waitingPickupTime": "업체에서 픽업 가능 시간을 확인중입니다."
+    },
+    "confirmation": {
+      "estimatedPickup": "예상 픽업 시간: {pickupTimeStr}",
+      "estimatedDelivery": "예상 배달 시간: 약 {estimatedDeliveryTime}분",
+      "confirmQuestion": "주문을 확정하시겠습니까?",
+      "confirmLink": "확정: {confirmUrl}",
+      "cancelLink": "취소: {cancelUrl}",
+      "autoCancel": "10분 이내 미확정 시 자동 취소됩니다."
+    },
+    "confirmed": "주문번호: {orderNumber}이(가) 확정되었습니다.\n업체에서 식당에 주문을 넣고 픽업 후 배달을 시작합니다.",
+    "cancelled": "주문번호: {orderNumber}이(가) 취소되었습니다.",
+    "pickedUp": "주문번호: {orderNumber}의 결제가 완료되고 픽업되었습니다.\n배달을 시작합니다.",
+    "deliveryComplete": "주문번호: {orderNumber}의 배달이 완료되었습니다.\n\n감사합니다.",
+    "pickupNotification": "주문번호: {orderNumber}\n픽업 가능 시간: {pickupTimeStr}\n\n해당 시간에 픽업 예정입니다.",
+    "driverAssigned": "주문번호 {orderNumber}에 배달원이 배정되었습니다.",
+    "driverDeparted": "주문번호 {orderNumber}의 음식을 픽업하러 출발합니다.",
+    "delivering": "주문번호 {orderNumber}이(가) 배달 중입니다.",
+    "verificationCode": "성인 인증번호: {code}\n\n3분 이내에 입력해주세요.",
+    "authCode": "인증번호: {verificationCode}\n3분 이내 입력해주세요.",
+    "orderLink": "주문을 시작하려면 아래 링크를 클릭하세요.\n{targetUrl}",
+    "partialPickup": "{restaurantName} 픽업 완료 ({pickedUp}/{total} 식당)",
+    "partialPickupRemaining": "나머지 {remaining}곳 픽업 후 배달 시작합니다.",
+    "allPickedUp": "모든 식당 픽업 완료 ({total}/{total})",
+    "allPickedUpDelivery": "배달을 시작합니다!"
+  }
+}

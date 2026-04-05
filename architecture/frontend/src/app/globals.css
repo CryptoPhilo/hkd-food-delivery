@@ -1,3 +1,100 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ── Airbnb Design System Base ── */
+@layer base {
+  body {
+    @apply font-airbnb text-airbnb-black bg-airbnb-bg antialiased;
+  }
+
+  /* Scrollbar hiding for horizontal scrolls */
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
+
+@layer components {
+  /* Airbnb Card */
+  .airbnb-card {
+    @apply bg-white rounded-airbnb-lg shadow-airbnb-card;
+  }
+  .airbnb-card-hover {
+    @apply bg-white rounded-airbnb-lg shadow-airbnb-card transition-all duration-200;
+  }
+  .airbnb-card-hover:hover {
+    @apply shadow-airbnb-hover -translate-y-0.5;
+  }
+
+  /* Airbnb Primary Button (near-black) */
+  .airbnb-btn {
+    @apply inline-flex items-center justify-center gap-2 px-6 h-12 rounded-airbnb-sm text-base font-medium border-none cursor-pointer transition-all duration-200;
+  }
+  .airbnb-btn-primary {
+    @apply airbnb-btn bg-airbnb-black text-white;
+  }
+  .airbnb-btn-primary:hover {
+    @apply bg-airbnb-red;
+  }
+  .airbnb-btn-primary:disabled {
+    @apply opacity-40 cursor-not-allowed;
+  }
+  .airbnb-btn-primary:disabled:hover {
+    @apply bg-airbnb-black;
+  }
+
+  /* Airbnb Brand Button (Rausch Red) */
+  .airbnb-btn-brand {
+    @apply airbnb-btn bg-airbnb-red text-white;
+  }
+  .airbnb-btn-brand:hover {
+    @apply bg-airbnb-red-dark;
+  }
+
+  /* Airbnb Secondary Button */
+  .airbnb-btn-secondary {
+    @apply airbnb-btn bg-white text-airbnb-black border border-airbnb-border;
+  }
+  .airbnb-btn-secondary:hover {
+    @apply shadow-airbnb-hover;
+  }
+
+  /* Airbnb Circular Button */
+  .airbnb-circle-btn {
+    @apply flex items-center justify-center rounded-full bg-airbnb-surface border-none cursor-pointer transition-all duration-200;
+  }
+  .airbnb-circle-btn:hover {
+    @apply bg-white shadow-airbnb-hover;
+  }
+
+  /* Airbnb Badge */
+  .airbnb-badge {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-airbnb-md text-xs font-semibold;
+  }
+
+  /* Airbnb Input */
+  .airbnb-input {
+    @apply w-full px-4 py-3.5 rounded-airbnb-sm border border-airbnb-border text-[15px] text-airbnb-black outline-none transition-all duration-200 font-airbnb;
+  }
+  .airbnb-input:focus {
+    @apply border-airbnb-black shadow-airbnb-focus;
+  }
+
+  /* Airbnb Category Pill */
+  .airbnb-pill {
+    @apply whitespace-nowrap px-4 py-2 rounded-airbnb-xl text-sm font-medium cursor-pointer transition-all duration-200;
+  }
+  .airbnb-pill-active {
+    @apply airbnb-pill bg-airbnb-black text-white border-2 border-airbnb-black;
+  }
+  .airbnb-pill-inactive {
+    @apply airbnb-pill bg-white text-airbnb-black border border-airbnb-border;
+  }
+  .airbnb-pill-inactive:hover {
+    @apply border-airbnb-black;
+  }
+}

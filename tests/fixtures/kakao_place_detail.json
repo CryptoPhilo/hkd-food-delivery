@@ -1,0 +1,24 @@
+{
+  "isMapUser": false,
+  "basicInfo": {
+    "cid": 12345,
+    "placenamefull": "BBQ 제주한경점",
+    "phonenum": "064-773-0669",
+    "address": {
+      "newaddr": {
+        "newaddrfull": "제주특별자치도 제주시 한경면 일주서로 456"
+      },
+      "region": {
+        "newaddrfullname": "제주특별자치도 제주시 한경면"
+      }
+    }
+  },
+  "menuInfo": {
+    "menucount": 3,
+    "list": [
+      {"menu": "황금올리브치킨", "price": "19,000원"},
+      {"menu": "자메이카통다리", "price": "18,000원"},
+      {"menu": "양념치킨", "price": "17,000원"}
+    ]
+  }
+}

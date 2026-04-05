@@ -1,0 +1,27 @@
+# ============================================
+# HKD 레포지터리 하네스 - 자동 라벨링
+# PR 변경 파일 기반으로 자동 라벨 부여
+# ============================================
+
+name: Auto Label
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  label:
+    name: 🏷️ 자동 라벨링
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/labeler@v5
+        with:
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          configuration-path: .github/labeler.yml
+          sync-labels: true

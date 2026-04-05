@@ -1,0 +1,64 @@
+[project]
+name = "hkd-scrapers"
+version = "1.0.0"
+description = "HKD 한경배달 레스토랑 데이터 수집 스크래퍼"
+requires-python = ">=3.9"
+
+[tool.pytest.ini_options]
+testpaths = ["scrapers/tests", "tests"]
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+addopts = "-v --tb=short"
+markers = [
+    "integration: 외부 API 호출이 필요한 통합 테스트",
+    "unit: 외부 의존성 없는 단위 테스트",
+]
+
+[tool.coverage.run]
+source = ["scrapers", "tests"]
+omit = ["*/tests/*", "*/__pycache__/*"]
+
+[tool.coverage.report]
+show_missing = true
+fail_under = 70
+
+# ── Ruff (Python 린터 + 포매터) ──
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+src = ["scrapers", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort (import 정렬)
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "SIM",  # flake8-simplify
+    "RUF",  # ruff 전용 규칙
+]
+ignore = [
+    "E501",    # line-length (formatter가 처리)
+    "B008",    # function-call-in-default-argument
+    "UP006",   # deprecated type alias (List→list) - 기존 코드 호환
+    "UP035",   # deprecated typing import - 기존 코드 호환
+    "N806",    # variable in function should be lowercase (R=6371 등 상수)
+    "SIM108",  # ternary operator 강제 - 가독성 우선
+    "SIM117",  # nested with statements - 가독성 우선
+    "SIM222",  # simplify or expression
+    "RUF012",  # mutable class default - dataclass 패턴 허용
+    "F841",    # unused variable - warn만 (CI에서 체크)
+    "B007",    # unused loop variable
+]
+
+[tool.ruff.lint.isort]
+known-first-party = ["scrapers"]
+
+[tool.ruff.format]
+quote-style = "double"
+indent-style = "space"
+docstring-code-format = true

@@ -1,34 +1,22 @@
 import axios from 'axios';
+import { auditLogger } from '../utils/security.utils';
+import logger from '../utils/logger';
 
-const PORTONE_API_KEY = process.env.PORTONE_API_KEY || '';
-const PORTONE_API_SECRET = process.env.PORTONE_API_SECRET || '';
-const PORTONE_MERCHANT_ID = process.env.PORTONE_MERCHANT_ID || '';
+// ============================================
+// PortOne V2 설정
+// ============================================
+const PORTONE_V2_API_SECRET = process.env.PORTONE_V2_API_SECRET || '';
 
-interface PaymentPrepareRequest {
-  orderId: string;
-  orderName: string;
-  amount: number;
-  customerEmail?: string;
-  customerName?: string;
-  customerMobile?: string;
-}
-
-interface PaymentPrepareResponse {
-  success: boolean;
-  paymentId?: string;
-  checkoutUrl?: string;
-  error?: string;
-}
-
-interface PaymentConfirmRequest {
-  impUid: string;
-  merchantUid: string;
+interface PaymentVerifyRequest {
+  paymentId: string;
   amount: number;
 }
 
-interface PaymentConfirmResponse {
+interface PaymentVerifyResponse {
   success: boolean;
   paymentId?: string;
+  status?: string;
+  amount?: number;
   error?: string;
 }
 
@@ -45,24 +33,10 @@ interface PaymentCancelResponse {
   error?: string;
 }
 
-interface PrepareAndPayRequest {
-  orderId: string;
-  orderName: string;
-  amount: number;
-  customerEmail?: string;
-  customerName?: string;
-  customerMobile?: string;
-}
-
-interface PrepareAndPayResponse {
-  success: boolean;
-  paymentId?: string;
-  error?: string;
-}
-
 export class PaymentService {
   private static instance: PaymentService;
-  private baseUrl = 'https://api.iamport.kr';
+  private readonly apiBaseUrl = 'https://api.portone.io';
+  private readonly isEnabled: boolean;
 
   static getInstance(): PaymentService {
     if (!PaymentService.instance) {
@@ -71,208 +45,171 @@ export class PaymentService {
     return PaymentService.instance;
   }
 
-  private async getAccessToken(): Promise<string> {
-    try {
-      const response = await axios.post(`${this.baseUrl}/users/getToken`, {
-        api_key: PORTONE_API_KEY,
-        api_secret: PORTONE_API_SECRET,
-      });
+  private constructor() {
+    this.isEnabled = !!(PORTONE_V2_API_SECRET
+      && PORTONE_V2_API_SECRET !== 'test_api_secret' && PORTONE_V2_API_SECRET !== '');
 
-      if (response.data && response.data.code === 0) {
-        return response.data.response.access_token;
-      }
-      throw new Error('Failed to get PortOne access token');
-    } catch (error) {
-      console.error('PortOne token error:', error);
-      throw error;
+    if (!this.isEnabled) {
+      logger.warn('[Payment] PortOne V2 API Secret 미설정 - 개발용 로그 모드로 동작합니다');
     }
   }
 
-  async preparePayment(request: PaymentPrepareRequest): Promise<PaymentPrepareResponse> {
-    try {
-      const accessToken = await this.getAccessToken();
-      const merchantUid = `ORD_${Date.now()}_${request.orderId.slice(0, 8)}`;
+  /**
+   * PortOne V2 API 공통 헤더
+   */
+  private getHeaders() {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': `PortOne ${PORTONE_V2_API_SECRET}`,
+    };
+  }
 
-      const response = await axios.post(
-        `${this.baseUrl}/payments/prepare`,
+  /**
+   * 결제 검증 (서버 사이드)
+   * - PortOne V2 API로 결제 정보 조회
+   * - 금액 일치 여부 확인
+   * - 결제 상태 확인
+   */
+  async verifyPayment(request: PaymentVerifyRequest): Promise<PaymentVerifyResponse> {
+    if (!this.isEnabled) {
+      logger.info('[Payment-DEV] 결제 검증 (로그 모드)', {
+        paymentId: request.paymentId,
+        amount: request.amount,
+      });
+      return { success: true, paymentId: request.paymentId, status: 'PAID', amount: request.amount };
+    }
+
+    try {
+      // PortOne V2: 결제 내역 단건 조회
+      const response = await axios.get(
+        `${this.apiBaseUrl}/payments/${encodeURIComponent(request.paymentId)}`,
         {
-          merchant_uid: merchantUid,
-          amount: request.amount,
-          name: request.orderName,
-          buyer_email: request.customerEmail,
-          buyer_name: request.customerName,
-          buyer_tel: request.customerMobile,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-          },
+          headers: this.getHeaders(),
+          timeout: 15000,
         }
       );
 
-      if (response.data && response.data.code === 0) {
-        return {
-          success: true,
-          paymentId: merchantUid,
-          checkoutUrl: `https://pgweb.uplus.co.kr/pg/wmp/mertcheck.jsp?PopWinType=y&mertid=${PORTONE_MERCHANT_ID}&merchantuid=${merchantUid}`,
-        };
-      }
+      const payment = response.data;
 
-      return {
-        success: false,
-        error: response.data?.message || 'Payment preparation failed',
-      };
-    } catch (error) {
-      console.error('Payment prepare error:', error);
-      return {
-        success: false,
-        error: 'Payment service unavailable',
-      };
-    }
-  }
-
-  async confirmPayment(request: PaymentConfirmRequest): Promise<PaymentConfirmResponse> {
-    try {
-      const accessToken = await this.getAccessToken();
-
-      const response = await axios.get(`${this.baseUrl}/payments/${request.impUid}`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      });
-
-      if (response.data && response.data.code === 0) {
-        const paymentData = response.data.response;
-
-        if (paymentData.amount === request.amount && paymentData.status === 'paid') {
-          return {
-            success: true,
-            paymentId: paymentData.merchant_uid,
-          };
-        }
-
+      // 결제 상태 확인
+      if (payment.status !== 'PAID') {
+        auditLogger.log({
+          action: 'PAYMENT_VERIFY_STATUS_FAIL',
+          resource: 'payment',
+          resourceId: request.paymentId,
+          details: { expectedStatus: 'PAID', actualStatus: payment.status },
+        });
         return {
           success: false,
-          error: 'Payment amount mismatch or not paid',
+          status: payment.status,
+          error: `결제가 완료되지 않았습니다 (상태: ${payment.status})`,
         };
       }
 
+      // 금액 일치 검증
+      const paidAmount = payment.amount?.total;
+      if (paidAmount !== request.amount) {
+        auditLogger.logSecurityEvent({
+          type: 'suspicious_input',
+          details: {
+            reason: 'payment_amount_mismatch',
+            expected: request.amount,
+            actual: paidAmount,
+            paymentId: request.paymentId,
+          },
+        });
+        return {
+          success: false,
+          error: `결제 금액 불일치: 요청(${request.amount}) vs 실제(${paidAmount})`,
+        };
+      }
+
+      auditLogger.log({
+        action: 'PAYMENT_VERIFY_SUCCESS',
+        resource: 'payment',
+        resourceId: request.paymentId,
+        details: { amount: paidAmount, method: payment.method?.type },
+      });
+
       return {
-        success: false,
-        error: 'Payment confirmation failed',
+        success: true,
+        paymentId: request.paymentId,
+        status: 'PAID',
+        amount: paidAmount,
       };
-    } catch (error) {
-      console.error('Payment confirm error:', error);
+
+    } catch (error: any) {
+      const status = error.response?.status;
+      const errorMsg = error.response?.data?.message || error.message;
+      logger.error('결제 검증 오류', { paymentId: request.paymentId, status, error: errorMsg });
+
       return {
         success: false,
-        error: 'Payment verification failed',
+        error: `결제 검증 실패: ${errorMsg}`,
       };
     }
   }
 
   async cancelPayment(paymentId: string, amount: number, reason?: string): Promise<PaymentCancelResponse> {
-    try {
-      const accessToken = await this.getAccessToken();
+    if (!this.isEnabled) {
+      logger.info('[Payment-DEV] 결제 취소 (로그 모드)', { paymentId, amount, reason });
+      return { success: true, cancelId: `dev_cancel_${Date.now()}`, canceledAmount: amount };
+    }
 
+    try {
       const response = await axios.post(
-        `${this.baseUrl}/payments/cancel`,
+        `${this.apiBaseUrl}/payments/${encodeURIComponent(paymentId)}/cancel`,
         {
-          merchant_uid: paymentId,
-          amount: amount,
-          reason: reason || 'Customer cancellation',
+          amount,
+          reason: reason || '고객 요청에 의한 취소',
         },
         {
-          headers: {
-            Authorization: accessToken,
-          },
+          headers: this.getHeaders(),
+          timeout: 15000,
         }
       );
 
-      if (response.data && response.data.code === 0) {
-        return {
-          success: true,
-          cancelId: response.data.response.cancel_id,
-          canceledAmount: response.data.response.cancel_amount,
-        };
-      }
+      auditLogger.log({
+        action: 'PAYMENT_CANCEL_SUCCESS',
+        resource: 'payment',
+        resourceId: paymentId,
+        details: { amount, reason },
+      });
+
 
       return {
-        success: false,
-        error: response.data?.message || 'Payment cancellation failed',
+        success: true,
+        cancelId: response.data?.cancellation?.id,
+        canceledAmount: amount,
       };
-    } catch (error) {
-      console.error('Payment cancel error:', error);
+    } catch (error: any) {
+      logger.error('결제 취소 오류', { paymentId, error: error.message });
       return {
         success: false,
-        error: 'Payment cancellation failed',
+        error: error.response?.data?.message || 'Payment cancellation failed',
       };
     }
   }
 
   async getPaymentStatus(paymentId: string): Promise<string | null> {
-    try {
-      const accessToken = await this.getAccessToken();
-
-      const response = await axios.get(`${this.baseUrl}/payments/status/${paymentId}`, {
-        headers: {
-          Authorization: accessToken,
-        },
-      });
-
-      if (response.data && response.data.code === 0) {
-        return response.data.response.status;
-      }
-
-      return null;
-    } catch (error) {
-      console.error('Payment status error:', error);
-      return null;
+    if (!this.isEnabled) {
+      logger.info('[Payment-DEV] 결제 상태 조회 (로그 모드)', { paymentId });
+      return 'PAID';
     }
-  }
 
-  async prepareAndPay(request: PrepareAndPayRequest): Promise<PrepareAndPayResponse> {
     try {
-      const merchantUid = `ORD_${Date.now()}_${request.orderId.slice(0, 8)}`;
-
-      const accessToken = await this.getAccessToken();
-
-      const response = await axios.post(
-        `${this.baseUrl}/payments/onetime`,
+      const response = await axios.get(
+        `${this.apiBaseUrl}/payments/${encodeURIComponent(paymentId)}`,
         {
-          merchant_uid: merchantUid,
-          amount: request.amount,
-          card_number: '1234-5678-9012-3456',
-          card_expiry: '2028-12',
-          card_quota: 0,
-          name: request.orderName,
-          buyer_email: request.customerEmail,
-          buyer_name: request.customerName,
-          buyer_tel: request.customerMobile,
-        },
-        {
-          headers: {
-            Authorization: accessToken,
-          },
+          headers: this.getHeaders(),
+          timeout: 10000,
         }
       );
 
-      if (response.data && response.data.code === 0) {
-        return {
-          success: true,
-          paymentId: merchantUid,
-        };
-      }
-
-      return {
-        success: false,
-        error: response.data?.message || 'Payment failed',
-      };
+      return response.data?.status || null;
     } catch (error) {
-      console.error('Prepare and pay error:', error);
-      return {
-        success: false,
-        error: 'Payment service unavailable',
-      };
+      console.error('Payment status error:', error);
+      return null;
     }
   }
 }

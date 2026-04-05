@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "ご注文を承りました。",
+      "orderNumber": "注文番号: {orderNumber}",
+      "restaurant": "店舗: {restaurantName}",
+      "menu": "メニュー: {items}",
+      "deliveryFee": "配達料: ₩{deliveryFee}",
+      "totalAmount": "合計: ₩{totalAmount}",
+      "estimatedTime": "配達予定時間: 約{estimatedTime}分",
+      "waitingPickupTime": "ピックアップ時間を確認中です。"
+    },
+    "confirmation": {
+      "estimatedPickup": "ピックアップ予定: {pickupTimeStr}",
+      "estimatedDelivery": "配達予定: 約{estimatedDeliveryTime}分",
+      "confirmQuestion": "注文を確定しますか？",
+      "confirmLink": "確定: {confirmUrl}",
+      "cancelLink": "キャンセル: {cancelUrl}",
+      "autoCancel": "10分以内に確定されない場合、自動キャンセルされます。"
+    },
+    "confirmed": "注文番号: {orderNumber}が確定されました。\n店舗で注文し、ピックアップ後に配達を開始します。",
+    "cancelled": "注文番号: {orderNumber}がキャンセルされました。",
+    "pickedUp": "注文番号: {orderNumber}の決済が完了し、ピックアップされました。\n配達を開始します。",
+    "deliveryComplete": "注文番号: {orderNumber}の配達が完了しました。\n\nありがとうございます。",
+    "pickupNotification": "注文番号: {orderNumber}\nピックアップ時間: {pickupTimeStr}\n\n予定時間にピックアップします。",
+    "driverAssigned": "注文番号{orderNumber}に配達員が配定されました。",
+    "driverDeparted": "注文番号{orderNumber}のピックアップに出発しました。",
+    "delivering": "注文番号{orderNumber}は配達中です。",
+    "verificationCode": "年齢認証番号: {code}\n\n3分以内に入力してください。",
+    "authCode": "認証番号: {verificationCode}\n3分以内に入力してください。",
+    "orderLink": "下のリンクをクリックして注文を開始してください。\n{targetUrl}",
+    "partialPickup": "{restaurantName} ピックアップ完了 ({pickedUp}/{total}店舗)",
+    "partialPickupRemaining": "残り{remaining}店舗のピックアップ後、配達を開始します。",
+    "allPickedUp": "全店舗ピックアップ完了 ({total}/{total})",
+    "allPickedUpDelivery": "配達を開始します！"
+  }
+}

@@ -43,6 +43,15 @@
     "category": {
       "other": "Sonstige",
       "otherStore": "Andere Convenience Stores"
+    },
+    "noService": {
+      "title": "In Ihrem Gebiet ist kein Lieferservice verfügbar",
+      "description": "Bitte wählen Sie unten ein Servicegebiet aus."
+    },
+    "addressInput": {
+      "placeholder": "Lieferadresse eingeben",
+      "button": "Setzen",
+      "set": "Adresse wurde festgelegt"
     }
   },
   "restaurant": {

@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "Ihre Bestellung wurde aufgegeben.",
+      "orderNumber": "Bestellnr.: {orderNumber}",
+      "restaurant": "Restaurant: {restaurantName}",
+      "menu": "Artikel: {items}",
+      "deliveryFee": "Liefergebühr: ₩{deliveryFee}",
+      "totalAmount": "Gesamt: ₩{totalAmount}",
+      "estimatedTime": "Voraussichtliche Lieferung: ~{estimatedTime} Min.",
+      "waitingPickupTime": "Abholzeit wird bestätigt."
+    },
+    "confirmation": {
+      "estimatedPickup": "Voraussichtliche Abholung: {pickupTimeStr}",
+      "estimatedDelivery": "Voraussichtliche Lieferung: ~{estimatedDeliveryTime} Min.",
+      "confirmQuestion": "Möchten Sie Ihre Bestellung bestätigen?",
+      "confirmLink": "Bestätigen: {confirmUrl}",
+      "cancelLink": "Stornieren: {cancelUrl}",
+      "autoCancel": "Automatische Stornierung nach 10 Min. ohne Bestätigung."
+    },
+    "confirmed": "Bestellung Nr. {orderNumber} wurde bestätigt.\nWir holen Ihr Essen ab und beginnen die Lieferung.",
+    "cancelled": "Bestellung Nr. {orderNumber} wurde storniert.",
+    "pickedUp": "Bestellung Nr. {orderNumber} wurde bezahlt und abgeholt.\nLieferung beginnt.",
+    "deliveryComplete": "Bestellung Nr. {orderNumber} wurde geliefert.\n\nVielen Dank!",
+    "pickupNotification": "Bestellung Nr. {orderNumber}\nAbholzeit: {pickupTimeStr}\n\nAbholung geplant.",
+    "driverAssigned": "Ein Fahrer wurde für Bestellung Nr. {orderNumber} zugewiesen.",
+    "driverDeparted": "Der Fahrer holt Bestellung Nr. {orderNumber} ab.",
+    "delivering": "Bestellung Nr. {orderNumber} wird geliefert.",
+    "verificationCode": "Altersverifizierungscode: {code}\n\nBitte innerhalb von 3 Minuten eingeben.",
+    "authCode": "Verifizierungscode: {verificationCode}\nBitte innerhalb von 3 Minuten eingeben.",
+    "orderLink": "Klicken Sie auf den Link unten, um zu bestellen.\n{targetUrl}",
+    "partialPickup": "{restaurantName} abgeholt ({pickedUp}/{total} Restaurants)",
+    "partialPickupRemaining": "Noch {remaining} Abholung(en) vor der Lieferung.",
+    "allPickedUp": "Alle Restaurants abgeholt ({total}/{total})",
+    "allPickedUpDelivery": "Die Lieferung beginnt!"
+  }
+}

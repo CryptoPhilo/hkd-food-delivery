@@ -43,6 +43,15 @@
     "category": {
       "other": "Otros",
       "otherStore": "Otras tiendas de conveniencia"
+    },
+    "noService": {
+      "title": "No hay servicio de entrega disponible en su área",
+      "description": "Seleccione un área de servicio a continuación."
+    },
+    "addressInput": {
+      "placeholder": "Ingrese su dirección de entrega",
+      "button": "Establecer",
+      "set": "Dirección establecida"
     }
   },
   "restaurant": {

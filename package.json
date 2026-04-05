@@ -1,5 +1,49 @@
 {
+  "name": "hkd-food-delivery",
+  "private": true,
+  "description": "한경배달(HKD) - 제주 한경면 음식배달 서비스",
+  "scripts": {
+    "lint": "eslint 'architecture/**/*.{ts,tsx}' --max-warnings 0",
+    "lint:fix": "eslint 'architecture/**/*.{ts,tsx}' --fix",
+    "format": "prettier --write 'architecture/**/*.{ts,tsx,css,json}'",
+    "format:check": "prettier --check 'architecture/**/*.{ts,tsx,css,json}'",
+    "lint:python": "ruff check scrapers/ tests/",
+    "lint:python:fix": "ruff check --fix scrapers/ tests/",
+    "format:python": "ruff format scrapers/ tests/",
+    "prepare": "husky"
+  },
   "dependencies": {
     "localtunnel": "^2.0.2"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^19.0.0",
+    "@commitlint/config-conventional": "^19.0.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "eslint": "^8.57.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-react": "^7.34.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "husky": "^9.0.0",
+    "lint-staged": "^15.2.0",
+    "prettier": "^3.2.0"
+  },
+  "lint-staged": {
+    "architecture/backend/src/**/*.ts": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "architecture/frontend/src/**/*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "scrapers/**/*.py": [
+      "ruff check --fix",
+      "ruff format"
+    ],
+    "tests/**/*.py": [
+      "ruff check --fix",
+      "ruff format"
+    ]
   }
 }

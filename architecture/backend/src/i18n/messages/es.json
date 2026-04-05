@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "Su pedido ha sido realizado.",
+      "orderNumber": "N° pedido: {orderNumber}",
+      "restaurant": "Restaurante: {restaurantName}",
+      "menu": "Artículos: {items}",
+      "deliveryFee": "Envío: ₩{deliveryFee}",
+      "totalAmount": "Total: ₩{totalAmount}",
+      "estimatedTime": "Entrega estimada: ~{estimatedTime} min",
+      "waitingPickupTime": "Esperando confirmación de recogida."
+    },
+    "confirmation": {
+      "estimatedPickup": "Recogida estimada: {pickupTimeStr}",
+      "estimatedDelivery": "Entrega estimada: ~{estimatedDeliveryTime} min",
+      "confirmQuestion": "¿Desea confirmar su pedido?",
+      "confirmLink": "Confirmar: {confirmUrl}",
+      "cancelLink": "Cancelar: {cancelUrl}",
+      "autoCancel": "Cancelación automática si no se confirma en 10 min."
+    },
+    "confirmed": "Pedido n°{orderNumber} confirmado.\nRecogeremos su comida y comenzaremos la entrega.",
+    "cancelled": "Pedido n°{orderNumber} cancelado.",
+    "pickedUp": "Pedido n°{orderNumber} pagado y recogido.\nComienza la entrega.",
+    "deliveryComplete": "Pedido n°{orderNumber} entregado.\n\n¡Gracias!",
+    "pickupNotification": "Pedido n°{orderNumber}\nHora de recogida: {pickupTimeStr}\n\nRecogida programada.",
+    "driverAssigned": "Un repartidor ha sido asignado al pedido n°{orderNumber}.",
+    "driverDeparted": "El repartidor va a recoger el pedido n°{orderNumber}.",
+    "delivering": "Pedido n°{orderNumber} en camino.",
+    "verificationCode": "Código de verificación: {code}\n\nIngrese en 3 minutos.",
+    "authCode": "Código: {verificationCode}\nIngrese en 3 minutos.",
+    "orderLink": "Haga clic en el enlace para realizar su pedido.\n{targetUrl}",
+    "partialPickup": "{restaurantName} recogido ({pickedUp}/{total} restaurantes)",
+    "partialPickupRemaining": "{remaining} recogida(s) más antes del envío.",
+    "allPickedUp": "Todos los restaurantes recogidos ({total}/{total})",
+    "allPickedUpDelivery": "¡La entrega está comenzando!"
+  }
+}

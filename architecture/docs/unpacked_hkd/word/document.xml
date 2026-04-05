@@ -1,0 +1,6035 @@
+<?xml version="1.0" encoding="UTF-8"?><w:document xmlns:wpc="http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas" xmlns:mo="http://schemas.microsoft.com/office/mac/office/2008/main" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:mv="urn:schemas-microsoft-com:mac:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" xmlns:m="http://schemas.openxmlformats.org/officeDocument/2006/math" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:wp14="http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing" xmlns:wp="http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing" xmlns:w10="urn:schemas-microsoft-com:office:word" xmlns:w="http://schemas.openxmlformats.org/wordprocessingml/2006/main" xmlns:w14="http://schemas.microsoft.com/office/word/2010/wordml" xmlns:wpg="http://schemas.microsoft.com/office/word/2010/wordprocessingGroup" xmlns:wpi="http://schemas.microsoft.com/office/word/2010/wordprocessingInk" xmlns:wne="http://schemas.microsoft.com/office/word/2006/wordml" xmlns:wps="http://schemas.microsoft.com/office/word/2010/wordprocessingShape" mc:Ignorable="w14 wp14">
+  <w:body>
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:rFonts w:ascii="Arial" w:hAnsi="Arial"/>
+          <w:b/>
+          <w:sz w:val="56"/>
+        </w:rPr>
+        <w:t>HKD(한경배달)</w:t>
+        <w:br/>
+        <w:t>시스템 설계서</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:sz w:val="28"/>
+        </w:rPr>
+        <w:t>v2.0 (테스트 통과 기준)</w:t>
+      </w:r>
+    </w:p>
+    <w:p/>
+    <w:p>
+      <w:pPr>
+        <w:jc w:val="center"/>
+      </w:pPr>
+      <w:r>
+        <w:rPr>
+          <w:sz w:val="24"/>
+        </w:rPr>
+        <w:t>작성일: 2026-04-01</w:t>
+        <w:br/>
+        <w:t>테스트 현황: 18 Suites PASS, 796 Tests PASS</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>1. 문서 정보</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4320"/>
+        <w:gridCol w:w="4320"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>항목</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>내용</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>문서명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>HKD(한경배달) 시스템 설계서</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>버전</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>2.0 (테스트 통과 기준)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>작성일</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>2026-04-01</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>테스트 기준</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>18 Suites PASS, 796 Tests PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>2. 시스템 개요</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:t>제주 지역 음식 배달 플랫폼 한경배달의 전체 시스템을 설계한 문서입니다. 멀티 리전 아키텍처로 설계되어 향후 다른 지역 확장을 고려하고 있습니다.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>2.1 플랫폼 개요</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4320"/>
+        <w:gridCol w:w="4320"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>항목</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>값</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>플랫폼명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>제주 지역 음식 배달 플랫폼 (한경배달)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>아키텍처</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>멀티 리전 (공유 DB + region_id 기반 격리)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>프론트엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Next.js 14.2.3 (App Router)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>백엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Express.js</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>ORM</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Prisma ORM</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>데이터베이스</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PostgreSQL (Supabase)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>실시간</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>SSE (Server-Sent Events)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>2.2 배포 환경</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4320"/>
+        <w:gridCol w:w="4320"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>구성요소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>백엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Fly.dev hkd-backend</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>프론트엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Fly.dev hkd-frontend</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>리전</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>nrt (Narita, Tokyo)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>데이터베이스</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Supabase PostgreSQL</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>2.3 외부 연동</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>PortOne: 결제 처리</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Aligo: SMS 전송</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Kakao Maps: 지도 및 좌표 기반 서비스</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>DiningCode: 음식점 정보 스크래핑</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>3. 시스템 아키텍처</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:ind w:left="720"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Client → Next.js Frontend (Fly.dev) → API Proxy Routes → Express Backend (Fly.dev) → PostgreSQL (Supabase)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>3.1 아키텍처 특징</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>프론트엔드 프록시: X-Admin-Token, X-Admin-Key, X-Admin-User 헤더 전달</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>인증 3가지: 고객(SMS/JWT), 관리자(password/JWT+API Key), 배달원(JWT/phone)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>리전 격리: region_id 기반 데이터 분리로 다중 지역 지원</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>확장성: 새로운 지역 추가 시 별도 설정 최소화</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4. 데이터베이스 스키마</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:t>총 13개 모델로 구성된 데이터베이스 스키마입니다.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.1 Region (지역)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>code</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String (Unique)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역 코드 (jeju-hangyeong)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>name</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역명 (제주 한경면)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>nameEn</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>영문 지역명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>centerLatitude/Longitude</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Float</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역 중심 좌표</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>addressKeyword</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주소 필터 키워드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isActive</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>활성 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>domain</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String (Unique)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>도메인 (jeju.hkd.co.kr)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.2 AdminUser (관리자)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>username</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String (Unique)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>로그인 아이디</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>passwordHash</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Scrypt 해시 암호</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>name</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>관리자 이름</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>role</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>권한 (system_admin | region_admin)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>regionId</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>소속 지역 (null: 시스템 관리자)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isActive</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>활성 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.3 User (고객)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>phone</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String (Unique)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>전화번호 (로그인 ID)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>name</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>고객명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>email</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>이메일 주소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>password</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>비밀번호 (선택)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>fcmToken</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Firebase Cloud Messaging 토큰</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isActive</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>활성 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.4 Restaurant (식당)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>naverPlaceId</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Naver 장소 ID</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>name</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>식당명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>address</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>storeType</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>유형 (restaurant | convenience_store)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>latitude/longitude</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Float</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>좌표</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isActive</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>활성 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isDeliverable</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 가능 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>regionId</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>소속 지역</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.5 Menu (메뉴)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>name</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>메뉴명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>price</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Int</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>가격</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>isAvailable</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>판매 가능 여부</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>requiresAgeVerification</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Boolean</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>성인 인증 필요</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>ageRestriction</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>연령 제한 (none | teen | adult)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>category</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>카테고리</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>stock</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Int</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>재고 (편의점)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>4.6 Order (주문)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필드명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>타입</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>orderNumber</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String (Unique)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문번호</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>status</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 상태</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>subtotal</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Int</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문금액</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>deliveryFee</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Int</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달비</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>totalAmount</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Int</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>총액</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>deliveryAddress</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 주소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>confirmToken</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>String</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>확인 토큰</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5. API 명세</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:t>총 54개의 REST API 엔드포인트를 제공합니다.</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5.1 고객 인증 (3개)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Method</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Path</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>인증</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/auth/phone/request</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>인증번호 요청</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/auth/phone/verify</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>인증번호 검증</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/auth/token/refresh</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>토큰 갱신</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Refresh Token</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5.2 식당/메뉴 (6개)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Method</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Path</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>인증</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants/regions</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역별 식당 조회</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants/search/kakao</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Kakao 검색 결과</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants/geocode</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>좌표 기반 검색</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>전체 식당 조회</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants/:id</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>식당 상세 조회</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/restaurants/:id/menus</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>메뉴 조회</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>None</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5.3 주문 (10개)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Method</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Path</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 생성</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/validate</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 유효성 검증</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 목록</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/:id</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 상세</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/:id/pickup-time</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>픽업 시간 설정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/confirm/:token</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 확인</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/cancel/:token</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 취소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/:id/pickup</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>픽업 상태</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/:id/delivering</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 중 상태</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/orders/:id/complete</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 완료</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5.4 배달원 (8개)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Method</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Path</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/start-duty</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>근무 시작</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/end-duty</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>근무 종료</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/status/:phone</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>상태 조회</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/deliveries</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 이력</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/assign</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>주문 배정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/assign-batch</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>일괄 배정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers/:id</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>정보 수정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/drivers</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달원 목록</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>5.5 관리자 인증 (10개)</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Method</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Path</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/login</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>로그인</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/setup</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>초기 설정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/me</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>현재 관리자 정보</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/change-password</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>비밀번호 변경</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/accounts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>계정 목록</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/accounts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>계정 생성</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PUT</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/accounts/:id</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>계정 수정</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>DELETE</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/accounts/:id</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>계정 삭제</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>GET</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/regions</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역 목록</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>POST</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>/admin/auth/regions</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>지역 생성</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>6. 인증 및 권한 체계</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>6.1 고객 인증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>방식: SMS OTP (인증번호)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>프로세스: 전화번호 입력 → 인증번호 전송 → 코드 검증 → JWT 발급</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Access Token: 15분 만료</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Refresh Token: 7일 만료</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>6.2 관리자 인증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>기본 인증: username + password (Scrypt 해싱)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>방법 1: X-Admin-Token 헤더 (JWT)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>방법 2: X-Admin-Key + X-Admin-User (Base64)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Access Token: 15분 만료</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>6.3 배달원 인증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>방식: JWT 토큰 또는 전화번호 기반</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>권한 확인: 헤더의 JWT 토큰 검증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>6.4 권한 체계</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>역할</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>권한 범위</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>system_admin</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>전체 시스템</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>모든 지역 관리 가능</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>region_admin</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>소속 지역만</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>해당 지역 데이터만 접근</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>7. 주문 처리 흐름</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>7.1 주문 상태 전환</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:ind w:left="720"/>
+      </w:pPr>
+      <w:r>
+        <w:t>pending → pending_confirmation → order_confirmed → picked_up → delivering → completed</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:ind w:left="720"/>
+      </w:pPr>
+      <w:r>
+        <w:t>(또는 모든 상태에서 cancelled로 전환 가능)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>7.2 관리자 수동 진행 시 필수 입력</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>상태 전환</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>필수 입력</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>pending → confirmed</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>driverId</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달원 선택</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>confirmed → picking_up</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>estimatedPickupTime, restaurantPaidAmount</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>픽업 예상 시간 및 식당 결제액</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>picking_up → delivering</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>pickupConfirmation</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>픽업 확인</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>delivering → completed</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>deliveryConfirmation</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>배달 완료 확인</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>8. 배달비 계산</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>8.1 기본 배달비</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>단일 식당: 5,000원</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>추가 식당당: +3,000원</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>8.2 거리 할증</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4320"/>
+        <w:gridCol w:w="4320"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>거리</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>할증료</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>0~1km</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>0원</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>1~2km</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>+1,000원</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>2~3km</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>+2,000원</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>3km 이상</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>+3,000원</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>8.3 제한 사항</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>최대 배달 반경: 5km</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>9. 정산 체계</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>9.1 정산 상태 흐름</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:ind w:left="720"/>
+      </w:pPr>
+      <w:r>
+        <w:t>calculated → approved → payment_requested → paid</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:ind w:left="720"/>
+      </w:pPr>
+      <w:r>
+        <w:t>또는: rejected (→ calculated 재계산), payment_failed (→ payment_requested 재시도)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>9.2 정산 계산</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>기준: 월별 배달원별</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>항목: 총 배달비, 서비스 수수료, 세금</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>순액(netAmount) = 배달비 - 서비스수수료 - 세금 + 보너스 - 페널티</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10. 보안</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10.1 Rate Limiting</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="4320"/>
+        <w:gridCol w:w="4320"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>엔드포인트</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>제한</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>API 일반</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>100회/15분</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>인증</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>10회/15분</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>웹훅</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="4320"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>30회/60초</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10.2 입력 검증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>XSS 패턴 감지 및 필터링</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>SQL Injection 패턴 감지</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Phone, Email, Coordinate 등 형식 검증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10.3 암호화 및 해싱</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>JWT: 15분 만료, 타이밍 안전 비교</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Password: Scrypt 해싱</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10.4 보안 헤더</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>X-Content-Type-Options: nosniff</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>X-Frame-Options: DENY</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Strict-Transport-Security (HSTS)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>Content-Security-Policy (CSP)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>10.5 CORS</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>프로덕션: 화이트리스트 기반</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>11. 테스트 현황</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:t>총 19개 테스트 파일, 872건 테스트 (796 PASS, 76 SKIP), 11,003 LOC</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>11.1 테스트 스위트 현황</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+        <w:gridCol w:w="2160"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>테스트 파일</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>테스트 수</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>상태</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>우선순위</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>auth.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>28건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>order.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>28건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>convenience-store-order.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>39건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>admin-auth.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>39건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>admin-orders.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>41건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>admin-scenarios.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>56건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0/P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>validation.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>151건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>input-validation.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>76건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>SKIP</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>security.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>38건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P0</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>restaurant.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>40건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>store-crud.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>32건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>product-management.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>33건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>age-verification.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>20건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>driver.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>39건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>driver-scenarios.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>34건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>settlement.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>50건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>infrastructure.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>67건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>rehearsal.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>24건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>user-scenarios.test.ts</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>37건</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PASS</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2160"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>P1</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>11.2 테스트 커버리지 영역</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>고객 인증 흐름 (SMS OTP, JWT 토큰 갱신)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>주문 생명주기 (생성→확인→배달→완료/취소)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>관리자 인증 및 권한 분리 (system_admin vs region_admin)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>관리자 주문 상태 수동 진행/취소/삭제</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>식당/메뉴 CRUD 및 편의점 관리</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>배달원 근무 관리, 주문 배정, 배달 이력</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>정산 계산, 승인, 결제 흐름</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>입력 검증 (전화번호, 좌표, 주문 상태 필터)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>보안 (XSS 방지, SQL injection 탐지, Rate limiting, 보안 헤더)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>인프라 (DB 연결, Redis, 헬스체크, 메트릭)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>부하 테스트 (동시 요청 처리)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>통합 시나리오 (고객-배달원-관리자 연계 흐름)</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:r>
+        <w:br w:type="page"/>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading1"/>
+      </w:pPr>
+      <w:r>
+        <w:t>12. 배포 환경</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>12.1 배포 구성</w:t>
+      </w:r>
+    </w:p>
+    <w:tbl>
+      <w:tblPr>
+        <w:tblStyle w:val="TableGrid"/>
+        <w:tblW w:type="auto" w:w="0"/>
+        <w:tblLook w:firstColumn="1" w:firstRow="1" w:lastColumn="0" w:lastRow="0" w:noHBand="0" w:noVBand="1" w:val="04A0"/>
+      </w:tblPr>
+      <w:tblGrid>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+        <w:gridCol w:w="2880"/>
+      </w:tblGrid>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>구성요소</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>플랫폼</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>설명</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>백엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Fly.dev (hkd-backend)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Node.js Express, Docker</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>프론트엔드</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Fly.dev (hkd-frontend)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Next.js standalone, Docker</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>데이터베이스</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Supabase</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>PostgreSQL (duzyjhcbrnjnwutoqdjt)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>캐시</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Optional</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Redis (in-memory fallback)</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+      <w:tr>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>리전</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>nrt</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+        <w:tc>
+          <w:tcPr>
+            <w:tcW w:type="dxa" w:w="2880"/>
+          </w:tcPr>
+          <w:p>
+            <w:r>
+              <w:t>Narita, Tokyo</w:t>
+            </w:r>
+          </w:p>
+        </w:tc>
+      </w:tr>
+    </w:tbl>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="Heading2"/>
+      </w:pPr>
+      <w:r>
+        <w:t>12.2 환경 변수</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>DATABASE_URL: Supabase PostgreSQL 연결</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>JWT_SECRET: JWT 서명 키</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>ADMIN_API_KEY: 관리자 API 키</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>PORTONE_*: 결제 API 인증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>ALIGO_*: SMS API 인증</w:t>
+      </w:r>
+    </w:p>
+    <w:p>
+      <w:pPr>
+        <w:pStyle w:val="ListBullet"/>
+      </w:pPr>
+      <w:r>
+        <w:t>KAKAO_REST_API_KEY: Kakao Maps API 키</w:t>
+      </w:r>
+    </w:p>
+    <w:sectPr w:rsidR="00FC693F" w:rsidRPr="0006063C" w:rsidSect="00034616">
+      <w:pgSz w:w="12240" w:h="15840"/>
+      <w:pgMar w:top="1440" w:right="1800" w:bottom="1440" w:left="1800" w:header="720" w:footer="720" w:gutter="0"/>
+      <w:cols w:space="720"/>
+      <w:docGrid w:linePitch="360"/>
+    </w:sectPr>
+  </w:body>
+</w:document>

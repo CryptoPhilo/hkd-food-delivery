@@ -43,6 +43,15 @@
     "category": {
       "other": "기타",
       "otherStore": "기타 편의점"
+    },
+    "noService": {
+      "title": "현재 계신 곳에서 이용 가능한 서비스가 없습니다",
+      "description": "아래 서비스 지역을 선택하여 이용하실 수 있습니다."
+    },
+    "addressInput": {
+      "placeholder": "배달받을 주소를 입력하세요",
+      "button": "설정",
+      "set": "주소가 설정되었습니다"
     }
   },
   "restaurant": {

@@ -43,6 +43,15 @@
     "category": {
       "other": "Other",
       "otherStore": "Other Stores"
+    },
+    "noService": {
+      "title": "No delivery service available in your area",
+      "description": "Please select a service area below."
+    },
+    "addressInput": {
+      "placeholder": "Enter your delivery address",
+      "button": "Set",
+      "set": "Address has been set"
     }
   },
   "restaurant": {

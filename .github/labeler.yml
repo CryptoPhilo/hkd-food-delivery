@@ -1,0 +1,42 @@
+# PR 자동 라벨링 규칙
+# 변경된 파일 경로에 따라 라벨 자동 부여
+
+backend:
+  - changed-files:
+    - any-glob-to-any-file: 'architecture/backend/**'
+
+frontend:
+  - changed-files:
+    - any-glob-to-any-file: 'architecture/frontend/**'
+
+scrapers:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'scrapers/**'
+      - 'tests/**'
+
+infra:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '.github/**'
+      - '**/Dockerfile'
+      - '**/fly.toml'
+      - '**/docker-compose*.yml'
+
+docs:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/*.md'
+      - 'docs/**'
+
+database:
+  - changed-files:
+    - any-glob-to-any-file:
+      - '**/prisma/**'
+      - '**/*.sql'
+
+scripts:
+  - changed-files:
+    - any-glob-to-any-file:
+      - 'scripts/**'
+      - '*.sh'

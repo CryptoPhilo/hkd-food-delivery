@@ -43,6 +43,15 @@
     "category": {
       "other": "其他",
       "otherStore": "其他便利店"
+    },
+    "noService": {
+      "title": "您所在的区域暂无配送服务",
+      "description": "请选择以下服务区域。"
+    },
+    "addressInput": {
+      "placeholder": "请输入配送地址",
+      "button": "设置",
+      "set": "地址已设置"
     }
   },
   "restaurant": {

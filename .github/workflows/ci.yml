@@ -1,0 +1,232 @@
+# ============================================
+# HKD 레포지터리 하네스 - CI (Continuous Integration)
+# PR 및 push 시 린트/테스트/빌드 자동 검증
+# ============================================
+
+name: CI
+
+on:
+  pull_request:
+    branches: [main, staging]
+  push:
+    branches: [main, staging]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  NODE_VERSION: '20'
+  PYTHON_VERSION: '3.11'
+
+jobs:
+  # ──────────────────────────────────────
+  # 변경 감지 - 어떤 부분이 변경되었는지 파악
+  # ──────────────────────────────────────
+  changes:
+    name: 🔍 변경 감지
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      frontend: ${{ steps.filter.outputs.frontend }}
+      scrapers: ${{ steps.filter.outputs.scrapers }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'architecture/backend/**'
+            frontend:
+              - 'architecture/frontend/**'
+            scrapers:
+              - 'scrapers/**'
+              - 'tests/**'
+              - 'pyproject.toml'
+              - 'requirements.txt'
+
+  # ──────────────────────────────────────
+  # 백엔드 CI
+  # ──────────────────────────────────────
+  backend-ci:
+    name: 🔧 백엔드 CI
+    needs: changes
+    if: needs.changes.outputs.backend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: architecture/backend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: architecture/backend/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Prisma 생성
+        run: npx prisma generate
+
+      - name: TypeScript 타입 체크
+        run: npx tsc --noEmit
+
+      - name: 빌드
+        run: npm run build
+
+      - name: 테스트
+        run: npm test -- --ci --coverage
+        env:
+          NODE_ENV: test
+          JWT_SECRET: test-jwt-secret-for-ci
+          JWT_REFRESH_SECRET: test-jwt-refresh-secret-for-ci
+          ADMIN_API_KEY: test-admin-api-key
+
+      - name: 테스트 커버리지 업로드
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-coverage
+          path: architecture/backend/coverage/
+          retention-days: 7
+
+  # ──────────────────────────────────────
+  # 프론트엔드 CI
+  # ──────────────────────────────────────
+  frontend-ci:
+    name: 🎨 프론트엔드 CI
+    needs: changes
+    if: needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: architecture/frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Node.js 설정
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'npm'
+          cache-dependency-path: architecture/frontend/package-lock.json
+
+      - name: 의존성 설치
+        run: npm ci
+
+      - name: Prisma 생성
+        run: npx prisma generate
+
+      - name: 린트
+        run: npm run lint
+
+      - name: TypeScript 타입 체크
+        run: npx tsc --noEmit
+
+      - name: 빌드
+        run: npm run build
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co' }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'placeholder' }}
+          BACKEND_URL: https://api.hankyeong.xyz
+
+  # ──────────────────────────────────────
+  # 스크래퍼 CI (Python)
+  # ──────────────────────────────────────
+  scrapers-ci:
+    name: 🐍 스크래퍼 CI
+    needs: changes
+    if: needs.changes.outputs.scrapers == 'true'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Python 설정
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: 의존성 설치
+        run: pip install -r requirements.txt
+
+      - name: 단위 테스트
+        run: pytest -m "not integration" --cov=scrapers --cov-report=xml -v
+
+      - name: 커버리지 업로드
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: scrapers-coverage
+          path: coverage.xml
+          retention-days: 7
+
+  # ──────────────────────────────────────
+  # Docker 빌드 검증 (빌드만, 푸시 안 함)
+  # ──────────────────────────────────────
+  docker-check:
+    name: 🐳 Docker 빌드 검증
+    needs: [changes]
+    if: |
+      needs.changes.outputs.backend == 'true' ||
+      needs.changes.outputs.frontend == 'true'
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        include:
+          - service: backend
+            context: architecture/backend
+          - service: frontend
+            context: architecture/frontend
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Docker Buildx 설정
+        uses: docker/setup-buildx-action@v3
+
+      - name: ${{ matrix.service }} Docker 빌드 테스트
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: false
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          tags: hkd-${{ matrix.service }}:ci-${{ github.sha }}
+
+  # ──────────────────────────────────────
+  # CI 게이트 (모든 체크 통과 여부 종합)
+  # ──────────────────────────────────────
+  ci-gate:
+    name: ✅ CI 게이트
+    if: always()
+    needs: [backend-ci, frontend-ci, scrapers-ci, docker-check]
+    runs-on: ubuntu-latest
+    steps:
+      - name: 결과 확인
+        run: |
+          echo "Backend:  ${{ needs.backend-ci.result }}"
+          echo "Frontend: ${{ needs.frontend-ci.result }}"
+          echo "Scrapers: ${{ needs.scrapers-ci.result }}"
+          echo "Docker:   ${{ needs.docker-check.result }}"
+
+          # 'skipped'는 변경 없는 경우이므로 허용
+          for result in "${{ needs.backend-ci.result }}" \
+                        "${{ needs.frontend-ci.result }}" \
+                        "${{ needs.scrapers-ci.result }}" \
+                        "${{ needs.docker-check.result }}"; do
+            if [[ "$result" == "failure" || "$result" == "cancelled" ]]; then
+              echo "❌ CI 실패"
+              exit 1
+            fi
+          done
+          echo "✅ 모든 CI 체크 통과"

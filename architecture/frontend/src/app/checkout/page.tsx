@@ -7,7 +7,11 @@ import PhoneInput from '@/components/PhoneInput';
 import { getPortOneLocale } from '@/i18n/config';
 import { useAuth } from '@/contexts/AuthContext';
 import { fetchWithAuth, getAccessToken } from '@/utils/auth';
-import { calculateDistance as calcDist, isWithinDeliveryRange, DEFAULT_MAX_DELIVERY_DISTANCE_KM } from '@/utils/distance';
+import {
+  calculateDistance as calcDist,
+  isWithinDeliveryRange,
+  DEFAULT_MAX_DELIVERY_DISTANCE_KM,
+} from '@/utils/distance';
 
 interface CartItem {
   menuId: string;
@@ -50,9 +54,31 @@ function CheckoutContent() {
   const [currentRestaurant, setCurrentRestaurant] = useState<Restaurant | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [restaurantCoords, setRestaurantCoords] = useState<{ [id: string]: { lat: number; lng: number; name: string; deliveryRadius?: number | null } }>({});
-  const [deliveryLat, setDeliveryLat] = useState<number | null>(null);
-  const [deliveryLng, setDeliveryLng] = useState<number | null>(null);
+  const [restaurantCoords, setRestaurantCoords] = useState<{
+    [id: string]: { lat: number; lng: number; name: string; deliveryRadius?: number | null };
+  }>({});
+  const [deliveryLat, setDeliveryLat] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('hkd_delivery_coords');
+      if (saved) {
+        try {
+          return JSON.parse(saved).lat;
+        } catch {}
+      }
+    }
+    return null;
+  });
+  const [deliveryLng, setDeliveryLng] = useState<number | null>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = sessionStorage.getItem('hkd_delivery_coords');
+      if (saved) {
+        try {
+          return JSON.parse(saved).lng;
+        } catch {}
+      }
+    }
+    return null;
+  });
   const [sdkLoaded, setSdkLoaded] = useState(false);
 
   // PortOne V2 SDK 로드 — polling 방식으로 안정적 감지
@@ -90,14 +116,24 @@ function CheckoutContent() {
   }, []);
 
   // localStorage에서 배달 정보 복원 (모바일 결제 리다이렉트 시 sessionStorage 손실 방지)
-  const savedInfo = typeof window !== 'undefined'
-    ? (localStorage.getItem('hkd_checkout_info') || sessionStorage.getItem('hkd_checkout_info'))
-    : null;
+  const savedInfo =
+    typeof window !== 'undefined'
+      ? localStorage.getItem('hkd_checkout_info') || sessionStorage.getItem('hkd_checkout_info')
+      : null;
   const parsed = savedInfo ? JSON.parse(savedInfo) : {};
 
-  const [phone, setPhone] = useState(parsed.phone || (typeof window !== 'undefined' ? localStorage.getItem('hkd_phone') : '') || '');
+  const [phone, setPhone] = useState(
+    parsed.phone || (typeof window !== 'undefined' ? localStorage.getItem('hkd_phone') : '') || '',
+  );
   const [name, setName] = useState(parsed.name || '');
-  const [deliveryAddress, setDeliveryAddress] = useState(parsed.deliveryAddress || '');
+  const [deliveryAddress, setDeliveryAddress] = useState(() => {
+    // 목록에서 설정한 주소가 있으면 우선 사용
+    if (typeof window !== 'undefined') {
+      const fromHome = sessionStorage.getItem('hkd_delivery_address');
+      if (fromHome) return fromHome;
+    }
+    return parsed.deliveryAddress || '';
+  });
   const [customerMemo, setCustomerMemo] = useState(parsed.customerMemo || '');
   const [showPlatformClosedModal, setShowPlatformClosedModal] = useState(false);
   const [hasAdultItems, setHasAdultItems] = useState(false);
@@ -106,7 +142,10 @@ function CheckoutContent() {
   // 입력값 변경 시 localStorage + sessionStorage 모두 저장
   useEffect(() => {
     const infoJson = JSON.stringify({
-      phone, name, deliveryAddress, customerMemo,
+      phone,
+      name,
+      deliveryAddress,
+      customerMemo,
     });
     localStorage.setItem('hkd_checkout_info', infoJson);
     sessionStorage.setItem('hkd_checkout_info', infoJson);
@@ -130,7 +169,9 @@ function CheckoutContent() {
     }
     setGeocoding(true);
     try {
-      const res = await fetch(`/api/v1/restaurants/geocode?address=${encodeURIComponent(deliveryAddress)}`);
+      const res = await fetch(
+        `/api/v1/restaurants/geocode?address=${encodeURIComponent(deliveryAddress)}`,
+      );
       const data = await res.json();
       if (data.success && data.data) {
         const newLat = data.data.latitude;
@@ -144,11 +185,13 @@ function CheckoutContent() {
           const dist = calcDist(newLat, newLng, coord.lat, coord.lng);
           const maxDist = coord.deliveryRadius ?? DEFAULT_MAX_DELIVERY_DISTANCE_KM;
           if (!isWithinDeliveryRange(dist, coord.deliveryRadius)) {
-            alert(t('common.exceedsDeliveryRange', {
-              name: cartData[rid]?.restaurantName || coord.name,
-              max: maxDist.toFixed(0),
-              dist: dist.toFixed(1)
-            }));
+            alert(
+              t('common.exceedsDeliveryRange', {
+                name: cartData[rid]?.restaurantName || coord.name,
+                max: maxDist.toFixed(0),
+                dist: dist.toFixed(1),
+              }),
+            );
             break;
           }
         }
@@ -178,7 +221,12 @@ function CheckoutContent() {
       const response = await fetch('/api/v1/settings/platform-hours');
       const data = await response.json();
       if (data.success && data.data) {
-        const { isOpen } = checkIfOpen(data.data.openTime, data.data.closeTime, data.data.isActive, data.data.closedDays);
+        const { isOpen } = checkIfOpen(
+          data.data.openTime,
+          data.data.closeTime,
+          data.data.isActive,
+          data.data.closedDays,
+        );
         if (!isOpen) {
           setShowPlatformClosedModal(true);
         }
@@ -188,7 +236,12 @@ function CheckoutContent() {
     }
   };
 
-  const checkIfOpen = (openTime: string, closeTime: string, isActive: boolean, closedDays?: string[]): { isOpen: boolean; message: string } => {
+  const checkIfOpen = (
+    openTime: string,
+    closeTime: string,
+    isActive: boolean,
+    closedDays?: string[],
+  ): { isOpen: boolean; message: string } => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
 
@@ -205,8 +258,13 @@ function CheckoutContent() {
     // 정기 휴무일 체크
     if (closedDays && closedDays.length > 0) {
       const dayKeyMap: Record<number, string> = {
-        0: 'sunday', 1: 'monday', 2: 'tuesday', 3: 'wednesday',
-        4: 'thursday', 5: 'friday', 6: 'saturday',
+        0: 'sunday',
+        1: 'monday',
+        2: 'tuesday',
+        3: 'wednesday',
+        4: 'thursday',
+        5: 'friday',
+        6: 'saturday',
       };
       const todayKey = dayKeyMap[now.getDay()];
       if (closedDays.includes(todayKey)) {
@@ -263,7 +321,9 @@ function CheckoutContent() {
   };
 
   const fetchRestaurantCoords = async (cart: CartData) => {
-    const coords: { [id: string]: { lat: number; lng: number; name: string; deliveryRadius?: number | null } } = {};
+    const coords: {
+      [id: string]: { lat: number; lng: number; name: string; deliveryRadius?: number | null };
+    } = {};
     for (const rid of Object.keys(cart)) {
       try {
         const response = await fetch(`/api/v1/restaurants/${rid}`);
@@ -273,7 +333,7 @@ function CheckoutContent() {
             lat: data.data.latitude,
             lng: data.data.longitude,
             name: data.data.name,
-            deliveryRadius: data.data.deliveryRadius ?? null
+            deliveryRadius: data.data.deliveryRadius ?? null,
           };
         }
       } catch (error) {
@@ -291,11 +351,11 @@ function CheckoutContent() {
   const updateQuantity = (menuId: string, delta: number) => {
     const newCart = { ...cartData };
     for (const rid in newCart) {
-      const item = newCart[rid].items.find(i => i.menuId === menuId);
+      const item = newCart[rid].items.find((i) => i.menuId === menuId);
       if (item) {
         item.quantity += delta;
         if (item.quantity <= 0) {
-          newCart[rid].items = newCart[rid].items.filter(i => i.menuId !== menuId);
+          newCart[rid].items = newCart[rid].items.filter((i) => i.menuId !== menuId);
           if (newCart[rid].items.length === 0) {
             delete newCart[rid];
           }
@@ -309,7 +369,7 @@ function CheckoutContent() {
   const removeItem = (menuId: string) => {
     const newCart = { ...cartData };
     for (const rid in newCart) {
-      newCart[rid].items = newCart[rid].items.filter(i => i.menuId !== menuId);
+      newCart[rid].items = newCart[rid].items.filter((i) => i.menuId !== menuId);
       if (newCart[rid].items.length === 0) {
         delete newCart[rid];
       }
@@ -334,7 +394,11 @@ function CheckoutContent() {
   // 공용 유틸리티 사용 (utils/distance.ts)
   const calculateDistance = calcDist;
 
-  const getDistanceSurcharge = (): { distance: number; surcharge: number; closestRestaurant: string } => {
+  const getDistanceSurcharge = (): {
+    distance: number;
+    surcharge: number;
+    closestRestaurant: string;
+  } => {
     if (!deliveryLat || !deliveryLng || Object.keys(restaurantCoords).length === 0) {
       return { distance: 0, surcharge: 0, closestRestaurant: '' };
     }
@@ -372,7 +436,8 @@ function CheckoutContent() {
     const { surcharge } = getDistanceSurcharge();
 
     if (restaurantCount === 0) return 0;
-    const restaurantFee = restaurantCount === 1 ? BASE_FEE : BASE_FEE + (restaurantCount - 1) * EXTRA_PER_RESTAURANT;
+    const restaurantFee =
+      restaurantCount === 1 ? BASE_FEE : BASE_FEE + (restaurantCount - 1) * EXTRA_PER_RESTAURANT;
     return restaurantFee + surcharge;
   };
 
@@ -382,7 +447,8 @@ function CheckoutContent() {
     const EXTRA_PER_RESTAURANT = 3000;
     const { distance, surcharge, closestRestaurant } = getDistanceSurcharge();
 
-    const restaurantFee = restaurantCount === 1 ? BASE_FEE : BASE_FEE + (restaurantCount - 1) * EXTRA_PER_RESTAURANT;
+    const restaurantFee =
+      restaurantCount === 1 ? BASE_FEE : BASE_FEE + (restaurantCount - 1) * EXTRA_PER_RESTAURANT;
 
     return {
       baseFee: BASE_FEE,
@@ -390,7 +456,7 @@ function CheckoutContent() {
       surcharge,
       distance: distance.toFixed(1),
       closestRestaurant,
-      total: restaurantFee + surcharge
+      total: restaurantFee + surcharge,
     };
   };
 
@@ -422,11 +488,13 @@ function CheckoutContent() {
         const dist = calculateDistance(deliveryLat, deliveryLng, coord.lat, coord.lng);
         const maxDist = coord.deliveryRadius ?? DEFAULT_MAX_DELIVERY_DISTANCE_KM;
         if (!isWithinDeliveryRange(dist, coord.deliveryRadius)) {
-          alert(t('common.exceedsDeliveryRange', {
-            name: cartData[rid].restaurantName,
-            max: maxDist.toFixed(0),
-            dist: dist.toFixed(1)
-          }));
+          alert(
+            t('common.exceedsDeliveryRange', {
+              name: cartData[rid].restaurantName,
+              max: maxDist.toFixed(0),
+              dist: dist.toFixed(1),
+            }),
+          );
           return;
         }
       }
@@ -447,10 +515,11 @@ function CheckoutContent() {
     try {
       const totalAmount = Math.floor(getTotal());
       const paymentId = `payment-${Date.now()}`;
-      const restaurantNames = Object.values(cartData).map(d => d.restaurantName);
-      const orderName = restaurantNames.length === 1
-        ? restaurantNames[0]
-        : `${restaurantNames[0]} 외 ${restaurantNames.length - 1}건`;
+      const restaurantNames = Object.values(cartData).map((d) => d.restaurantName);
+      const orderName =
+        restaurantNames.length === 1
+          ? restaurantNames[0]
+          : `${restaurantNames[0]} 외 ${restaurantNames.length - 1}건`;
       const cleanPhone = phone.replace(/-/g, '');
 
       // PortOne V2 결제창 호출 (KG이니시스)
@@ -494,7 +563,9 @@ function CheckoutContent() {
         // SDK가 예외를 던진 경우 — 상세 에러 정보 표시
         const errDetail = JSON.stringify(sdkError, Object.getOwnPropertyNames(sdkError), 2);
         console.error('[PortOne] SDK 예외:', errDetail);
-        alert(`[SDK 에러]\n${sdkError?.message || sdkError}\n\n[상세]\n${errDetail?.slice(0, 500)}\n\n[파라미터]\n${JSON.stringify(paymentParams)}`);
+        alert(
+          `[SDK 에러]\n${sdkError?.message || sdkError}\n\n[상세]\n${errDetail?.slice(0, 500)}\n\n[파라미터]\n${JSON.stringify(paymentParams)}`,
+        );
         setSubmitting(false);
         return;
       }
@@ -518,7 +589,6 @@ function CheckoutContent() {
 
       // 결제 성공 → 서버에 결제 검증 + 주문 생성
       await createOrdersWithPayment(paymentId, totalAmount);
-
     } catch (error: any) {
       console.error('Payment error:', error);
       alert(t('checkout.alert.paymentException', { error: error.message || '알 수 없는 오류' }));
@@ -604,8 +674,13 @@ function CheckoutContent() {
             restaurantName: cartData[rid].restaurantName,
           });
         } else {
-          const details = data.details ? ` [${Array.isArray(data.details) ? data.details.join(', ') : data.details}]` : '';
-          const errorMsg = (typeof data.error === 'string' ? data.error : (data.error?.message || JSON.stringify(data.error) || '주문 실패')) + details;
+          const details = data.details
+            ? ` [${Array.isArray(data.details) ? data.details.join(', ') : data.details}]`
+            : '';
+          const errorMsg =
+            (typeof data.error === 'string'
+              ? data.error
+              : data.error?.message || JSON.stringify(data.error) || '주문 실패') + details;
           // 주문 생성 실패 → 결제 자동 취소
           await cancelPayment(paymentId, paidAmount, `주문 생성 실패: ${errorMsg}`);
           alert(t('checkout.alert.orderFailedRefund', { error: errorMsg }));
@@ -650,12 +725,27 @@ function CheckoutContent() {
       <header className="bg-white border-b border-airbnb-divider sticky top-0 z-10">
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <button onClick={() => router.push('/')} className="airbnb-circle-btn w-9 h-9 flex items-center justify-center">
-              <svg className="w-6 h-6 text-airbnb-black" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            <button
+              onClick={() => router.push('/')}
+              className="airbnb-circle-btn w-9 h-9 flex items-center justify-center"
+            >
+              <svg
+                className="w-6 h-6 text-airbnb-black"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
-            <h1 className="text-lg font-bold text-airbnb-black tracking-airbnb-tight">{t('checkout.title')}</h1>
+            <h1 className="text-lg font-bold text-airbnb-black tracking-airbnb-tight">
+              {t('checkout.title')}
+            </h1>
             <div className="w-10"></div>
           </div>
         </div>
@@ -712,8 +802,18 @@ function CheckoutContent() {
           </div>
         ) : (
           <div className="airbnb-card rounded-airbnb-lg p-12 text-center mb-4">
-            <svg className="w-16 h-16 text-airbnb-surface mx-auto mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z" />
+            <svg
+              className="w-16 h-16 text-airbnb-surface mx-auto mb-3"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={1.5}
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 100 4 2 2 0 000-4z"
+              />
             </svg>
             <p className="text-airbnb-gray mb-4">{t('checkout.emptyCart')}</p>
             <button
@@ -736,14 +836,29 @@ function CheckoutContent() {
               <span className="text-right text-airbnb-black">
                 ₩{getDeliveryFeeBreakdown().baseFee.toLocaleString()}
                 {getDeliveryFeeBreakdown().extraFee > 0 && (
-                  <span className="text-airbnb-gray"> + ₩{getDeliveryFeeBreakdown().extraFee.toLocaleString()}({t('checkout.additionalFee')})</span>
+                  <span className="text-airbnb-gray">
+                    {' '}
+                    + ₩{getDeliveryFeeBreakdown().extraFee.toLocaleString()}(
+                    {t('checkout.additionalFee')})
+                  </span>
                 )}
               </span>
             </div>
             {deliveryLat && deliveryLng ? (
-              <div className={`flex justify-between ${getDeliveryFeeBreakdown().surcharge > 0 ? 'text-airbnb-error' : 'text-airbnb-green'}`}>
-                <span>{t('checkout.distanceSurcharge', { distance: getDeliveryFeeBreakdown().closestRestaurant, km: getDeliveryFeeBreakdown().distance })}</span>
-                <span>{getDeliveryFeeBreakdown().surcharge > 0 ? `+₩${getDeliveryFeeBreakdown().surcharge.toLocaleString()}` : '₩0'}</span>
+              <div
+                className={`flex justify-between ${getDeliveryFeeBreakdown().surcharge > 0 ? 'text-airbnb-error' : 'text-airbnb-green'}`}
+              >
+                <span>
+                  {t('checkout.distanceSurcharge', {
+                    distance: getDeliveryFeeBreakdown().closestRestaurant,
+                    km: getDeliveryFeeBreakdown().distance,
+                  })}
+                </span>
+                <span>
+                  {getDeliveryFeeBreakdown().surcharge > 0
+                    ? `+₩${getDeliveryFeeBreakdown().surcharge.toLocaleString()}`
+                    : '₩0'}
+                </span>
               </div>
             ) : (
               <div className="flex justify-between text-airbnb-gray">
@@ -767,7 +882,9 @@ function CheckoutContent() {
         </button>
 
         <div className="airbnb-card rounded-airbnb-lg p-5 mb-4">
-          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">{t('checkout.customerInfo')}</h2>
+          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">
+            {t('checkout.customerInfo')}
+          </h2>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-airbnb-black mb-1">
@@ -781,7 +898,9 @@ function CheckoutContent() {
               />
             </div>
             <div>
-              <label className="block text-sm font-medium text-airbnb-black mb-1">{t('checkout.nameLabel')}</label>
+              <label className="block text-sm font-medium text-airbnb-black mb-1">
+                {t('checkout.nameLabel')}
+              </label>
               <input
                 type="text"
                 lang="ko"
@@ -797,7 +916,9 @@ function CheckoutContent() {
         </div>
 
         <div className="airbnb-card rounded-airbnb-lg p-5 mb-4">
-          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">{t('checkout.deliveryInfo')}</h2>
+          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">
+            {t('checkout.deliveryInfo')}
+          </h2>
           <div className="space-y-3">
             <div>
               <label className="block text-sm font-medium text-airbnb-black mb-1">
@@ -820,11 +941,17 @@ function CheckoutContent() {
                 disabled={geocoding || !deliveryAddress || deliveryAddress.trim().length < 5}
                 className="mt-2 w-full py-2 bg-airbnb-surface border border-airbnb-border text-airbnb-red rounded-airbnb-sm text-sm font-medium hover:bg-airbnb-divider disabled:bg-airbnb-surface disabled:text-airbnb-gray disabled:border-airbnb-border disabled:opacity-40"
               >
-                {geocoding ? t('checkout.calculating') : deliveryLat ? t('checkout.recalculate') : t('checkout.calculateDeliveryFee')}
+                {geocoding
+                  ? t('checkout.calculating')
+                  : deliveryLat
+                    ? t('checkout.recalculate')
+                    : t('checkout.calculateDeliveryFee')}
               </button>
             </div>
             <div>
-              <label className="block text-sm font-medium text-airbnb-black mb-1">{t('checkout.memoLabel')}</label>
+              <label className="block text-sm font-medium text-airbnb-black mb-1">
+                {t('checkout.memoLabel')}
+              </label>
               <textarea
                 value={customerMemo}
                 onChange={(e) => setCustomerMemo(e.target.value)}
@@ -838,12 +965,26 @@ function CheckoutContent() {
 
         {/* 결제 수단 */}
         <div className="airbnb-card rounded-airbnb-lg p-5 mb-4">
-          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">{t('checkout.paymentMethod')}</h2>
+          <h2 className="font-semibold text-airbnb-black mb-3 tracking-airbnb-snug">
+            {t('checkout.paymentMethod')}
+          </h2>
           <div className="flex items-center gap-2 px-3 py-2.5 bg-airbnb-blue-bg border border-airbnb-border rounded-airbnb-sm">
-            <svg className="w-5 h-5 text-airbnb-blue-text" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" />
+            <svg
+              className="w-5 h-5 text-airbnb-blue-text"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z"
+              />
             </svg>
-            <span className="text-sm font-medium text-airbnb-blue-text">{t('checkout.creditCard')}</span>
+            <span className="text-sm font-medium text-airbnb-blue-text">
+              {t('checkout.creditCard')}
+            </span>
           </div>
         </div>
 
@@ -852,7 +993,9 @@ function CheckoutContent() {
             <div className="flex items-start">
               <span className="text-airbnb-error font-bold text-lg mr-2">19+</span>
               <div>
-                <p className="text-sm font-medium text-airbnb-error">{t('checkout.adultVerificationTitle')}</p>
+                <p className="text-sm font-medium text-airbnb-error">
+                  {t('checkout.adultVerificationTitle')}
+                </p>
                 <p className="text-xs text-airbnb-error mt-1">
                   {t('checkout.adultVerificationMessage')}
                 </p>
@@ -867,7 +1010,11 @@ function CheckoutContent() {
           disabled={submitting || Object.keys(cartData).length === 0 || !sdkLoaded}
           className="w-full bg-airbnb-red text-white py-4 h-14 rounded-airbnb-sm font-semibold hover:bg-airbnb-red-dark disabled:opacity-40 disabled:cursor-not-allowed"
         >
-          {submitting ? t('checkout.payProcessing') : !sdkLoaded ? t('checkout.payModuleLoading') : t('checkout.payButton', { amount: getTotal().toLocaleString() })}
+          {submitting
+            ? t('checkout.payProcessing')
+            : !sdkLoaded
+              ? t('checkout.payModuleLoading')
+              : t('checkout.payButton', { amount: getTotal().toLocaleString() })}
         </button>
       </main>
 
@@ -876,14 +1023,24 @@ function CheckoutContent() {
           <div className="absolute inset-0 bg-black bg-opacity-50"></div>
           <div className="relative bg-white rounded-airbnb-lg shadow-xl max-w-sm w-full p-6 text-center">
             <div className="w-16 h-16 bg-white border-2 border-airbnb-error rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-airbnb-error" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-8 h-8 text-airbnb-error"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
-            <h2 className="text-xl font-bold text-airbnb-black mb-2 tracking-airbnb-tight">{t('checkout.notDeliveryTimeTitle')}</h2>
-            <p className="text-airbnb-gray mb-4">
-              {t('checkout.notDeliveryTimeMessage')}
-            </p>
+            <h2 className="text-xl font-bold text-airbnb-black mb-2 tracking-airbnb-tight">
+              {t('checkout.notDeliveryTimeTitle')}
+            </h2>
+            <p className="text-airbnb-gray mb-4">{t('checkout.notDeliveryTimeMessage')}</p>
             <button
               onClick={() => router.push('/')}
               className="w-full bg-airbnb-black text-white py-3 rounded-airbnb-sm font-medium hover:opacity-80"
@@ -899,7 +1056,9 @@ function CheckoutContent() {
 
 export default function CheckoutPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}>
+    <Suspense
+      fallback={<div className="min-h-screen flex items-center justify-center">Loading...</div>}
+    >
       <CheckoutContent />
     </Suspense>
   );

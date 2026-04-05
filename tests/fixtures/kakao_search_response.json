@@ -1,0 +1,45 @@
+{
+  "documents": [
+    {
+      "id": "12345",
+      "place_name": "BBQ 제주한경점",
+      "category_name": "음식점 > 치킨",
+      "category_group_code": "FD6",
+      "phone": "064-773-0669",
+      "address_name": "제주특별자치도 제주시 한경면 고산리 123",
+      "road_address_name": "제주특별자치도 제주시 한경면 일주서로 456",
+      "x": "126.166",
+      "y": "33.296",
+      "place_url": "http://place.map.kakao.com/12345"
+    },
+    {
+      "id": "67890",
+      "place_name": "한경분식",
+      "category_name": "음식점 > 분식",
+      "category_group_code": "FD6",
+      "phone": "064-773-1234",
+      "address_name": "제주특별자치도 제주시 한경면 저지리 789",
+      "road_address_name": "",
+      "x": "126.170",
+      "y": "33.300",
+      "place_url": "http://place.map.kakao.com/67890"
+    },
+    {
+      "id": "11111",
+      "place_name": "서울식당",
+      "category_name": "음식점 > 한식",
+      "category_group_code": "FD6",
+      "phone": "02-1234-5678",
+      "address_name": "서울특별시 강남구 역삼동 100",
+      "road_address_name": "",
+      "x": "127.027",
+      "y": "37.497",
+      "place_url": "http://place.map.kakao.com/11111"
+    }
+  ],
+  "meta": {
+    "total_count": 3,
+    "pageable_count": 3,
+    "is_end": true
+  }
+}

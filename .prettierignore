@@ -1,0 +1,12 @@
+node_modules/
+dist/
+.next/
+coverage/
+*.min.js
+package-lock.json
+*.docx
+*.xlsx
+*.pptx
+*.json
+data/
+reports/

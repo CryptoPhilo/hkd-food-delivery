@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "Votre commande a été passée.",
+      "orderNumber": "N° commande: {orderNumber}",
+      "restaurant": "Restaurant: {restaurantName}",
+      "menu": "Articles: {items}",
+      "deliveryFee": "Frais de livraison: ₩{deliveryFee}",
+      "totalAmount": "Total: ₩{totalAmount}",
+      "estimatedTime": "Livraison estimée: ~{estimatedTime} min",
+      "waitingPickupTime": "En attente de confirmation du retrait."
+    },
+    "confirmation": {
+      "estimatedPickup": "Retrait estimé: {pickupTimeStr}",
+      "estimatedDelivery": "Livraison estimée: ~{estimatedDeliveryTime} min",
+      "confirmQuestion": "Voulez-vous confirmer votre commande ?",
+      "confirmLink": "Confirmer: {confirmUrl}",
+      "cancelLink": "Annuler: {cancelUrl}",
+      "autoCancel": "Annulation automatique si non confirmée sous 10 min."
+    },
+    "confirmed": "Commande n°{orderNumber} confirmée.\nNous récupérerons votre repas et commencerons la livraison.",
+    "cancelled": "Commande n°{orderNumber} annulée.",
+    "pickedUp": "Commande n°{orderNumber} payée et récupérée.\nLivraison en cours.",
+    "deliveryComplete": "Commande n°{orderNumber} livrée.\n\nMerci !",
+    "pickupNotification": "Commande n°{orderNumber}\nHeure de retrait: {pickupTimeStr}\n\nRetrait prévu.",
+    "driverAssigned": "Un livreur a été assigné à la commande n°{orderNumber}.",
+    "driverDeparted": "Le livreur part chercher la commande n°{orderNumber}.",
+    "delivering": "Commande n°{orderNumber} en cours de livraison.",
+    "verificationCode": "Code de vérification: {code}\n\nVeuillez saisir dans les 3 minutes.",
+    "authCode": "Code: {verificationCode}\nVeuillez saisir dans les 3 minutes.",
+    "orderLink": "Cliquez sur le lien ci-dessous pour commander.\n{targetUrl}",
+    "partialPickup": "{restaurantName} récupéré ({pickedUp}/{total} restaurants)",
+    "partialPickupRemaining": "Encore {remaining} récupération(s) avant la livraison.",
+    "allPickedUp": "Tous les restaurants récupérés ({total}/{total})",
+    "allPickedUpDelivery": "La livraison commence !"
+  }
+}

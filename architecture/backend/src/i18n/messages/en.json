@@ -1,0 +1,38 @@
+{
+  "sms": {
+    "brandPrefix": "[HKD]",
+    "orderReceived": {
+      "title": "Your order has been placed.",
+      "orderNumber": "Order #: {orderNumber}",
+      "restaurant": "Restaurant: {restaurantName}",
+      "menu": "Items: {items}",
+      "deliveryFee": "Delivery fee: ₩{deliveryFee}",
+      "totalAmount": "Total: ₩{totalAmount}",
+      "estimatedTime": "Estimated delivery: ~{estimatedTime} min",
+      "waitingPickupTime": "Waiting for pickup time confirmation."
+    },
+    "confirmation": {
+      "estimatedPickup": "Estimated pickup: {pickupTimeStr}",
+      "estimatedDelivery": "Estimated delivery: ~{estimatedDeliveryTime} min",
+      "confirmQuestion": "Would you like to confirm your order?",
+      "confirmLink": "Confirm: {confirmUrl}",
+      "cancelLink": "Cancel: {cancelUrl}",
+      "autoCancel": "Auto-cancelled if not confirmed within 10 min."
+    },
+    "confirmed": "Order #{orderNumber} has been confirmed.\nWe will pick up your food and start delivery.",
+    "cancelled": "Order #{orderNumber} has been cancelled.",
+    "pickedUp": "Order #{orderNumber} has been paid and picked up.\nDelivery is starting.",
+    "deliveryComplete": "Order #{orderNumber} has been delivered.\n\nThank you!",
+    "pickupNotification": "Order #{orderNumber}\nPickup time: {pickupTimeStr}\n\nPickup is scheduled.",
+    "driverAssigned": "A driver has been assigned to order #{orderNumber}.",
+    "driverDeparted": "Driver is heading to pick up order #{orderNumber}.",
+    "delivering": "Order #{orderNumber} is being delivered.",
+    "verificationCode": "Age verification code: {code}\n\nPlease enter within 3 minutes.",
+    "authCode": "Verification code: {verificationCode}\nPlease enter within 3 minutes.",
+    "orderLink": "Click the link below to start your order.\n{targetUrl}",
+    "partialPickup": "{restaurantName} picked up ({pickedUp}/{total} restaurants)",
+    "partialPickupRemaining": "{remaining} more pickup(s) before delivery begins.",
+    "allPickedUp": "All restaurants picked up ({total}/{total})",
+    "allPickedUpDelivery": "Delivery is starting!"
+  }
+}

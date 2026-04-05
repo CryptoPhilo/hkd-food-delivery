@@ -43,6 +43,15 @@
     "category": {
       "other": "その他",
       "otherStore": "その他のコンビニ"
+    },
+    "noService": {
+      "title": "お客様の現在地ではサービスをご利用いただけません",
+      "description": "以下のサービスエリアを選択してください。"
+    },
+    "addressInput": {
+      "placeholder": "配達先の住所を入力してください",
+      "button": "設定",
+      "set": "住所が設定されました"
     }
   },
   "restaurant": {

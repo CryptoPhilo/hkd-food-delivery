@@ -43,6 +43,15 @@
     "category": {
       "other": "Autres",
       "otherStore": "Autres magasins de proximité"
+    },
+    "noService": {
+      "title": "Aucun service de livraison disponible dans votre zone",
+      "description": "Veuillez sélectionner une zone de service ci-dessous."
+    },
+    "addressInput": {
+      "placeholder": "Entrez votre adresse de livraison",
+      "button": "Définir",
+      "set": "Adresse définie"
     }
   },
   "restaurant": {

@@ -65,11 +65,9 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: architecture/backend/package-lock.json
 
       - name: 의존성 설치
-        run: npm ci
+        run: npm install
 
       - name: Prisma 생성
         run: npx prisma generate
@@ -115,11 +113,12 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-          cache-dependency-path: architecture/frontend/package-lock.json
 
       - name: 의존성 설치
-        run: npm ci
+        run: npm install
+
+      - name: ESLint 설치
+        run: npm install --save-dev eslint
 
       - name: Prisma 생성
         run: npx prisma generate

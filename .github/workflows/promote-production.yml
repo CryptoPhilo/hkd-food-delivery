@@ -1,0 +1,138 @@
+# ============================================
+# HKD 워크플로우 - Staging → Production 승격
+# staging에서 검증된 코드를 main으로 PR 생성
+# ============================================
+
+name: Promote to Production
+
+on:
+  workflow_dispatch:
+    inputs:
+      description:
+        description: '배포 설명 (예: v1.2 주문 기능 개선)'
+        required: true
+        type: string
+      skip_confirmation:
+        description: '확인 건너뛰기'
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  promote:
+    name: 🚀 Production 승격 PR
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: staging/main 차이 확인
+        id: diff-check
+        run: |
+          git fetch origin main staging
+
+          DIFF_COUNT=$(git rev-list --count origin/main..origin/staging)
+          if [ "$DIFF_COUNT" -eq 0 ]; then
+            echo "⚠️ staging과 main이 동일합니다. 승격할 변경 사항이 없습니다."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "📦 staging이 main보다 $DIFF_COUNT 커밋 앞서 있습니다."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "diff_count=$DIFF_COUNT" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 변경 분석
+        if: steps.diff-check.outputs.has_changes == 'true'
+        id: analyze
+        run: |
+          COMMITS=$(git log origin/main..origin/staging --oneline)
+          FILES_CHANGED=$(git diff --name-only origin/main..origin/staging | wc -l | tr -d ' ')
+          STATS=$(git diff --shortstat origin/main..origin/staging)
+
+          # scope 감지
+          HAS_BACKEND=$(git diff --name-only origin/main..origin/staging | grep -c '^architecture/backend/' || echo "0")
+          HAS_FRONTEND=$(git diff --name-only origin/main..origin/staging | grep -c '^architecture/frontend/' || echo "0")
+
+          DEPLOY_TARGETS=""
+          [ "$HAS_BACKEND" -gt 0 ] && DEPLOY_TARGETS="Backend"
+          [ "$HAS_FRONTEND" -gt 0 ] && DEPLOY_TARGETS="${DEPLOY_TARGETS:+$DEPLOY_TARGETS + }Frontend"
+          [ -z "$DEPLOY_TARGETS" ] && DEPLOY_TARGETS="기타"
+
+          echo "files_changed=$FILES_CHANGED" >> "$GITHUB_OUTPUT"
+          echo "deploy_targets=$DEPLOY_TARGETS" >> "$GITHUB_OUTPUT"
+
+          # PR body 생성
+          cat > /tmp/promote-body.md << EOF
+          ## 🚀 Production 승격
+
+          **설명:** ${{ inputs.description }}
+          **배포 대상:** ${DEPLOY_TARGETS}
+          **변경 파일:** ${FILES_CHANGED}개
+          **커밋 수:** ${{ steps.diff-check.outputs.diff_count }}개
+
+          ### Staging에서 검증된 커밋
+          \`\`\`
+          ${COMMITS}
+          \`\`\`
+
+          ### 변경 통계
+          ${STATS}
+
+          ---
+
+          ### 배포 체크리스트
+          - [ ] Staging 환경에서 기능 테스트 완료
+          - [ ] 헬스체크 통과 확인
+          - [ ] 롤백 계획 확인
+
+          > ✅ 이 PR을 머지하면 **자동으로 Production에 배포**됩니다.
+          > ❌ 문제 발생 시 \`Rollback\` 워크플로우를 사용하세요.
+          EOF
+
+      - name: 기존 승격 PR 확인
+        if: steps.diff-check.outputs.has_changes == 'true'
+        id: check-existing
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          EXISTING=$(gh pr list --head staging --base main --state open --json number --jq '.[0].number // empty')
+          if [ -n "$EXISTING" ]; then
+            echo "existing=$EXISTING" >> "$GITHUB_OUTPUT"
+            echo "⚠️ 기존 승격 PR #$EXISTING 발견"
+          else
+            echo "existing=" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: 승격 PR 생성
+        if: steps.diff-check.outputs.has_changes == 'true' && steps.check-existing.outputs.existing == ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh pr create \
+            --head staging \
+            --base main \
+            --title "🚀 Production: ${{ inputs.description }}" \
+            --body-file /tmp/promote-body.md \
+            --label "production,promote"
+
+          echo "✅ Production 승격 PR 생성 완료"
+
+      - name: 기존 PR 업데이트
+        if: steps.diff-check.outputs.has_changes == 'true' && steps.check-existing.outputs.existing != ''
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          PR_NUM="${{ steps.check-existing.outputs.existing }}"
+          gh pr comment "$PR_NUM" --body "🔄 승격 요청 업데이트: ${{ inputs.description }}"
+          echo "✅ 기존 PR #$PR_NUM 에 코멘트 추가"
+
+      - name: 변경 없음 알림
+        if: steps.diff-check.outputs.has_changes == 'false'
+        run: |
+          echo "::warning::staging과 main이 동일합니다. 먼저 staging에 변경 사항을 머지하세요."

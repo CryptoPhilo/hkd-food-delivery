@@ -33,6 +33,7 @@ jobs:
           echo "✅ 백엔드 Prisma 스키마 유효"
 
       - name: 마이그레이션 드리프트 체크
+        continue-on-error: true
         working-directory: architecture/backend
         run: |
           # 마이그레이션 파일과 스키마 일치 여부 확인

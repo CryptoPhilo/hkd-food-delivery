@@ -34,6 +34,7 @@ module.exports = {
         'frontend',
         'scrapers',
         'infra',
+        'ci',
         'db',
         'scripts',
         'deps',

@@ -1,10 +1,11 @@
 import { Router, Request, Response, NextFunction } from 'express';
 import { PrismaClient } from '@prisma/client';
+import { authenticateDriver, authenticateAdmin, AuthenticatedRequest } from '../middleware/auth.middleware';
 
 const router = Router();
 const prisma = new PrismaClient();
 
-router.post('/start-duty', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/start-duty', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone, name, cardNumber } = req.body;
 
@@ -59,7 +60,7 @@ router.post('/start-duty', async (req: Request, res: Response, next: NextFunctio
   }
 });
 
-router.post('/end-duty', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/end-duty', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone } = req.body;
 
@@ -106,7 +107,7 @@ router.post('/end-duty', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-router.get('/status/:phone', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/status/:phone', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone } = req.params;
 
@@ -130,7 +131,7 @@ router.get('/status/:phone', async (req: Request, res: Response, next: NextFunct
   }
 });
 
-router.get('/deliveries', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/deliveries', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone, date, startDate, endDate } = req.query;
 
@@ -190,7 +191,7 @@ router.get('/deliveries', async (req: Request, res: Response, next: NextFunction
       orderBy: { deliveredAt: 'desc' },
       include: {
         restaurant: true,
-        user: true,
+        user: { select: { id: true, phone: true, name: true, isActive: true, createdAt: true, updatedAt: true } },
         items: true,
       },
     });
@@ -213,7 +214,7 @@ router.get('/deliveries', async (req: Request, res: Response, next: NextFunction
   }
 });
 
-router.get('/pending-orders', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/pending-orders', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const orders = await prisma.order.findMany({
       where: {
@@ -225,7 +226,7 @@ router.get('/pending-orders', async (req: Request, res: Response, next: NextFunc
       orderBy: { createdAt: 'asc' },
       include: {
         restaurant: true,
-        user: true,
+        user: { select: { id: true, phone: true, name: true, isActive: true, createdAt: true, updatedAt: true } },
         items: true,
       },
     });
@@ -282,7 +283,7 @@ router.get('/pending-orders', async (req: Request, res: Response, next: NextFunc
   }
 });
 
-router.get('/my-orders', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/my-orders', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone } = req.query;
 
@@ -314,7 +315,7 @@ router.get('/my-orders', async (req: Request, res: Response, next: NextFunction)
       orderBy: { createdAt: 'asc' },
       include: {
         restaurant: true,
-        user: true,
+        user: { select: { id: true, phone: true, name: true, isActive: true, createdAt: true, updatedAt: true } },
         items: true,
       },
     });
@@ -340,7 +341,7 @@ router.get('/my-orders', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-router.post('/assign/:orderId', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/assign/:orderId', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderId } = req.params;
     const { phone } = req.body;
@@ -368,7 +369,7 @@ router.post('/assign/:orderId', async (req: Request, res: Response, next: NextFu
       data: { driverId: driver.id },
       include: {
         restaurant: true,
-        user: true,
+        user: { select: { id: true, phone: true, name: true, isActive: true, createdAt: true, updatedAt: true } },
         items: true,
         driver: true,
       },
@@ -384,7 +385,7 @@ router.post('/assign/:orderId', async (req: Request, res: Response, next: NextFu
   }
 });
 
-router.post('/assign-batch', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/assign-batch', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderIds, phone } = req.body;
 
@@ -425,7 +426,7 @@ router.post('/assign-batch', async (req: Request, res: Response, next: NextFunct
   }
 });
 
-router.put('/complete/:orderId', async (req: Request, res: Response, next: NextFunction) => {
+router.put('/complete/:orderId', authenticateDriver, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { orderId } = req.params;
 
@@ -474,7 +475,7 @@ router.put('/complete/:orderId', async (req: Request, res: Response, next: NextF
   }
 });
 
-router.get('/list', async (req: Request, res: Response, next: NextFunction) => {
+router.get('/list', authenticateAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { isOnDuty } = req.query;
 
@@ -497,7 +498,7 @@ router.get('/list', async (req: Request, res: Response, next: NextFunction) => {
   }
 });
 
-router.post('/register', async (req: Request, res: Response, next: NextFunction) => {
+router.post('/register', authenticateAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { phone, name, cardNumber } = req.body;
 
@@ -537,7 +538,7 @@ router.post('/register', async (req: Request, res: Response, next: NextFunction)
   }
 });
 
-router.delete('/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.delete('/:id', authenticateAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
 
@@ -584,7 +585,7 @@ router.delete('/:id', async (req: Request, res: Response, next: NextFunction) =>
   }
 });
 
-router.put('/:id', async (req: Request, res: Response, next: NextFunction) => {
+router.put('/:id', authenticateAdmin, async (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { name, cardNumber } = req.body;

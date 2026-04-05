@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
 
 interface ScrapeJob {
   id: string;
@@ -11,28 +12,9 @@ interface ScrapeJob {
   completedAt: string | null;
 }
 
-interface BusinessHours {
-  openTime: string;
-  closeTime: string;
-  closedDays: string[];
-  isHoliday: boolean;
-}
-
-const SEOUL_DISTRICTS = [
-  '서울 강남구', '서울 강동구', '서울 강북구', '서울 강서구', '서울 관악구',
-  '서울 광진구', '서울 구로구', '서울 금천구', '서울 노원구', '서울 도봉구',
-  '서울 동대문구', '서울 동작구', '서울 마포구', '서울 서대문구', '서울 서초구',
-  '서울 성동구', '서울 성북구', '서울 송파구', '서울 양천구', '서울 영등포구',
-  '서울 용산구', '서울 은평구', '서울 종로구', '서울 중구', '서울 중랑구',
-];
-
-const COMMON_AREAS = [
-  '강남역', '홍대입구역', '명동', '잠실역', '신촌',
-  '이태원', '建大', '사당', '왕십리', '천호',
-];
-
 export default function SettingsPage() {
-  const [activeTab, setActiveTab] = useState<'scrape' | 'platform' | 'business' | 'delivery' | 'general'>('scrape');
+  const { adminFetch } = useAdminAuth();
+  const [activeTab, setActiveTab] = useState<'scrape' | 'platform' | 'delivery' | 'general'>('scrape');
   const [selectedAreas, setSelectedAreas] = useState<string[]>([]);
   const [customArea, setCustomArea] = useState('');
   const [scrapeJobs, setScrapeJobs] = useState<ScrapeJob[]>([]);
@@ -62,7 +44,7 @@ export default function SettingsPage() {
       for (const area of areasToScrape) {
         setScrapeProgress(`${area} 식당 데이터 수집 중...`);
         
-        const response = await fetch('/api/v1/admin/scrape', {
+        const response = await adminFetch('/api/v1/admin/scrape', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({ area }),
@@ -95,7 +77,6 @@ export default function SettingsPage() {
   const tabs = [
     { key: 'scrape', label: '데이터 수집' },
     { key: 'platform', label: '플랫폼 운영' },
-    { key: 'business', label: '영업시간' },
     { key: 'delivery', label: '배달 설정' },
     { key: 'general', label: '일반' },
   ];
@@ -133,45 +114,7 @@ export default function SettingsPage() {
             </p>
 
             <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">서울行政区 선택</h3>
-              <div className="grid grid-cols-5 gap-2 max-h-48 overflow-y-auto border rounded-lg p-3">
-                {SEOUL_DISTRICTS.map((area) => (
-                  <button
-                    key={area}
-                    onClick={() => handleAreaToggle(area)}
-                    className={`px-2 py-1 text-xs rounded transition-colors ${
-                      selectedAreas.includes(area)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {area.replace('서울 ', '')}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">인기 지역</h3>
-              <div className="flex flex-wrap gap-2">
-                {COMMON_AREAS.map((area) => (
-                  <button
-                    key={area}
-                    onClick={() => handleAreaToggle(area)}
-                    className={`px-3 py-1 text-sm rounded transition-colors ${
-                      selectedAreas.includes(area)
-                        ? 'bg-blue-600 text-white'
-                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                    }`}
-                  >
-                    {area}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-6">
-              <h3 className="text-sm font-medium text-gray-700 mb-2">직접 입력</h3>
+              <h3 className="text-sm font-medium text-gray-700 mb-2">지역명 입력</h3>
               <div className="flex space-x-2">
                 <input
                   type="text"
@@ -222,7 +165,7 @@ export default function SettingsPage() {
                     : 'bg-blue-600 text-white hover:bg-blue-700'
                 }`}
               >
-                {scrapeLoading ? '收集中...' : `${selectedAreas.length}개 지역 스크랩 시작`}
+                {scrapeLoading ? '수집 중...' : `${selectedAreas.length}개 지역 스크랩 시작`}
               </button>
               {scrapeProgress && (
                 <p className="mt-2 text-sm text-center text-gray-600">{scrapeProgress}</p>
@@ -283,7 +226,6 @@ export default function SettingsPage() {
         </div>
       )}
 
-      {activeTab === 'business' && <BusinessHoursSettings />}
       {activeTab === 'delivery' && <DeliverySettings />}
       {activeTab === 'general' && <GeneralSettings />}
     </div>
@@ -291,13 +233,25 @@ export default function SettingsPage() {
 }
 
 function PlatformHoursSettings() {
+  const { adminFetch } = useAdminAuth();
   const [settings, setSettings] = useState({
     openTime: '09:00',
     closeTime: '22:00',
     isActive: true,
+    closedDays: [] as string[],
   });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+
+  const days = [
+    { key: 'monday', label: '월' },
+    { key: 'tuesday', label: '화' },
+    { key: 'wednesday', label: '수' },
+    { key: 'thursday', label: '목' },
+    { key: 'friday', label: '금' },
+    { key: 'saturday', label: '토' },
+    { key: 'sunday', label: '일' },
+  ];
 
   useEffect(() => {
     fetchPlatformHours();
@@ -305,13 +259,14 @@ function PlatformHoursSettings() {
 
   const fetchPlatformHours = async () => {
     try {
-      const response = await fetch('/api/v1/settings/platform-hours');
+      const response = await adminFetch('/api/v1/settings/platform-hours');
       const data = await response.json();
       if (data.success && data.data) {
         setSettings({
           openTime: data.data.openTime || '09:00',
           closeTime: data.data.closeTime || '22:00',
           isActive: data.data.isActive !== false,
+          closedDays: data.data.closedDays || [],
         });
       }
     } catch (error) {
@@ -319,10 +274,19 @@ function PlatformHoursSettings() {
     }
   };
 
+  const toggleDay = (day: string) => {
+    setSettings(prev => ({
+      ...prev,
+      closedDays: prev.closedDays.includes(day)
+        ? prev.closedDays.filter(d => d !== day)
+        : [...prev.closedDays, day],
+    }));
+  };
+
   const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch('/api/v1/settings/platform-hours', {
+      const response = await adminFetch('/api/v1/settings/platform-hours', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings),
@@ -387,9 +351,34 @@ function PlatformHoursSettings() {
             </div>
           </div>
 
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">정기 휴무일</label>
+            <div className="flex space-x-2">
+              {days.map((day) => (
+                <button
+                  key={day.key}
+                  onClick={() => toggleDay(day.key)}
+                  className={`px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    settings.closedDays.includes(day.key)
+                      ? 'bg-red-100 text-red-800 ring-1 ring-red-300'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {day.label}
+                </button>
+              ))}
+            </div>
+            <p className="text-xs text-gray-400 mt-1">선택한 요일에는 주문이 불가합니다</p>
+          </div>
+
           <div className="p-4 bg-blue-50 rounded-lg">
             <p className="text-sm text-blue-800">
               운영 시간: {settings.openTime} ~ {settings.closeTime}
+              {settings.closedDays.length > 0 && (
+                <span className="ml-2">
+                  | 휴무: {settings.closedDays.map(d => days.find(dd => dd.key === d)?.label).filter(Boolean).join(', ')}
+                </span>
+              )}
             </p>
           </div>
 
@@ -414,24 +403,30 @@ function PlatformHoursSettings() {
         <p className="text-sm text-gray-500 mb-4">
           현재 플랫폼이 주문 가능한지 확인합니다.
         </p>
-        <PlatformStatusCheck openTime={settings.openTime} closeTime={settings.closeTime} isActive={settings.isActive} />
+        <PlatformStatusCheck openTime={settings.openTime} closeTime={settings.closeTime} isActive={settings.isActive} closedDays={settings.closedDays} />
       </div>
     </div>
   );
 }
 
-function PlatformStatusCheck({ openTime, closeTime, isActive }: { openTime: string; closeTime: string; isActive: boolean }) {
+function PlatformStatusCheck({ openTime, closeTime, isActive, closedDays = [] }: { openTime: string; closeTime: string; isActive: boolean; closedDays?: string[] }) {
   const [status, setStatus] = useState<{ isOpen: boolean; message: string } | null>(null);
+
+  const dayKeyMap: Record<number, string> = {
+    0: 'sunday', 1: 'monday', 2: 'tuesday', 3: 'wednesday',
+    4: 'thursday', 5: 'friday', 6: 'saturday',
+  };
 
   useEffect(() => {
     checkStatus();
     const interval = setInterval(checkStatus, 60000);
     return () => clearInterval(interval);
-  }, [openTime, closeTime, isActive]);
+  }, [openTime, closeTime, isActive, closedDays]);
 
   const checkStatus = () => {
     const now = new Date();
     const currentTime = now.getHours() * 60 + now.getMinutes();
+    const todayKey = dayKeyMap[now.getDay()];
 
     const [openHour, openMin] = openTime.split(':').map(Number);
     const [closeHour, closeMin] = closeTime.split(':').map(Number);
@@ -445,6 +440,9 @@ function PlatformStatusCheck({ openTime, closeTime, isActive }: { openTime: stri
     if (!isActive) {
       isOpen = false;
       message = '플랫폼이 비활성화되어 있습니다.';
+    } else if (closedDays.includes(todayKey)) {
+      isOpen = false;
+      message = '오늘은 정기 휴무일입니다.';
     } else if (close < open) {
       if (currentTime >= open || currentTime < close) {
         isOpen = true;
@@ -481,86 +479,8 @@ function PlatformStatusCheck({ openTime, closeTime, isActive }: { openTime: stri
   );
 }
 
-function BusinessHoursSettings() {
-  const [settings, setSettings] = useState({
-    openTime: '09:00',
-    closeTime: '22:00',
-    closedDays: ['sunday'],
-    isHoliday: false,
-  });
-
-  const days = [
-    { key: 'monday', label: '월' },
-    { key: 'tuesday', label: '화' },
-    { key: 'wednesday', label: '수' },
-    { key: 'thursday', label: '목' },
-    { key: 'friday', label: '금' },
-    { key: 'saturday', label: '토' },
-    { key: 'sunday', label: '일' },
-  ];
-
-  const toggleDay = (day: string) => {
-    setSettings(prev => ({
-      ...prev,
-      closedDays: prev.closedDays.includes(day)
-        ? prev.closedDays.filter(d => d !== day)
-        : [...prev.closedDays, day]
-    }));
-  };
-
-  return (
-    <div className="bg-white rounded-lg shadow p-6">
-      <h2 className="text-lg font-medium mb-4">영업시간 설정</h2>
-      <div className="space-y-4">
-        <div className="flex space-x-4">
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">개장 시간</label>
-            <input
-              type="time"
-              value={settings.openTime}
-              onChange={(e) => setSettings({ ...settings, openTime: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2"
-            />
-          </div>
-          <div className="flex-1">
-            <label className="block text-sm font-medium text-gray-700 mb-1">마감 시간</label>
-            <input
-              type="time"
-              value={settings.closeTime}
-              onChange={(e) => setSettings({ ...settings, closeTime: e.target.value })}
-              className="w-full border rounded-lg px-3 py-2"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">휴일</label>
-          <div className="flex space-x-2">
-            {days.map((day) => (
-              <button
-                key={day.key}
-                onClick={() => toggleDay(day.key)}
-                className={`px-3 py-2 rounded-lg text-sm ${
-                  settings.closedDays.includes(day.key)
-                    ? 'bg-red-100 text-red-800'
-                    : 'bg-gray-100 text-gray-700'
-                }`}
-              >
-                {day.label}
-              </button>
-            ))}
-          </div>
-        </div>
-
-        <button className="w-full py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700">
-          저장
-        </button>
-      </div>
-    </div>
-  );
-}
-
 function DeliverySettings() {
+  const { adminFetch } = useAdminAuth();
   const [settings, setSettings] = useState({
     baseFee: 3000,
     perKmFee: 500,
@@ -576,7 +496,7 @@ function DeliverySettings() {
 
   const fetchDeliveryFee = async () => {
     try {
-      const response = await fetch('/api/v1/settings/delivery-fee');
+      const response = await adminFetch('/api/v1/settings/delivery-fee');
       const data = await response.json();
       if (data.success && data.data) {
         setSettings({
@@ -594,7 +514,7 @@ function DeliverySettings() {
   const handleSave = async () => {
     setSaving(true);
     try {
-      const response = await fetch('/api/v1/settings/delivery-fee', {
+      const response = await adminFetch('/api/v1/settings/delivery-fee', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(settings),

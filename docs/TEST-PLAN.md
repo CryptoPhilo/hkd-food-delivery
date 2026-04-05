@@ -314,6 +314,54 @@ INSERT INTO settings (key, value, type) VALUES
 - [ ] TC-19: 영업시간 설정
 - [ ] TC-20: 배달비 설정
 
+### Phase 4: 스크래퍼 테스트 (ST-01 ~ ST-10)
+
+- [ ] ST-01: KakaoScraper 카카오 API 응답 파싱
+- [ ] ST-02: KakaoScraper 제주 외 지역 필터링
+- [ ] ST-03: KakaoScraper API 에러 시 예외 처리
+- [ ] ST-04: NaverScraper 네이버 플레이스 HTML 파싱
+- [ ] ST-05: NaverScraper 메뉴 정보 추출
+- [ ] ST-06: DiningcodeScraper ld+json 스키마 파싱
+- [ ] ST-07: DiningcodeScraper 검색 결과 파싱
+- [ ] ST-08: HttpClient 재시도 로직 동작
+- [ ] ST-09: HttpClient 타임아웃 처리
+- [ ] ST-10: Models Restaurant/Menu 데이터 변환
+
+### Phase 5: 확장 기능 테스트
+
+- [ ] DR-01: 배달원 로그인 (전화번호 인증)
+- [ ] DR-02: 배달 배정 수락/거절
+- [ ] DR-03: 배달 추적 (위치 업데이트)
+- [ ] DR-04: 네비게이션 연동
+- [ ] DR-05: 배달 완료 사진 업로드
+- [ ] PAY-01: PortOne 결제 요청
+- [ ] PAY-02: 결제 웹훅 서명 검증
+- [ ] PAY-03: 환불 처리
+- [ ] CONV-01: 편의점 목록 필터링
+- [ ] CONV-02: 연령 인증 (주류)
+- [ ] CONV-03: 편의점 전용 규칙
+
+### Phase 6: 보안 및 인프라 테스트
+
+- [ ] AUTH-01: RBAC 역할별 접근 제어
+- [ ] AUTH-02: JWT 토큰 갱신/무효화
+- [ ] AUTH-03: Admin API 키 인증
+- [ ] RATE-01: API Rate Limiting
+- [ ] RATE-02: Auth Rate Limiting
+- [ ] RATE-03: Webhook Rate Limiting
+- [ ] VAL-01: 전화번호 형식 검증
+- [ ] VAL-02: 주소 유효성 검증
+- [ ] VAL-03: 수량/금액 범위 검증
+- [ ] VAL-04: 거리 제한 검증
+- [ ] INFRA-01: 헬스체크 엔드포인트
+- [ ] INFRA-02: 메트릭 수집
+- [ ] INFRA-03: 로그 포맷/레벨 검증
+- [ ] INFRA-04: DB 연결 복원
+- [ ] SE-01: 월별 정산 생성
+- [ ] SE-02: 정산 승인 워크플로우
+- [ ] SE-03: 정산 내역 조회
+- [ ] SE-04: 이체 처리
+
 ---
 
 ## 테스트 계정
@@ -397,11 +445,47 @@ curl -X PUT http://localhost:3000/api/v1/admin/settings \
 
 ---
 
+## 테스트 코드 매핑
+
+| TC-ID | 테스트 파일 | 실행 명령 |
+|-------|-----------|----------|
+| TC-01~06 | `tests/integration/test_basic_*.py` | `pytest tests/integration/ -k "basic"` |
+| TC-07~14 | `tests/integration/test_order_*.py` | `pytest tests/integration/ -k "order"` |
+| TC-15~20 | `tests/integration/test_admin_*.py` | `pytest tests/integration/ -k "admin"` |
+| ST-01~10 | `scrapers/tests/test_*.py` | `pytest scrapers/tests/` |
+| DR-01~05 | `tests/integration/test_driver_*.py` | `pytest tests/integration/ -k "driver"` |
+| PAY-01~03 | `tests/integration/test_payment_*.py` | `pytest tests/integration/ -k "payment"` |
+| AUTH/RATE/VAL | `tests/unit/test_*_validation.py` | `pytest tests/unit/` |
+| INFRA-01~04 | `tests/integration/test_infra_*.py` | `pytest tests/integration/ -k "infra"` |
+| SE-01~04 | `tests/integration/test_settlement_*.py` | `pytest tests/integration/ -k "settlement"` |
+
+### 전체 테스트 실행
+
+```bash
+# 스크래퍼 단위 테스트
+pytest scrapers/tests/ -v --cov=scrapers --cov-report=html
+
+# 단위 테스트 (입력 검증 등)
+pytest tests/unit/ -v --cov --cov-report=html
+
+# 통합 테스트 (DB 필요)
+docker-compose -f docker-compose.test.yml up -d
+pytest tests/integration/ -v --cov --cov-report=html
+
+# 전체 테스트
+pytest tests/ scrapers/tests/ -v --cov --cov-report=html --cov-report=term-missing
+```
+
+---
+
 ## 예상 테스트 결과 요약
 
-| 구분 | 통과 | 실패 | 비고 |
-|------|------|------|------|
-| Phase 1 | - | - | |
-| Phase 2 | - | - | |
-| Phase 3 | - | - | |
-| **총계** | **/20** | **/20** | |
+| 구분 | TC 수 | 통과 | 실패 | 비고 |
+|------|-------|------|------|------|
+| Phase 1: 기본 기능 | 6 | - | - | TC-01~06 |
+| Phase 2: 주문 플로우 | 8 | - | - | TC-07~14 |
+| Phase 3: 관리자 기능 | 6 | - | - | TC-15~20 |
+| Phase 4: 스크래퍼 | 10 | - | - | ST-01~10 |
+| Phase 5: 확장 기능 | 11 | - | - | DR/PAY/CONV |
+| Phase 6: 보안/인프라 | 18 | - | - | AUTH/RATE/VAL/INFRA/SE |
+| **총계** | **59** | **/59** | **/59** | |

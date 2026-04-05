@@ -1,6 +1,14 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useAdminAuth } from '@/contexts/AdminAuthContext';
+import {
+  generateCategoryThumbnail,
+  generateRestaurantThumbnail,
+  generateMenuThumbnail,
+  resizeImageFile,
+  THUMBNAIL_SIZES,
+} from '@/utils/thumbnail';
 
 interface Menu {
   id: string;
@@ -8,8 +16,12 @@ interface Menu {
   description: string | null;
   price: number;
   imageUrl: string | null;
+  thumbnailUrl: string | null;
   isAvailable: boolean;
   isActive: boolean;
+  requiresAgeVerification?: boolean;
+  stock?: number | null;
+  category?: string | null;
 }
 
 interface Restaurant {
@@ -26,7 +38,12 @@ interface Restaurant {
   businessHours: string | null;
   isActive: boolean;
   isDeliverable: boolean;
+  isRecommended: boolean;
+  thumbnailUrl: string | null;
   deliveryRadius: number;
+  storeType: string;
+  brandName: string | null;
+  operatingHours24: boolean;
   menus: Menu[];
 }
 
@@ -42,9 +59,14 @@ interface RestaurantFormData {
   rating: string;
   businessHours: string;
   isDeliverable: boolean;
+  deliveryRadius: string;
+  storeType: string;
+  brandName: string;
+  operatingHours24: boolean;
 }
 
 export default function RestaurantsPage() {
+  const { adminFetch } = useAdminAuth();
   const [restaurants, setRestaurants] = useState<Restaurant[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRestaurant, setSelectedRestaurant] = useState<Restaurant | null>(null);
@@ -64,17 +86,91 @@ export default function RestaurantsPage() {
     rating: '',
     businessHours: '',
     isDeliverable: true,
+    deliveryRadius: '5',
+    storeType: 'restaurant',
+    brandName: '',
+    operatingHours24: false,
   });
   const [filter, setFilter] = useState<'all' | 'active' | 'inactive'>('all');
   const [importing, setImporting] = useState(false);
+  const [expandedCategory, setExpandedCategory] = useState<string | null>(null);
+  const [categoryThumbnails, setCategoryThumbnails] = useState<Record<string, string>>({});
 
   useEffect(() => {
     fetchRestaurants();
+    fetchCategoryThumbnails();
   }, []);
 
-  const fetchRestaurants = async () => {
+  const fetchCategoryThumbnails = async () => {
     try {
-      const response = await fetch('/api/v1/admin/restaurants');
+      const res = await adminFetch('/api/v1/thumbnails/categories');
+      const data = await res.json();
+      if (data.success && data.data) setCategoryThumbnails(data.data);
+    } catch (error) {
+      console.error('Category thumbnails fetch error:', error);
+    }
+  };
+
+  const uploadCategoryThumbnail = async (catName: string, file: File) => {
+    try {
+      const dataUri = await resizeImageFile(file, THUMBNAIL_SIZES.category);
+      const res = await adminFetch(`/api/v1/admin/thumbnails/categories/${encodeURIComponent(catName)}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ thumbnailUrl: dataUri }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setCategoryThumbnails(prev => ({ ...prev, [catName]: dataUri }));
+      } else {
+        alert(data.error || '업로드 실패');
+      }
+    } catch (error) {
+      alert('이미지 처리 오류');
+    }
+  };
+
+  const uploadRestaurantThumbnail = async (restaurantId: string, file: File) => {
+    try {
+      const dataUri = await resizeImageFile(file, THUMBNAIL_SIZES.restaurant);
+      const res = await adminFetch(`/api/v1/admin/thumbnails/restaurants/${restaurantId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ thumbnailUrl: dataUri }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        fetchRestaurants(restaurantId);
+      } else {
+        alert(data.error || '업로드 실패');
+      }
+    } catch (error) {
+      alert('이미지 처리 오류');
+    }
+  };
+
+  const uploadMenuThumbnail = async (menuId: string, file: File) => {
+    try {
+      const dataUri = await resizeImageFile(file, THUMBNAIL_SIZES.menu);
+      const res = await adminFetch(`/api/v1/admin/thumbnails/menus/${menuId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ thumbnailUrl: dataUri }),
+      });
+      const data = await res.json();
+      if (data.success && selectedRestaurant) {
+        fetchRestaurants(selectedRestaurant.id);
+      } else if (!data.success) {
+        alert(data.error || '업로드 실패');
+      }
+    } catch (error) {
+      alert('이미지 처리 오류');
+    }
+  };
+
+  const fetchRestaurants = async (refreshSelectedId?: string) => {
+    try {
+      const response = await adminFetch('/api/v1/admin/restaurants');
       const data = await response.json();
       if (data.success) {
         setRestaurants(data.data);
@@ -88,7 +184,7 @@ export default function RestaurantsPage() {
 
   const toggleRestaurantActive = async (restaurantId: string, isActive: boolean) => {
     try {
-      await fetch(`/api/v1/admin/restaurants/${restaurantId}`, {
+      await adminFetch(`/api/v1/admin/restaurants/${restaurantId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isActive: !isActive }),
@@ -101,7 +197,7 @@ export default function RestaurantsPage() {
 
   const toggleRestaurantDeliverable = async (restaurantId: string, isDeliverable: boolean) => {
     try {
-      await fetch(`/api/v1/admin/restaurants/${restaurantId}`, {
+      await adminFetch(`/api/v1/admin/restaurants/${restaurantId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isDeliverable: !isDeliverable }),
@@ -112,9 +208,22 @@ export default function RestaurantsPage() {
     }
   };
 
+  const toggleRecommended = async (restaurantId: string, isRecommended: boolean) => {
+    try {
+      await adminFetch(`/api/v1/admin/restaurants/${restaurantId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ isRecommended: !isRecommended }),
+      });
+      fetchRestaurants();
+    } catch (error) {
+      alert('오류가 발생했습니다');
+    }
+  };
+
   const toggleMenuAvailable = async (menuId: string, isAvailable: boolean) => {
     try {
-      await fetch(`/api/v1/admin/menus/${menuId}`, {
+      await adminFetch(`/api/v1/admin/menus/${menuId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ isAvailable: !isAvailable }),
@@ -158,7 +267,7 @@ export default function RestaurantsPage() {
       
       const method = editingMenu ? 'PUT' : 'POST';
       
-      await fetch(url, {
+      await adminFetch(url, {
         method,
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -183,12 +292,27 @@ export default function RestaurantsPage() {
     return true;
   });
 
+  // 카테고리별 그룹화
+  const adminGrouped = filteredRestaurants.reduce<Record<string, Restaurant[]>>((acc, r) => {
+    const cat = r.storeType === 'convenience_store'
+      ? (r.brandName || '기타 편의점')
+      : (r.category?.replace(/^음식점 > /, '') || '기타');
+    if (!acc[cat]) acc[cat] = [];
+    acc[cat].push(r);
+    return acc;
+  }, {});
+
+  const adminCategoryNames = Object.keys(adminGrouped).sort((a, b) => {
+    const diff = adminGrouped[b].length - adminGrouped[a].length;
+    return diff !== 0 ? diff : a.localeCompare(b, 'ko');
+  });
+
   const importMockData = async () => {
     if (!confirm('Mock 데이터를 import하시겠습니까? 기존 데이터는 건너뜁니다.')) return;
     
     setImporting(true);
     try {
-      const response = await fetch('/api/v1/admin/import-mock', { method: 'POST' });
+      const response = await adminFetch('/api/v1/admin/import-mock', { method: 'POST' });
       const data = await response.json();
       if (data.success) {
         alert(data.message);
@@ -210,7 +334,7 @@ export default function RestaurantsPage() {
     }
 
     try {
-      const response = await fetch('/api/v1/admin/restaurants', {
+      const response = await adminFetch('/api/v1/admin/restaurants', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -225,6 +349,10 @@ export default function RestaurantsPage() {
           rating: parseFloat(restaurantForm.rating) || 0,
           businessHours: restaurantForm.businessHours || null,
           isDeliverable: restaurantForm.isDeliverable,
+          deliveryRadius: parseFloat(restaurantForm.deliveryRadius) || 5,
+          storeType: restaurantForm.storeType,
+          brandName: restaurantForm.brandName || null,
+          operatingHours24: restaurantForm.operatingHours24,
         }),
       });
 
@@ -244,6 +372,10 @@ export default function RestaurantsPage() {
           rating: '',
           businessHours: '',
           isDeliverable: true,
+          deliveryRadius: '5',
+          storeType: 'restaurant',
+          brandName: '',
+          operatingHours24: false,
         });
         fetchRestaurants();
       } else {
@@ -254,11 +386,22 @@ export default function RestaurantsPage() {
     }
   };
 
+  const deleteMenu = async (menuId: string, menuName: string) => {
+    if (!confirm(`'${menuName}' 메뉴를 삭제하시겠습니까?`)) return;
+
+    try {
+      await adminFetch(`/api/v1/admin/menus/${menuId}`, { method: 'DELETE' });
+      fetchRestaurants();
+    } catch (error) {
+      alert('오류가 발생했습니다');
+    }
+  };
+
   const deleteRestaurant = async (id: string) => {
     if (!confirm('식당을 삭제하시겠습니까?')) return;
     
     try {
-      await fetch(`/api/v1/admin/restaurants/${id}`, { method: 'DELETE' });
+      await adminFetch(`/api/v1/admin/restaurants/${id}`, { method: 'DELETE' });
       fetchRestaurants();
       setSelectedRestaurant(null);
     } catch (error) {
@@ -280,6 +423,10 @@ export default function RestaurantsPage() {
         rating: String(restaurant.rating || ''),
         businessHours: restaurant.businessHours || '',
         isDeliverable: restaurant.isDeliverable,
+        deliveryRadius: String(restaurant.deliveryRadius || 5),
+        storeType: restaurant.storeType || 'restaurant',
+        brandName: restaurant.brandName || '',
+        operatingHours24: restaurant.operatingHours24 || false,
       });
     } else {
       setRestaurantForm({
@@ -294,6 +441,10 @@ export default function RestaurantsPage() {
         rating: '',
         businessHours: '',
         isDeliverable: true,
+        deliveryRadius: '5',
+        storeType: 'restaurant',
+        brandName: '',
+        operatingHours24: false,
       });
     }
     setShowRestaurantModal(true);
@@ -338,8 +489,8 @@ export default function RestaurantsPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-1 space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6" style={{ maxHeight: 'calc(100vh - 180px)' }}>
+        <div className="lg:col-span-1 space-y-2 overflow-y-auto" style={{ maxHeight: 'calc(100vh - 180px)' }}>
           {loading ? (
             <div className="flex justify-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
@@ -349,16 +500,72 @@ export default function RestaurantsPage() {
               식당 데이터가 없습니다
             </div>
           ) : (
-            filteredRestaurants.map((restaurant) => (
-              <RestaurantCard
-                key={restaurant.id}
-                restaurant={restaurant}
-                onSelect={() => setSelectedRestaurant(restaurant)}
-                isSelected={selectedRestaurant?.id === restaurant.id}
-                onToggleActive={() => toggleRestaurantActive(restaurant.id, restaurant.isActive)}
-                onToggleDeliverable={() => toggleRestaurantDeliverable(restaurant.id, restaurant.isDeliverable)}
-              />
-            ))
+            adminCategoryNames.map((catName) => {
+              const stores = adminGrouped[catName];
+              const isExpanded = expandedCategory === catName;
+              const activeCount = stores.filter(r => r.isActive).length;
+
+              return (
+                <div key={catName} className="bg-white rounded-lg shadow overflow-hidden">
+                  <div className="flex items-center px-4 py-2.5">
+                    <button
+                      onClick={() => setExpandedCategory(isExpanded ? null : catName)}
+                      className="flex-1 flex items-center justify-between hover:bg-gray-50 transition-colors"
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={categoryThumbnails[catName] || generateCategoryThumbnail(catName)}
+                          alt={catName}
+                          className="w-14 h-10 rounded-lg object-cover flex-shrink-0"
+                        />
+                        <span className="font-medium text-gray-900 text-sm">{catName}</span>
+                        <span className="text-xs text-gray-400">{stores.length}개</span>
+                        <span className={`text-xs px-1.5 py-0.5 rounded ${activeCount === stores.length ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                          {activeCount}/{stores.length} 활성
+                        </span>
+                      </div>
+                      <svg
+                        className={`w-4 h-4 text-gray-400 transition-transform duration-200 ${isExpanded ? 'rotate-180' : ''}`}
+                        fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                      </svg>
+                    </button>
+                    <label className="ml-2 cursor-pointer text-gray-400 hover:text-blue-500 flex-shrink-0" title="카테고리 썸네일 변경">
+                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                      </svg>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        className="hidden"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (file) uploadCategoryThumbnail(catName, file);
+                          e.target.value = '';
+                        }}
+                      />
+                    </label>
+                  </div>
+                  {isExpanded && (
+                    <div className="border-t space-y-2 p-2">
+                      {stores.map((restaurant) => (
+                        <RestaurantCard
+                          key={restaurant.id}
+                          restaurant={restaurant}
+                          onSelect={() => setSelectedRestaurant(restaurant)}
+                          isSelected={selectedRestaurant?.id === restaurant.id}
+                          onToggleActive={() => toggleRestaurantActive(restaurant.id, restaurant.isActive)}
+                          onToggleDeliverable={() => toggleRestaurantDeliverable(restaurant.id, restaurant.isDeliverable)}
+                          onToggleRecommended={() => toggleRecommended(restaurant.id, restaurant.isRecommended)}
+                          onUploadThumbnail={(file) => uploadRestaurantThumbnail(restaurant.id, file)}
+                        />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })
           )}
         </div>
 
@@ -369,6 +576,14 @@ export default function RestaurantsPage() {
               onToggleAvailable={toggleMenuAvailable}
               onEditMenu={openMenuModal}
               onAddMenu={() => openMenuModal()}
+              onRefresh={() => fetchRestaurants(selectedRestaurant.id)}
+              onEditRestaurant={() => openRestaurantModal(selectedRestaurant)}
+              onDeleteRestaurant={() => deleteRestaurant(selectedRestaurant.id)}
+              onToggleActive={() => toggleRestaurantActive(selectedRestaurant.id, selectedRestaurant.isActive)}
+              deleteMenu={deleteMenu}
+              fetch={fetch}
+              onUploadRestaurantThumbnail={(file) => uploadRestaurantThumbnail(selectedRestaurant.id, file)}
+              onUploadMenuThumbnail={uploadMenuThumbnail}
             />
           ) : (
             <div className="bg-white rounded-lg shadow p-8 text-center text-gray-500">
@@ -475,12 +690,16 @@ function RestaurantCard({
   isSelected,
   onToggleActive,
   onToggleDeliverable,
+  onToggleRecommended,
+  onUploadThumbnail,
 }: {
   restaurant: Restaurant;
   onSelect: () => void;
   isSelected: boolean;
   onToggleActive: () => void;
   onToggleDeliverable: () => void;
+  onToggleRecommended: () => void;
+  onUploadThumbnail: (file: File) => void;
 }) {
   return (
     <div
@@ -490,11 +709,53 @@ function RestaurantCard({
       }`}
     >
       <div className="flex justify-between items-start">
-        <div>
-          <h3 className="font-medium text-gray-900">{restaurant.name}</h3>
-          <p className="text-sm text-gray-500">{restaurant.category}</p>
+        <div className="flex items-start gap-2.5">
+          <div className="relative group flex-shrink-0">
+            <img
+              src={restaurant.thumbnailUrl || generateRestaurantThumbnail(restaurant.name, restaurant.category, restaurant.menus.map(m => m.name))}
+              alt={restaurant.name}
+              className="w-16 h-11 rounded-lg object-cover"
+            />
+            <label className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center cursor-pointer rounded transition-all">
+              <svg className="w-3.5 h-3.5 text-white opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+              </svg>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onClick={(e) => e.stopPropagation()}
+                onChange={(e) => {
+                  e.stopPropagation();
+                  const file = e.target.files?.[0];
+                  if (file) onUploadThumbnail(file);
+                  e.target.value = '';
+                }}
+              />
+            </label>
+          </div>
+          <div>
+            <div className="flex items-center gap-1.5">
+              <h3 className="font-medium text-gray-900">{restaurant.name}</h3>
+            {restaurant.isRecommended && (
+              <span className="px-1.5 py-0.5 bg-yellow-100 text-yellow-800 text-xs rounded font-medium">추천</span>
+            )}
+            {restaurant.storeType === 'convenience_store' && (
+              <span className="px-1.5 py-0.5 bg-green-100 text-green-700 text-xs rounded">편의점</span>
+            )}
+          </div>
+          <p className="text-sm text-gray-500">
+            {restaurant.storeType === 'convenience_store' ? (restaurant.brandName || '편의점') : restaurant.category}
+          </p>
         </div>
-        <div className="flex space-x-1">
+        </div>
+        <div className="flex flex-wrap gap-1 justify-end">
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleRecommended(); }}
+            className={`px-2 py-1 text-xs rounded ${restaurant.isRecommended ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-400'}`}
+          >
+            {restaurant.isRecommended ? '추천ON' : '추천OFF'}
+          </button>
           <button
             onClick={(e) => { e.stopPropagation(); onToggleActive(); }}
             className={`px-2 py-1 text-xs rounded ${restaurant.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
@@ -514,7 +775,7 @@ function RestaurantCard({
       </div>
       <div className="mt-2 flex items-center justify-between text-sm">
         <span>메뉴: {restaurant.menus.length}개</span>
-        {restaurant.rating && <span>★ {restaurant.rating}</span>}
+        {null}
       </div>
     </div>
   );
@@ -525,11 +786,27 @@ function MenuManagement({
   onToggleAvailable,
   onEditMenu,
   onAddMenu,
+  onRefresh,
+  onEditRestaurant,
+  onDeleteRestaurant,
+  onToggleActive,
+  deleteMenu,
+  fetch,
+  onUploadRestaurantThumbnail,
+  onUploadMenuThumbnail,
 }: {
   restaurant: Restaurant;
   onToggleAvailable: (menuId: string, isAvailable: boolean) => void;
   onEditMenu: (menu?: Menu) => void;
   onAddMenu: () => void;
+  onRefresh: () => void;
+  onEditRestaurant: () => void;
+  onDeleteRestaurant: () => void;
+  onToggleActive: () => void;
+  deleteMenu: (menuId: string, menuName: string) => void;
+  fetch: (url: string, options?: RequestInit) => Promise<Response>;
+  onUploadRestaurantThumbnail: (file: File) => void;
+  onUploadMenuThumbnail: (menuId: string, file: File) => void;
 }) {
   const availableMenus = restaurant.menus.filter(m => m.isAvailable);
   const unavailableMenus = restaurant.menus.filter(m => !m.isAvailable);
@@ -537,9 +814,43 @@ function MenuManagement({
   return (
     <div className="space-y-6">
       <div className="bg-white rounded-lg shadow p-4">
-        <div className="flex justify-between items-center mb-4">
-          <div>
-            <h2 className="text-lg font-bold">{restaurant.name}</h2>
+        <div className="flex justify-between items-start mb-4">
+          <div className="flex-1">
+            <div className="flex items-center gap-3">
+              <div className="relative group flex-shrink-0">
+                <img
+                  src={restaurant.thumbnailUrl || generateRestaurantThumbnail(restaurant.name, restaurant.category, restaurant.menus.map(m => m.name))}
+                  alt={restaurant.name}
+                  className="w-24 h-16 rounded-lg object-cover"
+                />
+                <label className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center cursor-pointer rounded-lg transition-all">
+                  <svg className="w-5 h-5 text-white opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                  </svg>
+                  <input
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      if (file) onUploadRestaurantThumbnail(file);
+                      e.target.value = '';
+                    }}
+                  />
+                </label>
+              </div>
+              <div>
+                <div className="flex items-center gap-2">
+                  <h2 className="text-lg font-bold">{restaurant.name}</h2>
+                  <button
+                    onClick={onToggleActive}
+                    className={`px-2 py-0.5 text-xs rounded ${restaurant.isActive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}
+                  >
+                    {restaurant.isActive ? '활성' : '비활성'}
+                  </button>
+                </div>
+              </div>
+            </div>
             <p className="text-sm text-gray-500">{restaurant.address}</p>
             {restaurant.phone && <p className="text-sm text-gray-500">☎ {restaurant.phone}</p>}
           </div>
@@ -563,8 +874,11 @@ function MenuManagement({
                 <MenuItem
                   key={menu.id}
                   menu={menu}
+                  restaurantCategory={restaurant.category}
                   onToggle={() => onToggleAvailable(menu.id, menu.isAvailable)}
                   onEdit={() => onEditMenu(menu)}
+                  onDelete={() => deleteMenu(menu.id, menu.name)}
+                  onUploadThumbnail={(file) => onUploadMenuThumbnail(menu.id, file)}
                 />
               ))}
             </div>
@@ -581,8 +895,11 @@ function MenuManagement({
                 <MenuItem
                   key={menu.id}
                   menu={menu}
+                  restaurantCategory={restaurant.category}
                   onToggle={() => onToggleAvailable(menu.id, menu.isAvailable)}
                   onEdit={() => onEditMenu(menu)}
+                  onDelete={() => deleteMenu(menu.id, menu.name)}
+                  onUploadThumbnail={(file) => onUploadMenuThumbnail(menu.id, file)}
                 />
               ))}
             </div>
@@ -595,23 +912,64 @@ function MenuManagement({
 
 function MenuItem({
   menu,
+  restaurantCategory,
   onToggle,
   onEdit,
+  onDelete,
+  onUploadThumbnail,
 }: {
   menu: Menu;
+  restaurantCategory?: string | null;
   onToggle: () => void;
   onEdit: () => void;
+  onDelete: () => void;
+  onUploadThumbnail: (file: File) => void;
 }) {
   return (
     <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-      <div className="flex-1">
-        <div className="flex items-center">
-          <span className="font-medium">{menu.name}</span>
-          <span className="ml-2 text-gray-500">{menu.price.toLocaleString()}원</span>
+      <div className="flex items-center gap-2.5 flex-1">
+        <div className="relative group flex-shrink-0">
+          <img
+            src={menu.thumbnailUrl || generateMenuThumbnail(menu.name, restaurantCategory)}
+            alt={menu.name}
+            className="w-14 h-14 rounded object-cover"
+          />
+          <label className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-40 flex items-center justify-center cursor-pointer rounded transition-all">
+            <svg className="w-4 h-4 text-white opacity-0 group-hover:opacity-100" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <input
+              type="file"
+              accept="image/*"
+              className="hidden"
+              onChange={(e) => {
+                const file = e.target.files?.[0];
+                if (file) onUploadThumbnail(file);
+                e.target.value = '';
+              }}
+            />
+          </label>
+        </div>
+        <div className="flex-1">
+          <div className="flex items-center gap-1.5 flex-wrap">
+            <span className="font-medium">{menu.name}</span>
+          <span className="text-gray-500">{menu.price.toLocaleString()}원</span>
+          {menu.requiresAgeVerification && (
+            <span className="px-1.5 py-0.5 text-xs bg-red-100 text-red-700 rounded">19+</span>
+          )}
+          {menu.stock !== null && menu.stock !== undefined && menu.stock <= 5 && (
+            <span className={`px-1.5 py-0.5 text-xs rounded ${menu.stock <= 0 ? 'bg-gray-200 text-gray-600' : 'bg-yellow-100 text-yellow-700'}`}>
+              {menu.stock <= 0 ? '품절' : `재고 ${menu.stock}`}
+            </span>
+          )}
+          {menu.category && (
+            <span className="px-1.5 py-0.5 text-xs bg-blue-50 text-blue-600 rounded">{menu.category}</span>
+          )}
         </div>
         {menu.description && (
           <p className="text-sm text-gray-500">{menu.description}</p>
         )}
+      </div>
       </div>
       <div className="flex items-center space-x-2">
         <button
@@ -726,16 +1084,27 @@ function RestaurantModal({
             placeholder="064-xxx-xxxx"
           />
         </div>
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-1">카테고리</label>
-          <input
-            type="text"
-            value={form.category}
-            onChange={(e) => setForm({ ...form, category: e.target.value })}
-            className="w-full border rounded-lg px-3 py-2"
-            placeholder="음식점 > 한식 > 고기"
-          />
-        </div>
+        {form.storeType !== 'convenience_store' && (
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">카테고리 *</label>
+            <select
+              value={form.category}
+              onChange={(e) => setForm({ ...form, category: e.target.value })}
+              className="w-full border rounded-lg px-3 py-2"
+            >
+              <option value="">선택하세요</option>
+              <option value="한식">한식</option>
+              <option value="중식">중식</option>
+              <option value="양식/피자">양식/피자</option>
+              <option value="치킨">치킨</option>
+              <option value="분식">분식</option>
+              <option value="고기/구이">고기/구이</option>
+              <option value="횟집">횟집</option>
+              <option value="카페">카페</option>
+              <option value="기타">기타</option>
+            </select>
+          </div>
+        )}
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">설명</label>
           <textarea
@@ -755,15 +1124,32 @@ function RestaurantModal({
             placeholder="10:00-22:00"
           />
         </div>
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            id="isDeliverable"
-            checked={form.isDeliverable}
-            onChange={(e) => setForm({ ...form, isDeliverable: e.target.checked })}
-            className="mr-2"
-          />
-          <label htmlFor="isDeliverable" className="text-sm text-gray-700">배달 가능</label>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center">
+            <input
+              type="checkbox"
+              id="isDeliverable"
+              checked={form.isDeliverable}
+              onChange={(e) => setForm({ ...form, isDeliverable: e.target.checked })}
+              className="mr-2"
+            />
+            <label htmlFor="isDeliverable" className="text-sm text-gray-700">배달 가능</label>
+          </div>
+          {form.isDeliverable && (
+            <div className="flex items-center gap-2">
+              <label className="text-sm text-gray-700">배달 반경</label>
+              <input
+                type="number"
+                value={form.deliveryRadius}
+                onChange={(e) => setForm({ ...form, deliveryRadius: e.target.value })}
+                className="w-20 border rounded-lg px-2 py-1 text-sm"
+                min="1"
+                max="20"
+                step="0.5"
+              />
+              <span className="text-sm text-gray-500">km</span>
+            </div>
+          )}
         </div>
         <div className="flex justify-end space-x-3 pt-2">
           <button

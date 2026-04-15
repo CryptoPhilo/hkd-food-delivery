@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 async function proxyToBackend(request: NextRequest, method: string, path: string, body?: any) {
   try {

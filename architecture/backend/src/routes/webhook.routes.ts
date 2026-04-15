@@ -20,14 +20,14 @@ router.post('/payment', async (req: Request, res: Response, next: NextFunction) 
   try {
     const { imp_uid, merchant_uid, status, amount } = req.body;
 
-    // 웹훅 서명 검증 (프로덕션 필수)
+    // [SECURITY] M-4: 환경 무관하게 서명 검증 — PORTONE_WEBHOOK_SECRET 존재 여부로 분기
     const signature = req.headers['webhook-signature'] as string;
-    if (process.env.NODE_ENV === 'production' && process.env.PORTONE_WEBHOOK_SECRET) {
+    if (process.env.PORTONE_WEBHOOK_SECRET) {
       const rawBody = JSON.stringify(req.body);
       const isValid = verifyPortOneWebhookSignature(
         rawBody,
         signature,
-        process.env.PORTONE_WEBHOOK_SECRET!,
+        process.env.PORTONE_WEBHOOK_SECRET,
       );
 
       if (!isValid) {
@@ -38,6 +38,9 @@ router.post('/payment', async (req: Request, res: Response, next: NextFunction) 
         });
         return res.status(401).json({ success: false, error: 'Invalid webhook signature' });
       }
+    } else if (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging') {
+      logger.error('[SECURITY] PORTONE_WEBHOOK_SECRET not configured in production/staging');
+      return res.status(503).json({ success: false, error: 'Webhook not configured' });
     }
 
     auditLogger.log({

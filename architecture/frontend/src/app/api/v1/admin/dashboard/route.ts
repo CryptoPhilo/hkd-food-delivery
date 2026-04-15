@@ -6,7 +6,13 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 
 export async function GET(request: Request) {
   try {
-    const response = await fetch(`${BACKEND_URL}/api/v1/admin/dashboard`);
+    const cookieHeader = request.headers.get('cookie') || '';
+    const adminTokenMatch = cookieHeader.match(/(?:^|;\s*)admin_token=([^;]*)/);
+    const adminToken = adminTokenMatch ? adminTokenMatch[1] : null;
+    const headers: Record<string, string> = {};
+    if (adminToken) headers['X-Admin-Token'] = adminToken;
+
+    const response = await fetch(`${BACKEND_URL}/api/v1/admin/dashboard`, { headers });
     const data = await response.json();
 
     if (!response.ok) {
@@ -18,7 +24,7 @@ export async function GET(request: Request) {
     console.error('Dashboard proxy error:', error);
     return NextResponse.json(
       { success: false, error: error.message || '대시보드 데이터 조회 중 오류 발생' },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

@@ -4,12 +4,11 @@ const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
 const ADMIN_API_KEY = process.env.ADMIN_API_KEY || '';
 
 async function proxyToBackend(request: NextRequest, method: string, path: string, body?: any) {
-  const adminToken = request.headers.get('x-admin-token');
-  const adminUser = request.headers.get('x-admin-user');
+  const cookieHeader = request.headers.get('cookie') || '';
+  const adminTokenMatch = cookieHeader.match(/(?:^|;\s*)admin_token=([^;]*)/);
+  const adminToken = adminTokenMatch ? adminTokenMatch[1] : request.headers.get('x-admin-token');
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
   if (adminToken) headers['X-Admin-Token'] = adminToken;
-  if (ADMIN_API_KEY) headers['X-Admin-Key'] = ADMIN_API_KEY;
-  if (adminUser) headers['X-Admin-User'] = adminUser;
 
   const options: RequestInit = { method, headers };
   if (body) options.body = JSON.stringify(body);
@@ -19,13 +18,19 @@ async function proxyToBackend(request: NextRequest, method: string, path: string
   return NextResponse.json(data, { status: response.status });
 }
 
-export async function PUT(request: NextRequest, { params }: { params: Promise<{ regionId: string }> }) {
+export async function PUT(
+  request: NextRequest,
+  { params }: { params: Promise<{ regionId: string }> },
+) {
   const { regionId } = await params;
   const body = await request.json();
   return proxyToBackend(request, 'PUT', `/regions/${regionId}`, body);
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: Promise<{ regionId: string }> }) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ regionId: string }> },
+) {
   const { regionId } = await params;
   return proxyToBackend(request, 'DELETE', `/regions/${regionId}`);
 }

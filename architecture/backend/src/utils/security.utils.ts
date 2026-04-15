@@ -75,6 +75,36 @@ export function verifyPortOneWebhookSignature(
 }
 
 // ============================================
+// 웹훅 서명 검증 (범용 HMAC-SHA256)
+// ============================================
+
+/**
+ * HMAC-SHA256 웹훅 서명 검증
+ * @param rawBody - 원본 요청 본문
+ * @param signature - 헤더의 서명 값 (hex)
+ * @param secret - 웹훅 시크릿
+ * @returns 검증 결과
+ */
+export function verifyWebhookHmac(rawBody: string, signature: string, secret: string): boolean {
+  if (!signature || !secret) {
+    return false;
+  }
+
+  try {
+    const expected = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+
+    if (expected.length !== signature.length) {
+      return false;
+    }
+
+    return crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(signature));
+  } catch (error) {
+    logger.error('[SECURITY] HMAC verification failed', { error });
+    return false;
+  }
+}
+
+// ============================================
 // 데이터 마스킹
 // ============================================
 

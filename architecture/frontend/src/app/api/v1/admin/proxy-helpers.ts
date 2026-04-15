@@ -15,11 +15,14 @@ export function getAdminHeaders(request: Request): Record<string, string> {
     'Content-Type': 'application/json',
   };
 
-  const adminToken = request.headers.get('x-admin-token');
-  const adminUser = request.headers.get('x-admin-user');
+  // [SECURITY] H-1: httpOnly 쿠키에서 admin_token 추출하여 백엔드에 전달
+  const cookieHeader = request.headers.get('cookie') || '';
+  const adminTokenMatch = cookieHeader.match(/(?:^|;\s*)admin_token=([^;]*)/);
+  const adminTokenFromCookie = adminTokenMatch ? adminTokenMatch[1] : null;
 
+  // 쿠키 우선, 헤더 폴백 (마이그레이션 기간)
+  const adminToken = adminTokenFromCookie || request.headers.get('x-admin-token');
   if (adminToken) headers['X-Admin-Token'] = adminToken;
-  if (adminUser) headers['X-Admin-User'] = adminUser;
 
   return headers;
 }

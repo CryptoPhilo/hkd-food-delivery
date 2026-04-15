@@ -35,13 +35,11 @@ export interface AuthenticatedRequest extends Request {
 export const authenticateToken = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ')
-      ? authHeader.slice(7)
-      : null;
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
     if (!token) {
       return res.status(401).json({
@@ -100,11 +98,11 @@ export const authenticateToken = async (
 export const authenticateAdmin = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
-    // JWT 어드민 토큰 (X-Admin-Token 헤더)
-    const adminToken = req.headers['x-admin-token'] as string;
+    // [SECURITY] H-1: httpOnly 쿠키 우선, X-Admin-Token 헤더 폴백
+    const adminToken = req.cookies?.admin_token || (req.headers['x-admin-token'] as string);
     if (!adminToken) {
       return res.status(401).json({
         success: false,
@@ -156,7 +154,7 @@ export const authenticateAdmin = async (
 export const requireSystemAdmin = (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   if (!req.adminUser || req.adminUser.role !== 'system_admin') {
     return res.status(403).json({
@@ -198,13 +196,11 @@ export const requireRegionAccess = (regionIdParam: string = 'regionId') => {
 export const authenticateDriver = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ')
-      ? authHeader.slice(7)
-      : null;
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
     if (!token) {
       return res.status(401).json({
@@ -255,13 +251,11 @@ export const authenticateDriver = async (
 export const optionalAuth = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const authHeader = req.headers.authorization;
-    const token = authHeader && authHeader.startsWith('Bearer ')
-      ? authHeader.slice(7)
-      : null;
+    const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
     if (!token) {
       return next(); // 토큰 없으면 비인증 상태로 통과
@@ -312,19 +306,17 @@ export const optionalAuth = async (
 export const authenticateAny = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
-  // 1. 관리자 토큰 확인
-  const adminToken = req.headers['x-admin-token'] as string;
+  // 1. 관리자 토큰 확인 (쿠키 또는 헤더)
+  const adminToken = req.cookies?.admin_token || (req.headers['x-admin-token'] as string);
   if (adminToken) {
     return authenticateAdmin(req, res, next);
   }
 
   // 2. Bearer 토큰 확인
   const authHeader = req.headers.authorization;
-  const token = authHeader && authHeader.startsWith('Bearer ')
-    ? authHeader.slice(7)
-    : null;
+  const token = authHeader && authHeader.startsWith('Bearer ') ? authHeader.slice(7) : null;
 
   if (!token) {
     return res.status(401).json({
@@ -377,7 +369,7 @@ export const authenticateAny = async (
 export const verifyOrderOwnership = async (
   req: AuthenticatedRequest,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => {
   try {
     const orderId = req.params.id;

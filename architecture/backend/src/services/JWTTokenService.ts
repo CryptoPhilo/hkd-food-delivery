@@ -4,9 +4,20 @@ import logger from '../utils/logger';
 
 const prisma = new PrismaClient();
 
-// Access Token과 Refresh Token에 별도의 시크릿 사용 (보안 강화)
-const JWT_ACCESS_SECRET = process.env.JWT_SECRET || 'your-secret-key';
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || process.env.JWT_SECRET || 'your-refresh-secret-key';
+// [SECURITY] H-4: 기본 폴백 제거 — JWT_SECRET 미설정 시 서버 기동 실패
+if (!process.env.JWT_SECRET) {
+  throw new Error(
+    '[SECURITY] JWT_SECRET 환경변수가 설정되지 않았습니다. 서버를 시작할 수 없습니다.',
+  );
+}
+if (!process.env.JWT_REFRESH_SECRET) {
+  throw new Error(
+    '[SECURITY] JWT_REFRESH_SECRET 환경변수가 설정되지 않았습니다. 서버를 시작할 수 없습니다.',
+  );
+}
+
+const JWT_ACCESS_SECRET = process.env.JWT_SECRET;
+const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET;
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY = '7d';
 
@@ -55,7 +66,11 @@ export class JWTService {
   /**
    * Token Pair 생성 + Refresh Token DB 저장
    */
-  async generateTokenPair(userId: string, phone: string, role: UserRole = 'user'): Promise<TokenPair> {
+  async generateTokenPair(
+    userId: string,
+    phone: string,
+    role: UserRole = 'user',
+  ): Promise<TokenPair> {
     const accessToken = this.generateAccessToken(userId, phone, role);
     const refreshToken = this.generateRefreshToken(userId, phone, role);
 
@@ -149,7 +164,9 @@ export class JWTService {
 
     // 3. 이미 사용(무효화)된 토큰이 재사용된 경우 → 탈취 의심
     if (stored.revokedAt) {
-      logger.warn(`[SECURITY] Refresh token reuse detected for user ${stored.userId}. Revoking all tokens.`);
+      logger.warn(
+        `[SECURITY] Refresh token reuse detected for user ${stored.userId}. Revoking all tokens.`,
+      );
       await prisma.refreshToken.updateMany({
         where: { userId: stored.userId, revokedAt: null },
         data: { revokedAt: new Date() },

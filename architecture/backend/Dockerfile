@@ -21,11 +21,19 @@ FROM node:20-slim
 
 WORKDIR /app
 
-RUN apt-get update && apt-get install -y openssl && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y openssl curl && rm -rf /var/lib/apt/lists/*
+
+# [SECURITY] H-2: non-root 사용자로 실행
+RUN groupadd -r appgroup && useradd -r -g appgroup -d /app appuser
 
 COPY --from=builder /app/dist ./dist
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/prisma ./prisma
+COPY --from=builder --chown=appuser:appgroup /app/prisma ./prisma
+
+USER appuser
+
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+  CMD curl -f http://localhost:3000/health || exit 1
 
 CMD ["node", "dist/server.js"]

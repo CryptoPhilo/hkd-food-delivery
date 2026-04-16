@@ -1,0 +1,12 @@
+node_modules/
+dist/
+*.db
+*.db-journal
+.env
+.env.local
+.env.production
+logs/
+backups/
+coverage/
+*.tgz
+.DS_Store

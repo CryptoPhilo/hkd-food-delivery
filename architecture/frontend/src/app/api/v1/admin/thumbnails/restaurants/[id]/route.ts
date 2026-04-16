@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { BACKEND_URL, getAdminHeaders } from '../../proxy-helpers';
+import { BACKEND_URL, getAdminHeaders } from '../../../proxy-helpers';
 
 export const dynamic = 'force-dynamic';
 

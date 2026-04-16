@@ -8,7 +8,7 @@ FROM node:20-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
 COPY prisma ./prisma/
-RUN npm ci && npx prisma generate
+RUN npm install -g npm@latest && npm ci && npx prisma generate
 
 # Stage 2: Build
 FROM node:20-alpine AS builder

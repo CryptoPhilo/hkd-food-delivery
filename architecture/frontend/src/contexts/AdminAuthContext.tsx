@@ -13,7 +13,6 @@ interface AdminUser {
 
 interface AdminAuthContextType {
   admin: AdminUser | null;
-  token: string | null;
   loading: boolean;
   login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
@@ -25,20 +24,28 @@ const AdminAuthContext = createContext<AdminAuthContextType | null>(null);
 
 export function AdminAuthProvider({ children }: { children: ReactNode }) {
   const [admin, setAdmin] = useState<AdminUser | null>(null);
-  const [token, setToken] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // 저장된 토큰으로 세션 복원
-    const savedToken = sessionStorage.getItem('adminToken');
-    const savedAdmin = sessionStorage.getItem('adminUser');
-    if (savedToken && savedAdmin) {
+    // [SECURITY] H-1: httpOnly 쿠키 기반 — /me 호출로 세션 복원
+    const restoreSession = async () => {
       try {
-        setToken(savedToken);
-        setAdmin(JSON.parse(savedAdmin));
-      } catch {}
-    }
-    setLoading(false);
+        const res = await fetch('/api/v1/admin/auth/me', {
+          credentials: 'include',
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) {
+            setAdmin(data.data);
+          }
+        }
+      } catch {
+        // 세션 없음 — 무시
+      } finally {
+        setLoading(false);
+      }
+    };
+    restoreSession();
   }, []);
 
   const login = async (username: string, password: string) => {
@@ -46,15 +53,13 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
       const res = await fetch('/api/v1/admin/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
         body: JSON.stringify({ username, password }),
       });
       const data = await res.json();
 
       if (data.success) {
-        setToken(data.data.token);
         setAdmin(data.data.admin);
-        sessionStorage.setItem('adminToken', data.data.token);
-        sessionStorage.setItem('adminUser', JSON.stringify(data.data.admin));
         return { success: true };
       }
       return { success: false, error: data.error || '로그인 실패' };
@@ -63,44 +68,37 @@ export function AdminAuthProvider({ children }: { children: ReactNode }) {
     }
   };
 
-  const logout = () => {
-    setToken(null);
+  const logout = async () => {
+    try {
+      await fetch('/api/v1/admin/auth/logout', {
+        method: 'POST',
+        credentials: 'include',
+      });
+    } catch {
+      // best-effort
+    }
     setAdmin(null);
-    sessionStorage.removeItem('adminToken');
-    sessionStorage.removeItem('adminUser');
   };
 
-  // 어드민 API 호출 시 자동으로 토큰을 포함하는 fetch 헬퍼
+  // [SECURITY] H-1: httpOnly 쿠키 자동 전송 — credentials: 'include' 사용
   const adminFetch = async (url: string, options: RequestInit = {}) => {
-    const headers: Record<string, string> = {
-      ...(options.headers as Record<string, string> || {}),
-    };
-    if (token) {
-      headers['X-Admin-Token'] = token;
-    }
-    if (admin) {
-      const adminUserJson = JSON.stringify({
-        id: admin.id,
-        username: admin.username,
-        name: admin.name,
-        role: admin.role,
-        regionId: admin.regionId,
-      });
-      headers['X-Admin-User'] = btoa(unescape(encodeURIComponent(adminUserJson)));
-    }
-    return fetch(url, { ...options, headers });
+    return fetch(url, {
+      ...options,
+      credentials: 'include',
+    });
   };
 
   return (
-    <AdminAuthContext.Provider value={{
-      admin,
-      token,
-      loading,
-      login,
-      logout,
-      isSystemAdmin: admin?.role === 'system_admin',
-      adminFetch,
-    }}>
+    <AdminAuthContext.Provider
+      value={{
+        admin,
+        loading,
+        login,
+        logout,
+        isSystemAdmin: admin?.role === 'system_admin',
+        adminFetch,
+      }}
+    >
       {children}
     </AdminAuthContext.Provider>
   );

@@ -10,6 +10,7 @@ interface MenuItem {
   description?: string;
   price: number;
   imageUrl?: string;
+  thumbnailUrl?: string;
   isAvailable: boolean;
   isActive: boolean;
 }
@@ -147,7 +148,7 @@ export default function RestaurantPage() {
     if (!newCart[restaurantId]) {
       newCart[restaurantId] = { restaurantName: restaurant?.name || '', items: [] };
     }
-    
+
     const existing = newCart[restaurantId].items.find((item) => item.menuId === menu.id);
     if (existing) {
       existing.quantity += 1;
@@ -172,7 +173,9 @@ export default function RestaurantPage() {
         if (existing.quantity > 1) {
           existing.quantity -= 1;
         } else {
-          newCart[restaurantId].items = newCart[restaurantId].items.filter((item) => item.menuId !== menuId);
+          newCart[restaurantId].items = newCart[restaurantId].items.filter(
+            (item) => item.menuId !== menuId,
+          );
           if (newCart[restaurantId].items.length === 0) {
             delete newCart[restaurantId];
           }
@@ -231,11 +234,23 @@ export default function RestaurantPage() {
         <div className="max-w-md mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
             <button onClick={() => router.back()} className="p-2 -ml-2">
-              <svg className="w-6 h-6 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              <svg
+                className="w-6 h-6 text-gray-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M15 19l-7-7 7-7"
+                />
               </svg>
             </button>
-            <h1 className="text-lg font-bold text-gray-900 flex-1 text-center pr-8">{restaurant.name}</h1>
+            <h1 className="text-lg font-bold text-gray-900 flex-1 text-center pr-8">
+              {restaurant.name}
+            </h1>
           </div>
         </div>
       </header>
@@ -278,9 +293,9 @@ export default function RestaurantPage() {
               return (
                 <div key={menu.id} className="bg-white rounded-lg shadow-sm p-4">
                   <div className="flex justify-between items-start">
-                    {menu.imageUrl && (
+                    {(menu.imageUrl || menu.thumbnailUrl) && (
                       <img
-                        src={menu.imageUrl}
+                        src={menu.imageUrl || menu.thumbnailUrl}
                         alt={menu.name}
                         className="w-20 h-20 object-cover rounded-lg mr-3 flex-shrink-0"
                       />
@@ -351,11 +366,24 @@ export default function RestaurantPage() {
 
       {showClosedModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black bg-opacity-50" onClick={() => router.push('/')}></div>
+          <div
+            className="absolute inset-0 bg-black bg-opacity-50"
+            onClick={() => router.push('/')}
+          ></div>
           <div className="relative bg-white rounded-lg shadow-xl max-w-sm w-full p-6 text-center">
             <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <svg className="w-8 h-8 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              <svg
+                className="w-8 h-8 text-red-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
+                />
               </svg>
             </div>
             <h2 className="text-xl font-bold text-gray-900 mb-2">배달 가능한 시간이 아닙니다</h2>

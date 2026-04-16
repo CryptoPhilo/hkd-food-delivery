@@ -15,7 +15,7 @@ const GEMINI_IMAGE_MODEL = process.env.GEMINI_IMAGE_MODEL || 'gemini-2.5-flash-i
 const TOGETHER_API_KEY = process.env.TOGETHER_API_KEY;
 
 // 사용할 프로바이더 순서 (환경변수로 오버라이드 가능)
-const PROVIDER_ORDER = (process.env.IMAGE_PROVIDER_ORDER || 'pollinations,gemini,together')
+const PROVIDER_ORDER = (process.env.IMAGE_PROVIDER_ORDER || 'pollinations,together')
   .split(',')
   .map((s) => s.trim());
 

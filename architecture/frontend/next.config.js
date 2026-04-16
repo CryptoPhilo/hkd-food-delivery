@@ -42,7 +42,8 @@ const nextConfig = {
           },
           {
             key: 'Content-Security-Policy',
-            value: "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.hankyeong.xyz https://*.portone.io;",
+            // [SECURITY] M-2: unsafe-eval 제거 — XSS 보호 강화
+            value: "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self' data:; connect-src 'self' https://api.hankyeong.xyz https://*.portone.io;",
           },
           {
             key: 'Permissions-Policy',

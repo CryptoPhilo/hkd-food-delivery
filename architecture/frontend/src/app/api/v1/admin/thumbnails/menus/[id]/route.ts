@@ -1,20 +1,16 @@
 import { NextResponse } from 'next/server';
+import { BACKEND_URL, getAdminHeaders } from '../../../proxy-helpers';
 
 export const dynamic = 'force-dynamic';
 
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:3001';
-
+// [SECURITY] M-3: X-Admin-Key 제거 → httpOnly 쿠키 기반 인증으로 전환
 export async function PUT(request: Request, { params }: { params: { id: string } }) {
   try {
-    const adminKey = request.headers.get('x-admin-key');
     const body = await request.json();
 
     const response = await fetch(`${BACKEND_URL}/api/v1/admin/thumbnails/menus/${params.id}`, {
       method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(adminKey && { 'X-Admin-Key': adminKey }),
-      },
+      headers: getAdminHeaders(request),
       body: JSON.stringify(body),
     });
 
@@ -28,14 +24,9 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
 export async function DELETE(request: Request, { params }: { params: { id: string } }) {
   try {
-    const adminKey = request.headers.get('x-admin-key');
-
     const response = await fetch(`${BACKEND_URL}/api/v1/admin/thumbnails/menus/${params.id}`, {
       method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-        ...(adminKey && { 'X-Admin-Key': adminKey }),
-      },
+      headers: getAdminHeaders(request),
     });
 
     const data = await response.json();
